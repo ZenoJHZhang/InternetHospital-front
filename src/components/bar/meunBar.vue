@@ -1,10 +1,10 @@
 <template>
 <el-container>
-  <el-header> 
-    <el-container>
-      <el-aside width="800px"> <img id="logo" src="../../assets/logo.png"></el-aside>
-      <el-main>     
-        <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" @select="handleSelect" router >
+  <el-header style="height:81px"> 
+    <el-container style="padding-top:20px">
+      <el-aside width="25%" style="padding-left:17%"> <img id="logo" src="../../assets/logo.png"></el-aside>
+      <el-main style="padding-left:20%">  
+        <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" @select="handleSelect" router background-color=#F2F2F2>
             <el-menu-item index="/">首页</el-menu-item>
             <el-menu-item index="/about">处理中心</el-menu-item>
             <el-menu-item index="/c">处理中心</el-menu-item>
@@ -13,9 +13,11 @@
             <el-menu-item index="/f">处理中心</el-menu-item>  
         </el-menu>
       </el-main>
+      <el-aside>
+        <el-button type="text" id="login"  @click="loginFormVisible = true">登录</el-button>
+        <el-button type="text" id="register" @click="registerFormVisible = true">注册</el-button>
+      </el-aside>
     </el-container>
-    <!-- <el-col :span="2" :offset="11"><el-button type="text" id="login"  @click="loginFormVisible = true">登录</el-button></el-col>
-    <el-col :span="2"><el-button type="text" id="register" @click="registerFormVisible = true">注册</el-button></el-col> -->
   </el-header>
   <el-dialog title="登录" :visible.sync="loginFormVisible" width="400px" :close-on-click-modal="closeOnClickModal" @close="resetForm('loginForm')">
     <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="100px" class="demo-ruleForm" label-position="left">
@@ -67,14 +69,20 @@
   font-size: 14px;
 }
 #logo {
-  margin-top: 20px;
-  height: 30px;
-  width: 10%;
+  margin-top: -10px;
+  height: 50px;
+  width: 100%;
 }
 .el-menu-item {
   padding-left: 2.5%;
   padding-right: 2.5%;
-  font-size: 12px;
+  font-size: 14px;
+}
+.el-main{
+  padding: 0
+}
+.el-header{
+  background-color: #F2F2F2
 }
 </style>
 

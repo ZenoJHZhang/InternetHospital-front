@@ -1,13 +1,14 @@
 <template>
-<el-row>
-  <el-col>
-    <el-carousel indicator-position="outside">
+<el-container>
+<el-header style="height:350px">
+    <el-carousel>
       <el-carousel-item v-for="item in 4" :key="item">
         <img src="../../assets/default_carousel_picture.png">
       </el-carousel-item>
     </el-carousel>
-  </el-col>
-</el-row>
+</el-header>
+<el-main>FOR THE BEST LIFE</el-main>
+</el-container>
 </template>
 
 
@@ -27,6 +28,12 @@ export default {
 
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
+}
+img{
+  width: 100%;
+}
+.el-main{
+  padding: 0;
 }
 </style>
 
