@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+import father_store from './testStore.js'
+
 export default new Vuex.Store({
   state: {
 
@@ -12,5 +14,8 @@ export default new Vuex.Store({
   },
   actions: {
 
+  },
+  modules: {
+    father: father_store
   }
 })

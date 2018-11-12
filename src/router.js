@@ -22,6 +22,11 @@ export default new Router({
         component: () => import('./views/About.vue')
       },
     ]
+    },
+    {
+      path: '/father',
+      name: 'father',
+      component: () => import('./views/test/father.vue')
     }
   ]
 })
