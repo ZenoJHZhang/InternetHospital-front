@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import './plugins/element.js'
 import './utils/normalize.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 Vue.config.productionTip = false
 
