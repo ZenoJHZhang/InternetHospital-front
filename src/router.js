@@ -13,13 +13,13 @@ export default new Router({
       children :[
       {
         path: '/',
-        name: 'netTreatRoom',
-        component: () => import('./views/diagnose/netTreatRoom.vue')
+        name: 'index',
+        component: () => import('./views/diagnose/index.vue')
       },
       {
-        path: '/about',
-        name: 'about',
-        component: () => import('./views/About.vue')
+        path: '/netTreatRoom',
+        name: 'netTreatRoom',
+        component: () => import('./views/diagnose/netTreatRoom.vue')
       },
     ]
     },

@@ -1,8 +1,10 @@
 <template>
-<div>
+<el-container direction='vertical'>
   <menu-bar></menu-bar>
   <router-view></router-view>
-</div>
+</el-container>
+
+
 </template>
 
 <script>
