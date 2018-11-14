@@ -3,13 +3,13 @@
   <el-container>
     <el-main style="" direction='vertical' >
       <div style="position:relative;overflow:hidden">
-        <el-carousel :height="screenHeight" autoplay interval='5000' indicator-position='none' arrow='never'>
+        <el-carousel :height="screenHeight" :autoplay='autoplay' >
           <el-carousel-item v-for="img in imgs" :key="img.key">
             <img :src="img.path">
           </el-carousel-item>
         </el-carousel>
         <div class="lrButton">
-          <img src="../../assets/sign.png">
+          <img src="../../assets/index/sign.png">
           <el-button id="login" type="primary" @click="loginFormVisible = true">登录</el-button>
           <el-button id="register" @click="registerFormVisible = true">注册</el-button>
         </div>
@@ -70,11 +70,12 @@ export default {
       }
     };
     return {
+      autoplay: false,
       screenHeight: document.documentElement.clientHeight - 81+'px', //减去header的60px
       imgs: [
-        { path: require("../../assets/home1.jpg") },
-        { path: require("../../assets/home2.jpg") },
-        { path: require("../../assets/home3.jpg") }
+        { path: require("../../assets/index/home1.jpg") },
+        { path: require("../../assets/index/home2.jpg") },
+        { path: require("../../assets/index/home3.jpg") }
       ],
       loginForm: {
         phone: "",

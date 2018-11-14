@@ -2,9 +2,9 @@
 <el-container>
   <el-header style="height:81px"> 
     <el-container style="padding-top:20px">
-      <el-aside width="20%" style="padding-left:10%"> <img id="logo" src="../../assets/logo.png"></el-aside>
-      <el-main style="padding-left:25%">  
-        <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" @select="handleSelect" router background-color=#F2F2F2>
+      <el-aside width="20%" style="padding-left:10%"> <img id="logo" src="../../assets/index/logo.png"></el-aside>
+      <el-main style="padding-left:25%;height:61px;overflow:hidden">  
+        <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" router background-color=#F2F2F2>
             <el-menu-item index="/">首页</el-menu-item>
             <el-menu-item index="/netTreatRoom">网络诊间</el-menu-item>
             <el-menu-item index="/c">处理中心</el-menu-item>
@@ -38,7 +38,6 @@
 </style>
 
 <script>
-import sliderValidation from "../common/sliderValidation";
 export default {
   name: "meunBar"
 };
