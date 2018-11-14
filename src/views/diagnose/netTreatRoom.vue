@@ -14,7 +14,7 @@
                     <el-header style="backgroundColor:white;width:840px;margin-bottom:20px" height='140px'>
                         <treatment-process></treatment-process>
                     </el-header>
-                    <el-main style="backgroundColor:white;width:840px;height:500px">
+                    <el-main style="backgroundColor:white;width:840px;height:330px">
                         <consultation-department></consultation-department>
                     </el-main>
                 </el-container>

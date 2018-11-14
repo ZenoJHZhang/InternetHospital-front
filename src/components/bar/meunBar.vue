@@ -20,9 +20,9 @@
 
 <style scoped>
 #logo {
-  margin-top: -10px;
   height: auto;
   width: 100%;
+  min-width: 80px;
 }
 .el-menu-item {
   padding-left: 2.5%;

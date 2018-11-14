@@ -1,10 +1,10 @@
 <template>
-<div>
-  <el-container>
+<div style="height:calc(100vh - 81px)">
+  <el-container style="height:100%">
     <el-main style="" direction='vertical' >
-      <div style="position:relative;overflow:hidden">
-        <el-carousel :height="screenHeight" :autoplay='autoplay' >
-          <el-carousel-item v-for="img in imgs" :key="img.key">
+      <div style="position:relative;overflow:hidden;height:100%">
+        <el-carousel :autoplay='autoplay' height="calc(100vh - 81px)">
+          <el-carousel-item v-for="img in imgs" :key="img.key" style="height:100%">
             <img :src="img.path">
           </el-carousel-item>
         </el-carousel>
@@ -71,7 +71,7 @@ export default {
     };
     return {
       autoplay: false,
-      screenHeight: document.documentElement.clientHeight - 81+'px', //减去header的60px
+      // screenHeight: document.documentElement.clientHeight - 81+'px', //减去header的60px
       imgs: [
         { path: require("../../assets/index/home1.jpg") },
         { path: require("../../assets/index/home2.jpg") },
@@ -146,6 +146,7 @@ export default {
 </script>
 
 <style scoped>
+
 .el-carousel__item:nth-child(2n) {
   background-color: #99a9bf;
 }
