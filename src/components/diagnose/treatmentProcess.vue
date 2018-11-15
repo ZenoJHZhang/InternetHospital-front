@@ -28,13 +28,18 @@ export default {
   height: 40px;
   line-height: 40px;
   color: #a71820;
-  font-size: 18px;
+  font-size: 1;
   font-family: "microsoft yahei";
   font-weight: 700;
   margin-bottom: 20px;
 }
-.el-step {
-  font-size: 12px;
+
+.icon {
+    width: 0.3em;
+    height: 0.3em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
 }
 </style>
 

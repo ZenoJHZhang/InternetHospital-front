@@ -1,9 +1,10 @@
 <template>
 <div>
-    <div class="title-line">今日接诊科室</div>
-    <el-carousel :interval="4000" type="card" height="200px" style="width:800px" :autoplay="false">        
+    <div class="title-line">今日接诊科室<i class="fas fa-hand-point-right" style="float:right"> 更多</i></div>
+    <no-comment></no-comment>
+    <el-carousel v-if="isDepartments" :interval="4000" type="card" height="200px" style="width:100%" :autoplay="false" indicator-position='none'	>      
             <el-carousel-item v-for="department in departments" :key="department.key">
-                <img :src="department.path">
+                <img class="department-img-style" :src="department.path">
                 <div class="department-message-style">{{department.message}}</div>
                 <el-button type="primary" :key="department.id">挂号({{department.time}})</el-button>
             </el-carousel-item>
@@ -12,6 +13,7 @@
 </template>
 
 <script>
+import noComment from '../../components/common/noComment'
 export default {
   data() {
     return {
@@ -40,8 +42,12 @@ export default {
           time: "全天",
           path: require("../../assets/diagnose/defaultDept.png")
         }
-      ]
+      ],
+      isDepartments:false
     };
+  },
+  components:{
+    noComment
   }
 };
 </script>
@@ -53,7 +59,7 @@ export default {
   height: 40px;
   line-height: 40px;
   color: #a71820;
-  font-size: 18px;
+  font-size: 16px;
   font-family: "microsoft yahei";
   font-weight: 700;
   margin-bottom: 20px;
@@ -66,20 +72,26 @@ export default {
 } */
 .el-button {
   text-align: center;
-  width: 150px;
-  margin-left: 125px;
+  width: 30%;
+  margin-left: 35%;
   margin-top: 20px;
+  font-size: 12px;
+  padding-left: 0 ;
+  padding-right: 0;
 }
-img {
-  width: 180px;
+.department-img-style {
+  width: 40%;
   height: 100px;
-  padding-left: 110px;
+  padding-left: 30%;
 }
 .department-message-style {
-  width: 250px;
+  width: 40%;
   text-align: center;
-  margin-left: 75px;
+  margin-left: 30%;
   margin-top: 10px;
   font-weight: 600;
+}
+.no-comment{
+  
 }
 </style>
