@@ -21,6 +21,11 @@ export default new Router({
         name: 'netTreatRoom',
         component: () => import('./views/diagnose/netTreatRoom.vue')
       },
+      {
+        path: '/reservationData',
+        name: 'reservationData',
+        component: () => import('./views/diagnose/reservationData.vue')
+      }
     ]
     },
     {

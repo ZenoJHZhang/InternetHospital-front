@@ -1,5 +1,5 @@
 export default {
     state:{
-        active: 0
+        isDepartment: false
     }
 }

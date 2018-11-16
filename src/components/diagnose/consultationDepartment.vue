@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="title-line">今日接诊科室<i class="fas fa-hand-point-right" style="float:right"> 更多</i></div>
-    <no-comment></no-comment>
+    <no-comment v-if="!isDepartments"></no-comment>
     <el-carousel v-if="isDepartments" :interval="4000" type="card" height="200px" style="width:100%" :autoplay="false" indicator-position='none'	>      
             <el-carousel-item v-for="department in departments" :key="department.key">
                 <img class="department-img-style" :src="department.path">
@@ -43,7 +43,7 @@ export default {
           path: require("../../assets/diagnose/defaultDept.png")
         }
       ],
-      isDepartments:false
+      isDepartments:this.$store.state.consultationDepartmentStore.isDepartments
     };
   },
   components:{
@@ -90,8 +90,5 @@ export default {
   margin-left: 30%;
   margin-top: 10px;
   font-weight: 600;
-}
-.no-comment{
-  
 }
 </style>
