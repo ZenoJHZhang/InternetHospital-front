@@ -71,7 +71,7 @@ export default {
           expertNumber: 20,
           expertImg: require("../../assets/diagnose/expert.png")
         },
-                {
+        {
           id: 3,
           expertName: "ZJH",
           expertDepartment: "示例专家科室",
@@ -79,7 +79,7 @@ export default {
           expertNumber: 50,
           expertImg: require("../../assets/diagnose/expert.png")
         },
-                {
+        {
           id: 4,
           expertName: "ZJH",
           expertDepartment: "示例专家科室",
@@ -87,7 +87,7 @@ export default {
           expertNumber: 50,
           expertImg: require("../../assets/diagnose/expert.png")
         },
-                {
+        {
           id: 5,
           expertName: "ZJH",
           expertDepartment: "示例专家科室",
@@ -95,7 +95,7 @@ export default {
           expertNumber: 50,
           expertImg: require("../../assets/diagnose/expert.png")
         },
-                {
+        {
           id: 6,
           expertName: "ZJH",
           expertDepartment: "示例专家科室",
@@ -103,25 +103,24 @@ export default {
           expertNumber: 50,
           expertImg: require("../../assets/diagnose/expert.png")
         }
-      ],
+      ]
     };
   },
   methods: {
     getDateFormat() {
       var date = new Date();
-      var seperator1 = "-";
       this.month = date.getMonth() + 1;
       this.strDate = date.getDate();
       this.expertreatRoomDateRadio =
         this.month + "月" + (this.strDate + 1) + "日";
     },
     isExpertJudge() {
-      if(this.experts.length > 0){
-        this.$store.state.expertAppointmentStore.isExpert  = true;
+      if (this.experts.length > 0) {
+        this.$store.state.expertAppointmentStore.isExpert = true;
       }
     },
-    reservation(){
-      this.$router.push('/reservationData')
+    reservation() {
+      this.$router.push("/reservationData");
     }
   },
   mounted() {
@@ -133,8 +132,7 @@ export default {
   components: {
     noComment
   },
-  computed:{
-  }
+  computed: {}
 };
 </script>
 

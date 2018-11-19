@@ -27,8 +27,17 @@
                     <div class="title-line">个人信息</div>
                     <el-form ref="patientInformationForm" :model="patientInformationForm" label-width="100px" label-position='left' style="margin-left:20px;width:70%">
                         <el-form-item label="姓名:" >
-                            <el-input style='width:40%' v-model="patientInformationForm.patientName" readonly="readonly" placeholder="请点击右侧选择就诊人"></el-input>
-                            <el-button type="primary" style="margin-left:20px">选择就诊人</el-button>
+                        <el-select v-model="value" placeholder="请选择" style="width:50%">
+                            <el-option
+                            v-for="item in beChoicedPatient"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                            <span style="float: left">{{ item.name }}</span>
+                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.IdCard }}</span>
+                            </el-option>
+                        </el-select>
+                            <el-button type="primary" style="margin-left:20px">添加就诊人</el-button>
                         </el-form-item>
                         <el-form-item label="初/复诊:" >
                             <el-radio v-model="patientInformationForm.accentRadio" label="初诊"></el-radio>
@@ -49,7 +58,7 @@
                                 <el-table-column  prop="detail" label="详情" width="500"></el-table-column>
                                 <el-table-column  prop="choice" label="操作" width="150">
                                     <template slot-scope="scope">
-                                        <el-button type="text" size="small">选择</el-button>
+                                        <el-button type="text" size="small" @click="handleClick(scope.row)">选择</el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -71,6 +80,18 @@
             </el-container>
         </el-main>
     </el-container>
+    <!-- <el-dialog title="提示" :visible.sync="accentHistoryDialogVisible" width="30%">
+        <el-checkbox-group v-model="accentHistory[0].detail">
+            <el-checkbox label="复选框 A"></el-checkbox>
+            <el-checkbox label="复选框 B"></el-checkbox>
+            <el-checkbox label="复选框 C"></el-checkbox>
+            <el-checkbox label="禁用" disabled></el-checkbox>
+            <el-checkbox label="选中且禁用" disabled></el-checkbox>
+        </el-checkbox-group>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </span>
+    </el-dialog> -->
 </div>
 </template>
 
@@ -87,12 +108,27 @@ export default {
         accentDetail: ""
       },
       accentHistory: [
-        { type: "既往史", detail: "", choice: "选择" },
-        { type: "婚育史", detail: "", choice: "选择" },
-        { type: "过敏史", detail: "", choice: "选择" },
-        { type: "家族史", detail: "", choice: "选择" },
-        { type: "个人习惯", detail: "", choice: "选择" }
-      ]
+        { type: "既往史", detail: [], choice: "选择" },
+        { type: "婚育史", detail: [], choice: "选择" },
+        { type: "过敏史", detail: [], choice: "选择" },
+        { type: "家族史", detail: [], choice: "选择" },
+        { type: "个人习惯", detail: [], choice: "选择" }
+      ],
+      accentHistoryDialogVisible:false,
+      /**选择就诊人 */
+      beChoicedPatient: [
+        {
+          id: 1,
+          name: "ZJH",
+          IdCard: "330104199610093012"
+        },
+        {
+          id: 2,
+          name: "ZJH2",
+          IdCard: "330104199610093013"
+        }
+      ],
+      value: ""
     };
   },
   components: {
@@ -104,13 +140,13 @@ export default {
       const isPNG = file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG && !isPNG ) {
+      if (!isJPG && !isPNG) {
         this.$message.error("上传头像图片只能是 JPG/PNG 格式!");
       }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
-       return (isJPG||isPNG) && isLt2M;
+      return (isJPG || isPNG) && isLt2M;
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -118,6 +154,12 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    log() {
+      console.log(this.$refs.patientNameSelect);
+    },
+    handleClick(row){
+        console.log(row)
     }
   },
   mounted() {
