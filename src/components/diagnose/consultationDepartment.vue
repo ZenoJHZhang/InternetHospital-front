@@ -1,12 +1,12 @@
 <template>
 <div>
     <div class="title-line">今日接诊科室<i class="fas fa-hand-point-right" style="float:right"> 更多</i></div>
-    <no-comment v-if="!isDepartments"></no-comment>
-    <el-carousel v-if="isDepartments" :interval="4000" type="card" height="200px" style="width:100%" :autoplay="false" indicator-position='none'	>      
-            <el-carousel-item v-for="department in departments" :key="department.key">
-                <img class="department-img-style" :src="department.path">
-                <div class="department-message-style">{{department.message}}</div>
-                <el-button type="primary" :key="department.id">挂号({{department.time}})</el-button>
+    <no-comment v-if="!this.$store.state.consultationDepartmentStore.isDepartment"></no-comment>
+    <el-carousel v-if="this.$store.state.consultationDepartmentStore.isDepartment" :interval="4000" type="card" height="200px" style="width:100%" :autoplay="false" indicator-position='none'	>      
+            <el-carousel-item v-for="department in departments" :key="department.id">
+                <!-- <img class="department-img-style" :src="department.base_path+department.img_uuid+'.'+department.suffix"> -->
+                <div class="department-message-style">{{department.department_name}}</div>
+                <el-button type="primary" :key="department.id">挂号({{department.time_message}})</el-button>
             </el-carousel-item>
     </el-carousel>
 </div>
@@ -14,40 +14,32 @@
 
 <script>
 import noComment from '../../components/common/noComment'
+import axion from '../../utils/http_url'
 export default {
   data() {
     return {
-      departments: [
-        {
-          id: 1,
-          message: "普通门诊科室",
-          time: "上午/下午",
-          path: require("../../assets/diagnose/defaultDept.png")
-        },
-        {
-          id: 2,
-          message: "骨科科室",
-          time: "下午/晚上",
-          path: require("../../assets/diagnose/defaultDept.png")
-        },
-        {
-          id: 3,
-          message: "外科科室",
-          time: "上午",
-          path: require("../../assets/diagnose/defaultDept.png")
-        },
-        {
-          id: 4,
-          message: "紧急门诊科室",
-          time: "全天",
-          path: require("../../assets/diagnose/defaultDept.png")
-        }
-      ],
-      isDepartments:this.$store.state.consultationDepartmentStore.isDepartments
+      departments: ''
     };
   },
   components:{
     noComment
+  },
+  methods:{
+    listDepartmentSchedule(){
+      axion.listDepartmentSchedule('2018-11-21')
+      .then(response => {
+        this.departments = response.data.data.list
+        if(this.departments.length > 0){
+           this.$store.state.consultationDepartmentStore.isDepartment = true;
+        }
+        console.log(response)
+      })
+    }
+  },
+  mounted(){
+    this.$nextTick(function generate() {
+      this.listDepartmentSchedule();
+    });
   }
 };
 </script>

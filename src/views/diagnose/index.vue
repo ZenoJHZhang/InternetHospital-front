@@ -52,12 +52,14 @@
       </el-form-item>
     </el-form>
   </el-dialog>
+   <el-alert title="用户不存在或密码错误" type="error" show-icon style="width:250px" center v-if="alertShow"></el-alert>
 </div>
 </template>
 
 
 
 <script>
+import axion from '../../utils/http_url.js'
 export default {
   data() {
     var confirmPasswordRule = (rule, value, callback) => {
@@ -120,7 +122,8 @@ export default {
           }
         ]
       },
-      registerFormVisible: false
+      registerFormVisible: false,
+      alertShow: false
     };
   },
   components: {},
@@ -128,7 +131,14 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          axion.login(this.loginForm.phone,this.loginForm.password).then(response =>{
+            if(response.status == 200){
+              console.log(response);
+            }
+            else{
+              this.alertShow = true;
+            }
+          })
         } else {
           console.log("error submit!!");
           return false;

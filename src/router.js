@@ -29,9 +29,9 @@ export default new Router({
     ]
     },
     {
-      path: '/father',
-      name: 'father',
-      component: () => import('./views/test/father.vue')
+      path: '/test',
+      name: 'test',
+      component: () => import('./views/test/test.vue')
     }
   ]
 })
