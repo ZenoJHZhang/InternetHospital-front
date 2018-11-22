@@ -43,11 +43,15 @@ const postimg =  (_url, obj) => axios.post(_url, obj,{ baseURL: baseURL,headers:
 
 /*测试*/
 const test = (name) => post('/test',name)
+
+/**登录 */
 const login = (phone,password)  => get('/user/login?phone='+phone+'&password='+password)
+const register = (phone,password) => post('/user/register',phone,password)
 /** 获取当日诊室信息及其排班信息 */
 const listDepartmentSchedule = (date) => get('/department/scheduleOfDay?date='+date)
 export default {
   test,
   login,
+  register,
   listDepartmentSchedule
 }

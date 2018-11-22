@@ -11,7 +11,7 @@
         <div class="lrButton">
           <img src="../../assets/index/sign.png">
           <el-button id="login" type="primary" @click="loginFormVisible = true">登录</el-button>
-          <el-button id="register" @click="registerFormVisible = true">注册</el-button>
+          <el-button id="register" @click="registerFormVisible = true" >注册</el-button>
         </div>
       </div>
     </el-main>
@@ -29,7 +29,7 @@
         <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
       </el-form-item>
       <el-form-item style="margin-left:7.5%">
-        <el-button type="text">未有账号去注册</el-button>
+        <el-button type="text" @click="toRegister()">未有账号去注册</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -39,13 +39,13 @@
         <el-input v-model="registerForm.phone" ></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type ='password' v-model="registerForm.password"></el-input>
+        <el-input minlength="8" maxlength="16" type ='password' v-model="registerForm.password"></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="confirmPassword">
         <el-input type ='password' v-model="registerForm.confirmPassword"></el-input>
       </el-form-item>
       <el-form-item style="margin-left:11.25%">
-        <el-button type="primary">注册</el-button>
+        <el-button type="primary" @click="submitForm('registerForm')">注册</el-button>
       </el-form-item>
       <el-form-item style="margin-left:7.5%">
         <el-button type="text">已有账号去登录</el-button>
@@ -59,7 +59,7 @@
 
 
 <script>
-import axion from '../../utils/http_url.js'
+import axion from "../../utils/http_url.js";
 export default {
   data() {
     var confirmPasswordRule = (rule, value, callback) => {
@@ -93,7 +93,13 @@ export default {
             trigger: "blur"
           }
         ],
-        password: [{ required: true, message: "密码不得为空", trigger: "blur" }]
+        password: [
+          {
+            required: true,
+            message: "密码不得为空",
+            trigger: "blur"
+          }
+        ]
       },
       loginFormVisible: false,
       registerForm: {
@@ -112,7 +118,12 @@ export default {
           }
         ],
         password: [
-          { required: true, message: "密码不得为空", trigger: "blur" }
+          { required: true, message: "密码不得为空", trigger: "blur" },
+          {
+            message: "密码必须是强密码",
+            trigger: "blur",
+            pattern: "^(?:(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).{8,16}$"
+          }
         ],
         confirmPassword: [
           {
@@ -131,14 +142,64 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          axion.login(this.loginForm.phone,this.loginForm.password).then(response =>{
-            if(response.status == 200){
-              console.log(response);
-            }
-            else{
-              this.alertShow = true;
-            }
-          })
+          if (formName == "loginForm") {
+            axion
+              .login(this.loginForm.phone, this.loginForm.password)
+              .then(response => {
+                if (response.status == 200) {
+                  if (response.data.returnCode == 200) {
+                    let token = response.data.returnData.token;
+                    let phone = response.data.returnData.phone;
+                    this.$store.commit("add_token", {
+                      token: token,
+                      phone: phone
+                    });
+                    this.$message({
+                      message: "登录成功",
+                      type: "success",
+                      duration: 1000
+                    });
+                    this.loginFormVisible = false;
+                    this.$router.push("netTreatRoom");
+                  } else if (response.data.returnCode == 401) {
+                    this.$message({
+                      message: response.data.returnType,
+                      type: "error",
+                      duration: 1000
+                    });
+                  }
+                }
+              });
+          }
+          if (formName == "registerForm") {
+            axion
+              .register({
+                phone: this.registerForm.phone,
+                password: this.registerForm.password
+              })
+              .then(response => {
+                console.log(response)
+                if (response.status == 200) {
+                  if (response.data.returnCode == 200) {
+                    this.$message({
+                      message: "注册成功",
+                      type: "success",
+                      duration: 1000
+                    });
+                    this.registerFormVisible = false;
+                    this.$router.push("home");
+                  }
+                  else if(response.data.returnCode == 400){
+                    this.$message({
+                      message: response.data.returnType,
+                      type: "error",
+                      duration: 1000
+                    });
+                  }
+                }
+              });
+          }
+          // if (formName == "registerForm")
         } else {
           console.log("error submit!!");
           return false;
@@ -148,15 +209,15 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    makeLoginAlbe() {
-      this.loginAble = false;
+    toRegister() {
+      this.loginFormVisible = false;
+      this.registerFormVisible = true;
     }
   }
 };
 </script>
 
 <style scoped>
-
 .el-carousel__item:nth-child(2n) {
   background-color: #99a9bf;
 }
@@ -168,15 +229,15 @@ export default {
   padding: 0;
 }
 
-.lrButton{
+.lrButton {
   position: absolute;
   top: 40%;
   left: 35%;
   z-index: 10;
-  width:30%;
+  width: 30%;
   min-width: 500px;
   height: 110px;
-  text-align: center
+  text-align: center;
 }
 
 #login {

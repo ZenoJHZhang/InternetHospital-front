@@ -36,7 +36,6 @@ axios.interceptors.response.use(
         case 401:
           // 返回 401 清除token信息并跳转到登录页面
           store.commit('remove_token');
-          this.$message('这是一条消息提示');
       }
     }
     return Promise.reject(error.response.data)   // 返回接口返回的错误信息

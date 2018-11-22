@@ -4,7 +4,7 @@
     <no-comment v-if="!this.$store.state.consultationDepartmentStore.isDepartment"></no-comment>
     <el-carousel v-if="this.$store.state.consultationDepartmentStore.isDepartment" :interval="4000" type="card" height="200px" style="width:100%" :autoplay="false" indicator-position='none'	>      
             <el-carousel-item v-for="department in departments" :key="department.id">
-                <!-- <img class="department-img-style" :src="department.base_path+department.img_uuid+'.'+department.suffix"> -->
+                <img class="department-img-style" src="../../assets/diagnose/defaultDept.png">
                 <div class="department-message-style">{{department.department_name}}</div>
                 <el-button type="primary" :key="department.id">挂号({{department.time_message}})</el-button>
             </el-carousel-item>
@@ -26,13 +26,17 @@ export default {
   },
   methods:{
     listDepartmentSchedule(){
+      let date = new Date();
+      this.month = date.getMonth() + 1;
+      this.strDate = date.getDate();
+      this.year = date.getFullYear();
+      let today = this.year+'-'+this.month+'-'+this.strDate;
       axion.listDepartmentSchedule('2018-11-21')
       .then(response => {
-        this.departments = response.data.data.list
+        this.departments = response.data.returnData.list
         if(this.departments.length > 0){
            this.$store.state.consultationDepartmentStore.isDepartment = true;
         }
-        console.log(response)
       })
     }
   },
@@ -73,7 +77,7 @@ export default {
 }
 .department-img-style {
   width: 40%;
-  height: 100px;
+  height: 55%;
   padding-left: 30%;
 }
 .department-message-style {

@@ -9,16 +9,21 @@ import expert_appointment_store from './expertAppointmentStore.js'
 import consultation_department_store from './consultationDepartmentStore.js'
 export default new Vuex.Store({
   state: {
-    token:''
+    token:'',
+    phone:''
   },
   mutations: {
-      add_token(token){
-        state.token = token;
-        localStorage.setItem("token",token);
+      add_token(state,user){
+        state.token = user.token;
+        state.phone = user.phone;
+        localStorage.setItem("token",user.token);
+        localStorage.setItem("phone",user.phone)
       },
-      remove_token(){
+      remove_token(state){
         localStorage.removeItem("token");
+        localStorage.removeItem("phone")
         state.token = '';
+        state.phone = '';
       }
   },
   actions: {
