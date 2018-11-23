@@ -6,6 +6,7 @@ import axios from 'axios'
 import './plugins/element.js'
 import './utils/normalize.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
+import { Message } from 'element-ui';
 
 Vue.config.productionTip = false
 
@@ -36,6 +37,8 @@ axios.interceptors.response.use(
         case 401:
           // 返回 401 清除token信息并跳转到登录页面
           store.commit('remove_token');
+          Message.error("请登录!");
+          router.push("/");
       }
     }
     return Promise.reject(error.response.data)   // 返回接口返回的错误信息

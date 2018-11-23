@@ -1,5 +1,5 @@
 <template>
-<div style="height:calc(100vh - 81px)">
+<div style="height:calc(100vh - 86px)">
   <el-container style="height:100%">
     <el-main style="" direction='vertical' >
       <div style="position:relative;overflow:hidden;height:100%">
@@ -10,8 +10,8 @@
         </el-carousel>
         <div class="lrButton">
           <img src="../../assets/index/sign.png">
-          <el-button id="login" type="primary" @click="loginFormVisible = true">登录</el-button>
-          <el-button id="register" @click="registerFormVisible = true" >注册</el-button>
+          <el-button id="login" type="primary" @click="loginFormVisible = true" v-if="!this.$store.state.commonStore.isUserLogin">登录</el-button>
+          <el-button id="register" @click="registerFormVisible = true" v-if="!this.$store.state.commonStore.isUserLogin">注册</el-button>
         </div>
       </div>
     </el-main>
@@ -48,7 +48,7 @@
         <el-button type="primary" @click="submitForm('registerForm')">注册</el-button>
       </el-form-item>
       <el-form-item style="margin-left:7.5%">
-        <el-button type="text">已有账号去登录</el-button>
+        <el-button type="text" @click="toLogin()">已有账号去登录</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -161,6 +161,7 @@ export default {
                     });
                     this.loginFormVisible = false;
                     this.$router.push("netTreatRoom");
+                    this.$store.state.commonStore.isUserLogin = true;
                   } else if (response.data.returnCode == 401) {
                     this.$message({
                       message: response.data.returnType,
@@ -187,7 +188,7 @@ export default {
                       duration: 1000
                     });
                     this.registerFormVisible = false;
-                    this.$router.push("home");
+                    this.$router.push("/");
                   }
                   else if(response.data.returnCode == 400){
                     this.$message({
@@ -199,7 +200,7 @@ export default {
                 }
               });
           }
-          // if (formName == "registerForm")
+
         } else {
           console.log("error submit!!");
           return false;
@@ -212,6 +213,10 @@ export default {
     toRegister() {
       this.loginFormVisible = false;
       this.registerFormVisible = true;
+    },
+    toLogin(){
+      this.loginFormVisible = true;
+      this.registerFormVisible = false;
     }
   }
 };

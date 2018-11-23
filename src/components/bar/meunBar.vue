@@ -1,6 +1,9 @@
 <template>
 <div>
-  <div class="head"><span v-if="logoutVisiable" style="margin-left:65%">你好,{{phone}}</span><span id="logout" @click="logout()" v-if="logoutVisiable">退出</span></div>
+  <div class="head">
+    <span v-if="this.$store.state.commonStore.isUserLogin" style="margin-left:65%">你好,{{phone}}</span>
+    <span v-if="this.$store.state.commonStore.isUserLogin" id="logout" @click="logout()">退出</span>
+  </div>
   <el-container>
   <el-header style="height:66px;padding-top:0"> 
     <el-container style="padding-top:5px">
@@ -56,7 +59,6 @@ export default {
   name: "meunBar",
   data() {
     return {
-      logoutVisiable: false,
       phone:''
     };
   },
@@ -69,13 +71,13 @@ export default {
         duration: 1000
       });
       this.$router.push("/");
-      this.logoutVisiable = false;
+      this.$store.state.commonStore.isUserLogin = false;
     },
     getLoginDetail(){
       let phone = localStorage.getItem('phone');
       let token = localStorage.getItem('token')
       if(phone != null && token != null){
-        this.logoutVisiable = true;
+        this.$store.state.commonStore.isUserLogin = true;
         this.phone = phone;
       }
     }

@@ -11,43 +11,42 @@
                     <div class="title-line">问诊信息</div>
                     <div class='reservationStyle'>
                         <div>
-                            <label>科室：</label><span>示例专家科室</span>
-                            <label>医生：</label><span>ZJH</span>
-                            <label>擅长：</label><span>吃饭</span>
+                            <span><label style="color:black">科室：</label><span>{{treatmentInformation.department_name}}</span></span>
+                            <span v-if="doctorVisiable"><label style="color:black">医生：</label><span>ZJH</span></span>
+                            <span v-if="goodatVisiable"><label style="color:black">擅长：</label><span>吃饭</span></span>
                         </div>
                         <div>
-                            <label>挂号费：</label><span>￥1.00</span>
+                            <label>挂号费：</label><span>￥{{treatmentInformation.price}}</span>
                         </div>
                         <div>
-                            <label>时间：</label><span>2018-11-17(上午)</span>
+                            <label>时间：</label><span>{{treatmentInformation.schedule_time}}</span>
+                        </div>
+                        <div>
+                            <label>就诊时段：</label>
+                            <el-select v-model="timeSelected" placeholder="请选择就诊时段">
+                                <el-option v-for="item in timeHas" :key="item.value" :label="item.value" :value="item.value"></el-option>
+                            </el-select>
                         </div>
                     </div>
                 </el-main>
                 <el-footer style="backgroundColor:white;width:100%;height:100%;padding:20px;">
                     <div class="title-line">个人信息</div>
-                    <el-form ref="patientInformationForm" :model="patientInformationForm" label-width="100px" label-position='left' style="margin-left:20px;width:70%">
+                    <el-form ref="patientInformationForm" :model="patientInformationForm" label-width="100px" label-position='left' style="margin-left:20px;width:80%">
                         <el-form-item label="姓名:" >
-                        <el-select v-model="value" placeholder="请选择" style="width:50%">
+                        <el-select v-model="patintSelectValue" placeholder="请选择就诊人" style="width:25%" @change="wantInsertPatinet(patintSelectValue)">
                             <el-option
                             v-for="item in beChoicedPatient"
                             :key="item.id"
                             :label="item.name"
                             :value="item.id">
                             <span style="float: left">{{ item.name }}</span>
-                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.IdCard }}</span>
                             </el-option>
                         </el-select>
-                            <el-button type="primary" style="margin-left:20px">添加就诊人</el-button>
+                            <el-button type="primary" style="margin-left:12%" v-if="insertPatinetVisiable">添加就诊人</el-button>
                         </el-form-item>
                         <el-form-item label="初/复诊:" >
                             <el-radio v-model="patientInformationForm.accentRadio" label="初诊"></el-radio>
                             <el-radio v-model="patientInformationForm.accentRadio" label="复诊"></el-radio>
-                        </el-form-item>
-                        <el-form-item label="身份证号:" >
-                            <el-input v-model="patientInformationForm.IdCard" style="width:50%"></el-input>
-                        </el-form-item>
-                        <el-form-item label="手机号码:" >
-                            <el-input v-model="patientInformationForm.IdCard" style="width:50%"></el-input>
                         </el-form-item>
                         <el-form-item label="疾病描述:" >
                             <el-input type="textarea" :rows="5" style="width:100%" placeholder="请详细描述疾病、症状、发病时间、已服用的药物……" v-model="patientInformationForm.accentDetail"></el-input>
@@ -77,6 +76,7 @@ import treatmentProcess from "../../components/diagnose/treatmentProcess";
 export default {
   data() {
     return {
+      treatmentInformation: {},
       patientInformationForm: {
         patientName: "",
         accentRadio: "初诊",
@@ -88,16 +88,22 @@ export default {
       beChoicedPatient: [
         {
           id: 1,
-          name: "ZJH",
-          IdCard: "330104199610093012"
+          name: "ZJH"
         },
         {
           id: 2,
-          name: "ZJH2",
-          IdCard: "330104199610093013"
+          name: "ZJH2"
+        },{
+           id:0,
+            name:"需要添加就诊人"
         }
       ],
-      value: ""
+      patintSelectValue: "",
+      doctorVisiable: "",
+      goodatVisiable: "",
+      timeSelected:"",
+      timeHas:[],
+      insertPatinetVisiable:false
     };
   },
   components: {
@@ -116,10 +122,44 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return (isJPG || isPNG) && isLt2M;
+    },
+    wantInsertPatinet(id){
+        if(id == 0){
+            this.insertPatinetVisiable =  true;
+        }
+        else{
+            this.insertPatinetVisiable  = false;
+        }
     }
   },
   mounted() {
-    this.$store.state.treatmentProcessStore.active = 1;
+    this.$nextTick(function generate() {
+      this.$store.state.treatmentProcessStore.active = 1;
+      console.log(this.$route.params.treatmentInformation);
+      this.treatmentInformation = this.$route.params.treatmentInformation;
+      if (this.treatmentInformation == null) {
+        this.$router.push("netTreatRoom");
+      }
+      if (this.treatmentInformation.dept_type == 0) {
+        this.doctorVisiable = false;
+        this.goodatVisiable = false;
+      }
+      if(this.treatmentInformation.morning_has == 1){
+        this.timeHas.push({
+            value:'早上'
+        });
+      }
+      if(this.treatmentInformation.afternoon_has == 1){
+          this.timeHas.push({
+            value:'中午'
+        });
+      }
+      if(this.treatmentInformation.night_has == 1){
+          this.timeHas.push({
+            value:'晚上'
+        });
+      }
+    });
   }
 };
 </script>

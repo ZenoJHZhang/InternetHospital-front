@@ -10,13 +10,13 @@ import {
 const errorMsg = '服务器内部错误'
 const errorMsg401 = '用户登录失败'
 const errorFn = err => {
-  if (err.returnCode == 500) {
-    Message.error(err.returnType)
-  }
-  if (err.returnCode == 401) {
-    Message.error(err.returnType)
-  }
-  return err
+  // if (err.returnCode == 500) {
+  //   Message.error(err.returnType)
+  // }
+  // if (err.returnCode == 401) {
+  //   Message.error(err.returnType)
+  // }
+  // return err
 }
 const codeerror = d => {
   if (d.data != null && d.data.code == 401) {

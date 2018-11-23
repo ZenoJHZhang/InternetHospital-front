@@ -4,43 +4,46 @@
     <no-comment v-if="!this.$store.state.consultationDepartmentStore.isDepartment"></no-comment>
     <el-carousel v-if="this.$store.state.consultationDepartmentStore.isDepartment" :interval="4000" type="card" height="200px" style="width:100%" :autoplay="false" indicator-position='none'	>      
             <el-carousel-item v-for="department in departments" :key="department.id">
-                <img class="department-img-style" src="../../assets/diagnose/defaultDept.png">
+                <img class="department-img-style" :src="require('../../assets/diagnose/'+department.img_path)" >
                 <div class="department-message-style">{{department.department_name}}</div>
-                <el-button type="primary" :key="department.id">挂号({{department.time_message}})</el-button>
+                <el-button  type="primary" :key="department.id" @click="toReservation(department)">挂号({{department.time_message}})</el-button>
             </el-carousel-item>
     </el-carousel>
 </div>
 </template>
 
 <script>
-import noComment from '../../components/common/noComment'
-import axion from '../../utils/http_url'
+import noComment from "../../components/common/noComment";
+import axion from "../../utils/http_url";
 export default {
   data() {
     return {
-      departments: ''
+      departments: "",
+      treatmentInformation:""
     };
   },
-  components:{
+  components: {
     noComment
   },
-  methods:{
-    listDepartmentSchedule(){
+  methods: {
+    listDepartmentSchedule() {
       let date = new Date();
       this.month = date.getMonth() + 1;
       this.strDate = date.getDate();
       this.year = date.getFullYear();
-      let today = this.year+'-'+this.month+'-'+this.strDate;
-      axion.listDepartmentSchedule('2018-11-21')
-      .then(response => {
-        this.departments = response.data.returnData.list
-        if(this.departments.length > 0){
-           this.$store.state.consultationDepartmentStore.isDepartment = true;
+      let today = this.year + "-" + this.month + "-" + this.strDate;
+      axion.listDepartmentSchedule("2018-11-21").then(response => {
+        this.departments = response.data.returnData.list;
+        if (this.departments.length > 0) {
+          this.$store.state.consultationDepartmentStore.isDepartment = true;
         }
-      })
+      });
+    },
+    toReservation(department) {
+      this.$router.push({ name: "reservationData", params: {treatmentInformation:department } });
     }
   },
-  mounted(){
+  mounted() {
     this.$nextTick(function generate() {
       this.listDepartmentSchedule();
     });
@@ -72,7 +75,7 @@ export default {
   margin-left: 35%;
   margin-top: 20px;
   font-size: 12px;
-  padding-left: 0 ;
+  padding-left: 0;
   padding-right: 0;
 }
 .department-img-style {
