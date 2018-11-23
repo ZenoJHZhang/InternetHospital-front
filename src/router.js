@@ -27,11 +27,6 @@ export default new Router({
         component: () => import('./views/diagnose/reservationData.vue')
       }
     ]
-    },
-    {
-      path: '/test',
-      name: 'test',
-      component: () => import('./views/test/test.vue')
     }
   ]
 })
