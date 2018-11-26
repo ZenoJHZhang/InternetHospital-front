@@ -11,21 +11,22 @@
                     <div class="title-line">问诊信息</div>
                     <div class='reservationStyle'>
                         <div>
-                            <span><label style="color:black">科室：</label><span>{{treatmentInformation.department_name}}</span></span>
-                            <span v-if="doctorVisiable"><label style="color:black">医生：</label><span>ZJH</span></span>
-                            <span v-if="goodatVisiable"><label style="color:black">擅长：</label><span>吃饭</span></span>
+                            <span><label style="color:black">科室：</label><span>{{treatmentInformation.departmentName}}</span></span>
+                            <span v-if="isExpert"><label style="color:black">医生：</label><span>{{treatmentInformation.doctorName}}</span></span>
+                            <span v-if="isExpert"><label style="color:black">擅长：</label><span>{{treatmentInformation.goodat}}</span></span>
                         </div>
                         <div>
                             <label>挂号费：</label><span>￥{{treatmentInformation.price}}</span>
                         </div>
                         <div>
-                            <label>时间：</label><span>{{treatmentInformation.schedule_time}}</span>
+                            <label>时间：</label><span>{{treatmentInformation.scheduleTime}}</span>
                         </div>
                         <div>
                             <label>就诊时段：</label>
-                            <el-select v-model="timeSelected" placeholder="请选择就诊时段">
+                            <el-select v-model="timeSelected" placeholder="请选择就诊时段" v-if="!isExpert" style="margin-left:10px">
                                 <el-option v-for="item in timeHas" :key="item.value" :label="item.value" :value="item.value"></el-option>
                             </el-select>
+                            <span v-if="isExpert">{{treatmentInformation.timeInterval}}</span>
                         </div>
                     </div>
                 </el-main>
@@ -93,17 +94,17 @@ export default {
         {
           id: 2,
           name: "ZJH2"
-        },{
-           id:0,
-            name:"需要添加就诊人"
+        },
+        {
+          id: 0,
+          name: "需要添加就诊人"
         }
       ],
       patintSelectValue: "",
-      doctorVisiable: "",
-      goodatVisiable: "",
-      timeSelected:"",
-      timeHas:[],
-      insertPatinetVisiable:false
+      isExpert: "",
+      timeSelected: "",
+      timeHas: [],
+      insertPatinetVisiable: false
     };
   },
   components: {
@@ -123,40 +124,43 @@ export default {
       }
       return (isJPG || isPNG) && isLt2M;
     },
-    wantInsertPatinet(id){
-        if(id == 0){
-            this.insertPatinetVisiable =  true;
-        }
-        else{
-            this.insertPatinetVisiable  = false;
-        }
+    wantInsertPatinet(id) {
+      if (id == 0) {
+        this.insertPatinetVisiable = true;
+      } else {
+        this.insertPatinetVisiable = false;
+      }
     }
   },
   mounted() {
     this.$nextTick(function generate() {
       this.$store.state.treatmentProcessStore.active = 1;
-      console.log(this.$route.params.treatmentInformation);
       this.treatmentInformation = this.$route.params.treatmentInformation;
       if (this.treatmentInformation == null) {
         this.$router.push("netTreatRoom");
       }
-      if (this.treatmentInformation.dept_type == 0) {
-        this.doctorVisiable = false;
-        this.goodatVisiable = false;
+      if (this.treatmentInformation.deptType == 0) {
+          this.isExpert = false;
+        if (this.treatmentInformation.morningHas == 1) {
+          this.timeHas.push({
+            value: "早上"
+          });
+        }
+        if (this.treatmentInformation.afternoonHas == 1) {
+          this.timeHas.push({
+            value: "下午"
+          });
+        }
+        if (this.treatmentInformation.nightHas == 1) {
+          this.timeHas.push({
+            value: "晚上"
+          });
+        }
       }
-      if(this.treatmentInformation.morning_has == 1){
+      if (this.treatmentInformation.deptType == 1) {
+        this.isExpert = true;
         this.timeHas.push({
-            value:'早上'
-        });
-      }
-      if(this.treatmentInformation.afternoon_has == 1){
-          this.timeHas.push({
-            value:'中午'
-        });
-      }
-      if(this.treatmentInformation.night_has == 1){
-          this.timeHas.push({
-            value:'晚上'
+          value: this.treatmentInformation.timeInterval
         });
       }
     });

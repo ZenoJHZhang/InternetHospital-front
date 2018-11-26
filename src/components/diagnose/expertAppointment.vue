@@ -4,32 +4,31 @@
     <el-form ref="treatRoomForm">
         <el-form-item>
             <label class="title-label">科室筛选</label>
-            <el-radio-group v-model="expertreatRoomNameRadio" v-for="room in expertreatRoom" :key="room.id" size="medium">
+            <el-radio-group v-model="expertreatRoomNameRadio" v-for="room in expertreatRooms" :key="room.id" size="medium"  @change="listExpertDoctor()">
                 <el-radio-button :label="room.departmentName"></el-radio-button>
             </el-radio-group>
         </el-form-item>
         <el-form-item>
             <label class="title-label">就诊日期</label>
-            <el-radio-group v-model="expertreatRoomDateRadio" v-for="t in 5" :key="t" size="medium">
-                <el-radio-button :label="month+'月'+(strDate+t)+'日'"></el-radio-button>
+            <el-radio-group v-model="expertreatRoomDateRadio" v-for="t in 5" :key="t" size="medium"  @change="listExpertDoctor()">
+                <el-radio-button :label="month+'-'+(strDate+t)"></el-radio-button>
             </el-radio-group>
         </el-form-item>
         <el-form-item>
             <label class="title-label">就诊时段</label>
-            <el-radio-group v-model="expertreatRoomTimeRadio" size="medium">
-                <el-radio-button label="上午"></el-radio-button>
-                <el-radio-button label="下午"></el-radio-button>
-                <el-radio-button label="晚上"></el-radio-button>
+            <el-radio-group v-model="expertreatRoomTimeRadio" size="medium" @change="listExpertDoctor()" >
+                <el-radio-button label="上午" ></el-radio-button>
+                <el-radio-button label="下午" ></el-radio-button>
+                <el-radio-button label="晚上" ></el-radio-button>
             </el-radio-group>
         </el-form-item>
-        <no-comment v-if="!this.$store.state.expertAppointmentStore.isExpert"></no-comment>
-        <el-form-item v-if="this.$store.state.expertAppointmentStore.isExpert">
-            <li class="expertLi" v-for="expert in experts" :key="expert.id">
-              <img class="expertImg" :src='expert.expertImg'>
-              <div class="expertName"><span>{{expert.expertName}}</span></div>
-              <div class="expertDepartment">{{expert.expertDepartment}}</div>
-              <div class="expertMajor">{{expert.expertMajor}}</div>
-              <el-button size="small" :disabled="!expert.expertNumber>0" @click="reservation()">预约（{{expert.expertNumber}}个号源）</el-button>
+        <no-comment v-if="!this.isExpertDoctor" style="height:220px;margin-top:80px"></no-comment>
+        <el-form-item v-if="this.isExpertDoctor">
+            <li class="expertLi" v-for="t in scheduleDoctors" :key="t.id">
+              <img class="expertImg" :src="require('../../assets/diagnose/'+t.doctor.imgPath)">
+              <div class="expertName"><span>{{t.doctor.doctorName}}</span></div>
+              <div class="expertMajor">{{t.doctor.goodat}}</div>
+              <el-button size="small" :disabled="!t.timeIntervalNumber>0" @click="reservation(t)">预约（{{t.timeIntervalNumber}}个号源）</el-button>
             </li>
         </el-form-item>
     </el-form>
@@ -38,95 +37,123 @@
 
 <script>
 import noComment from "../../components/common/noComment";
+import axion from "../../utils/http_url";
 export default {
   data() {
     return {
       strDate: "",
       month: "",
-      expertreatRoomNameRadio: "示例专家科室",
+      expertreatRoomNameRadio: "",
       expertreatRoomDateRadio: "",
       expertreatRoomTimeRadio: "上午",
-      expertreatRoom: [
-        {
-          departmentName: "示例专家科室"
-        },
-        {
-          departmentName: "外科专家科室"
-        }
-      ],
-      experts: [
-        {
-          id: 1,
-          expertName: "ZJH",
-          expertDepartment: "示例专家科室",
-          expertMajor: "吃",
-          expertNumber: 0,
-          expertImg: require("../../assets/diagnose/expert.png")
-        },
-        {
-          id: 2,
-          expertName: "ZJH",
-          expertDepartment: "示例专家科室",
-          expertMajor: "吃饭",
-          expertNumber: 20,
-          expertImg: require("../../assets/diagnose/expert.png")
-        },
-        {
-          id: 3,
-          expertName: "ZJH",
-          expertDepartment: "示例专家科室",
-          expertMajor: "吃饭",
-          expertNumber: 50,
-          expertImg: require("../../assets/diagnose/expert.png")
-        },
-        {
-          id: 4,
-          expertName: "ZJH",
-          expertDepartment: "示例专家科室",
-          expertMajor: "吃饭",
-          expertNumber: 50,
-          expertImg: require("../../assets/diagnose/expert.png")
-        },
-        {
-          id: 5,
-          expertName: "ZJH",
-          expertDepartment: "示例专家科室",
-          expertMajor: "吃饭",
-          expertNumber: 50,
-          expertImg: require("../../assets/diagnose/expert.png")
-        },
-        {
-          id: 6,
-          expertName: "ZJH",
-          expertDepartment: "示例专家科室",
-          expertMajor: "吃饭",
-          expertNumber: 50,
-          expertImg: require("../../assets/diagnose/expert.png")
-        }
-      ]
+      expertreatRooms: "",
+      scheduleDoctors: "",
+      pageNo: 1,
+      pageSize: 5,
+      isExpertDoctor: true,
+      year: "",
+      treatmentInformation: {
+        departmentId: "",
+        departmentName: "",
+        morningHas: "",
+        afternoonHas: "",
+        nightHas: "",
+        scheduleTime: "",
+        price: "",
+        deptType: "",
+        doctorId:'',
+        doctorName:'',
+        goodat:"",
+        timeInterval:''
+      }
     };
   },
   methods: {
+    listExpertDepartment() {
+      axion.listExpertDepartment().then(response => {
+        if (response.status == 200) {
+          this.expertreatRooms = response.data.returnData;
+          this.expertreatRoomNameRadio =
+            response.data.returnData[0].departmentName;
+          axion
+            .listExpertDoctor(
+              response.data.returnData[0].departmentName,
+              this.year + "-" + this.month + "-" + (this.strDate + 1),
+              this.expertreatRoomTimeRadio,
+              this.pageNo,
+              this.pageSize
+            )
+            .then(response => {
+              if (response.status == 200) {
+                this.scheduleDoctors = response.data.returnData.list;
+                if (response.data.returnData.list.length > 0) {
+                  this.isExpertDoctor = true;
+                } else {
+                  this.isExpertDoctor = false;
+                }
+              } else {
+                this.$message.error("服务器异常，请稍后重试！");
+              }
+            });
+        } else {
+          this.$message.error("服务器异常，请稍后重试！");
+        }
+      });
+    },
     getDateFormat() {
       var date = new Date();
       this.month = date.getMonth() + 1;
       this.strDate = date.getDate();
-      this.expertreatRoomDateRadio =
-        this.month + "月" + (this.strDate + 1) + "日";
+      this.year = date.getFullYear();
+      this.expertreatRoomDateRadio = this.month + "-" + (this.strDate + 1);
     },
-    isExpertJudge() {
-      if (this.experts.length > 0) {
-        this.$store.state.expertAppointmentStore.isExpert = true;
-      }
+    reservation(treatRoom) {
+      this.treatmentInformation.departmentName =
+        treatRoom.department.departmentName;
+      this.treatmentInformation.departmentId =
+        treatRoom.department.departmentId;
+      this.treatmentInformation.price = treatRoom.department.price;
+      this.treatmentInformation.deptType = treatRoom.department.deptType;
+      this.treatmentInformation.scheduleTime = treatRoom.scheduleTime;
+      this.treatmentInformation.morningHas = treatRoom.doctorMorningHas;
+      this.treatmentInformation.afternoonHas = treatRoom.doctorAfternoonHas;
+      this.treatmentInformation.nightHas = treatRoom.doctorNightHas;
+      this.treatmentInformation.doctorId = treatRoom.doctor.doctorId;
+      this.treatmentInformation.doctorName = treatRoom.doctor.doctorName;
+      this.treatmentInformation.goodat = treatRoom.doctor.goodat;
+      this.treatmentInformation.timeInterval = this.expertreatRoomTimeRadio;
+      this.$router.push({
+        name: "reservationData",
+        params: { treatmentInformation: this.treatmentInformation }
+      });
     },
-    reservation() {
-      this.$router.push("/reservationData");
+    listExpertDoctor() {
+      axion
+        .listExpertDoctor(
+          this.expertreatRoomNameRadio,
+          this.year + "-" + this.expertreatRoomDateRadio,
+          this.expertreatRoomTimeRadio,
+          this.pageNo,
+          this.pageSize
+        )
+        .then(response => {
+          if (response.status == 200) {
+            this.scheduleDoctors = response.data.returnData.list;
+            if (response.data.returnData.list.length > 0) {
+              this.isExpertDoctor = true;
+            } else {
+              this.isExpertDoctor = false;
+            }
+          } else {
+            this.$message.error("服务器异常，请稍后重试！");
+          }
+        });
     }
   },
   mounted() {
     this.$nextTick(function getDate() {
       this.getDateFormat();
-      this.isExpertJudge();
+      this.listExpertDepartment();
     });
   },
   components: {

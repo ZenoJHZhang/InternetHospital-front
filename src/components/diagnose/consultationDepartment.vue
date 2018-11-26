@@ -1,12 +1,12 @@
 <template>
 <div>
     <div class="title-line">今日接诊科室<i class="fas fa-hand-point-right" style="float:right"> 更多</i></div>
-    <no-comment v-if="!this.$store.state.consultationDepartmentStore.isDepartment"></no-comment>
+    <no-comment v-if="!this.$store.state.consultationDepartmentStore.isDepartment" style="margin-top:50px"></no-comment>
     <el-carousel v-if="this.$store.state.consultationDepartmentStore.isDepartment" :interval="4000" type="card" height="200px" style="width:100%" :autoplay="false" indicator-position='none'	>      
             <el-carousel-item v-for="department in departments" :key="department.id">
-                <img class="department-img-style" :src="require('../../assets/diagnose/'+department.img_path)" >
-                <div class="department-message-style">{{department.department_name}}</div>
-                <el-button  type="primary" :key="department.id" @click="toReservation(department)">挂号({{department.time_message}})</el-button>
+                <img class="department-img-style" :src="require('../../assets/diagnose/'+department.imgPath)" >
+                <div class="department-message-style">{{department.departmentName}}</div>
+                <el-button  type="primary" :key="department.id" @click="toReservation(department)">挂号({{department.timeMessage}})</el-button>
             </el-carousel-item>
     </el-carousel>
 </div>
@@ -19,7 +19,9 @@ export default {
   data() {
     return {
       departments: "",
-      treatmentInformation:""
+      treatmentInformation: "",
+      pageNo: 1,
+      pageSize: 5
     };
   },
   components: {
@@ -32,15 +34,25 @@ export default {
       this.strDate = date.getDate();
       this.year = date.getFullYear();
       let today = this.year + "-" + this.month + "-" + this.strDate;
-      axion.listDepartmentSchedule("2018-11-21").then(response => {
-        this.departments = response.data.returnData.list;
-        if (this.departments.length > 0) {
-          this.$store.state.consultationDepartmentStore.isDepartment = true;
-        }
-      });
+      axion
+        .listDepartmentSchedule(today, this.pageNo, this.pageSize)
+        .then(response => {
+          if (response.status == 200) {
+            this.departments = response.data.returnData.list;
+            if (this.departments.length > 0) {
+              this.$store.state.consultationDepartmentStore.isDepartment = true;
+            }
+          }
+         else{
+           this.$message.error('服务器异常，请稍后重试！')
+         }
+        });
     },
     toReservation(department) {
-      this.$router.push({ name: "reservationData", params: {treatmentInformation:department } });
+      this.$router.push({
+        name: "reservationData",
+        params: { treatmentInformation: department }
+      });
     }
   },
   mounted() {

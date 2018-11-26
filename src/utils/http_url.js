@@ -47,11 +47,18 @@ const test = (name) => post('/test',name)
 /**登录 */
 const login = (phone,password)  => get('/user/login?phone='+phone+'&password='+password)
 const register = (phone,password) => post('/user/register',phone,password)
-/** 获取当日诊室信息及其排班信息 */
-const listDepartmentSchedule = (date) => get('/department/scheduleOfDay?date='+date)
+/** 分页获取当日诊室信息及其排班信息 */
+const listDepartmentSchedule = (date,pageNo,pageSize) => get('/department/scheduleOfDay?date='+date+'&pageNo='+pageNo+'&pageSize='+pageSize)
+/** 分页获取当日，该时段该科室内的排班医生 */
+const listExpertDoctor = (departmentName,scheduleTime,timeInterval,pageNo,pageSize) => get('/schedule/listExpertDoctor?departmentName='
++departmentName+'&scheduleTime='+scheduleTime+'&timeInterval='+timeInterval+'&pageNo='+pageNo+'&pageSize='+pageSize)
+/** 获取所有的专家科室 */
+const listExpertDepartment = () =>get("/department/listExpertDepartment");
 export default {
   test,
   login,
   register,
-  listDepartmentSchedule
+  listDepartmentSchedule,
+  listExpertDoctor,
+  listExpertDepartment
 }

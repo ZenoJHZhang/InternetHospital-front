@@ -169,6 +169,8 @@ export default {
                       duration: 1000
                     });
                   }
+                } else {
+                  this.$message.error("服务器异常，请稍后重试！");
                 }
               });
           }
@@ -179,7 +181,7 @@ export default {
                 password: this.registerForm.password
               })
               .then(response => {
-                console.log(response)
+                console.log(response);
                 if (response.status == 200) {
                   if (response.data.returnCode == 200) {
                     this.$message({
@@ -189,18 +191,18 @@ export default {
                     });
                     this.registerFormVisible = false;
                     this.$router.push("/");
-                  }
-                  else if(response.data.returnCode == 400){
+                  } else if (response.data.returnCode == 400) {
                     this.$message({
                       message: response.data.returnType,
                       type: "error",
                       duration: 1000
                     });
                   }
+                } else {
+                  this.$message.error("服务器异常，请稍后重试！");
                 }
               });
           }
-
         } else {
           console.log("error submit!!");
           return false;
@@ -214,7 +216,7 @@ export default {
       this.loginFormVisible = false;
       this.registerFormVisible = true;
     },
-    toLogin(){
+    toLogin() {
       this.loginFormVisible = true;
       this.registerFormVisible = false;
     }
