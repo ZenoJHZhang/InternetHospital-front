@@ -4,7 +4,6 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import treatment_process_store from './treatmentProcessStore.js'
-import expert_appointment_store from './expertAppointmentStore.js'
 import consultation_department_store from './consultationDepartmentStore.js'
 import common_store from "./commonStore.js"
 export default new Vuex.Store({
@@ -31,7 +30,6 @@ export default new Vuex.Store({
   },
   modules: {
     treatmentProcessStore: treatment_process_store,
-    expertAppointmentStore: expert_appointment_store,
     consultationDepartmentStore: consultation_department_store,
     commonStore: common_store
   }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <img src="../../assets/diagnose/noCommon.png">
+        <img src="@/assets/diagnose/noCommon.png">
         <p>暂无科室</p>  
     </div>
 </template>

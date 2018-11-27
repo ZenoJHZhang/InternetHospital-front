@@ -1,7 +1,7 @@
 <template>
 <div>
     <el-container style="padding:0">
-        <el-header style="height:100%;padding:0px"><img src="../../assets/diagnose/specialistClinic.png"></el-header>
+        <el-header style="height:100%;padding:0px"><img src="@/assets/diagnose/specialistClinic.png"></el-header>
         <el-main style="backgroundColor:#eeeeee;padding-left:15%;padding-right:15%;padding-top:50px">
             <el-container>
                <el-header style="backgroundColor:white;width:100%;margin-bottom:20px;height:100%;padding:20px;">
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import treatmentProcess from "../../components/diagnose/treatmentProcess";
+import treatmentProcess from "@/components/diagnose/treatmentProcess";
 export default {
   data() {
     return {

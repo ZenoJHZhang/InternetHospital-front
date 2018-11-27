@@ -7,7 +7,7 @@
   <el-container>
   <el-header style="height:66px;padding-top:0"> 
     <el-container style="padding-top:5px">
-      <el-aside width="25%"> <img id="logo" src="../../assets/index/logo.png"></el-aside>
+      <el-aside width="25%"> <img id="logo" src="@/assets/index/logo.png"></el-aside>
       <el-main style="padding-left:20%;height:61px;overflow:hidden">  
         <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" router background-color=#F2F2F2>
             <el-menu-item index="/">首页</el-menu-item>
@@ -59,7 +59,7 @@ export default {
   name: "meunBar",
   data() {
     return {
-      phone:''
+      phone: ""
     };
   },
   methods: {
@@ -73,19 +73,22 @@ export default {
       this.$router.push("/");
       this.$store.state.commonStore.isUserLogin = false;
     },
-    getLoginDetail(){
-      let phone = localStorage.getItem('phone');
-      let token = localStorage.getItem('token')
-      if(phone != null && token != null){
+    getLoginDetail() {
+      let phone = this.$store.state.phone;
+      if (phone == '') {
+        phone = localStorage.getItem("phone");
+      }
+      let token = localStorage.getItem("token");
+      if (phone != null && token != null) {
         this.$store.state.commonStore.isUserLogin = true;
         this.phone = phone;
       }
     }
   },
   mounted() {
-  this.$nextTick(function () {
+    this.$nextTick(function() {
       this.getLoginDetail();
-  })
+    });
   }
 };
 </script>

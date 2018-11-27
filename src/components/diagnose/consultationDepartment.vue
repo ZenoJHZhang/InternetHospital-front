@@ -4,7 +4,7 @@
     <no-comment v-if="!this.$store.state.consultationDepartmentStore.isDepartment" style="margin-top:50px"></no-comment>
     <el-carousel v-if="this.$store.state.consultationDepartmentStore.isDepartment" :interval="4000" type="card" height="200px" style="width:100%" :autoplay="false" indicator-position='none'	>      
             <el-carousel-item v-for="department in departments" :key="department.id">
-                <img class="department-img-style" :src="require('../../assets/diagnose/'+department.imgPath)" >
+                <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)" >
                 <div class="department-message-style">{{department.departmentName}}</div>
                 <el-button  type="primary" :key="department.id" @click="toReservation(department)">挂号({{department.timeMessage}})</el-button>
             </el-carousel-item>
@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import noComment from "../../components/common/noComment";
-import axion from "../../utils/http_url";
+import noComment from "@/components/common/noComment";
+import axion from "@/utils/http_url";
 export default {
   data() {
     return {

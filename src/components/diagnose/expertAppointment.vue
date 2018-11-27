@@ -25,7 +25,7 @@
         <no-comment v-if="!this.isExpertDoctor" style="height:220px;margin-top:80px"></no-comment>
         <el-form-item v-if="this.isExpertDoctor">
             <li class="expertLi" v-for="t in scheduleDoctors" :key="t.id">
-              <img class="expertImg" :src="require('../../assets/diagnose/'+t.doctor.imgPath)">
+              <img class="expertImg" :src="require('@/assets/diagnose/'+t.doctor.imgPath)">
               <div class="expertName"><span>{{t.doctor.doctorName}}</span></div>
               <div class="expertMajor">{{t.doctor.goodat}}</div>
               <el-button size="small" :disabled="!t.timeIntervalNumber>0" @click="reservation(t)">预约（{{t.timeIntervalNumber}}个号源）</el-button>
@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import noComment from "../../components/common/noComment";
-import axion from "../../utils/http_url";
+import noComment from "@/components/common/noComment";
+import axion from "@/utils/http_url";
 export default {
   data() {
     return {

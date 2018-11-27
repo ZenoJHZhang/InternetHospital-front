@@ -9,7 +9,7 @@
           </el-carousel-item>
         </el-carousel>
         <div class="lrButton">
-          <img src="../../assets/index/sign.png">
+          <img src="@/assets/index/sign.png">
           <el-button id="login" type="primary" @click="loginFormVisible = true" v-if="!this.$store.state.commonStore.isUserLogin">登录</el-button>
           <el-button id="register" @click="registerFormVisible = true" v-if="!this.$store.state.commonStore.isUserLogin">注册</el-button>
         </div>
@@ -59,7 +59,7 @@
 
 
 <script>
-import axion from "../../utils/http_url.js";
+import axion from "@/utils/http_url.js";
 export default {
   data() {
     var confirmPasswordRule = (rule, value, callback) => {
@@ -75,9 +75,9 @@ export default {
       autoplay: false,
       // screenHeight: document.documentElement.clientHeight - 81+'px', //减去header的60px
       imgs: [
-        { path: require("../../assets/index/home1.jpg") },
-        { path: require("../../assets/index/home2.jpg") },
-        { path: require("../../assets/index/home3.jpg") }
+        { path: require("@/assets/index/home1.jpg") },
+        { path: require("@/assets/index/home2.jpg") },
+        { path: require("@/assets/index/home3.jpg") }
       ],
       loginForm: {
         phone: "",
@@ -162,6 +162,7 @@ export default {
                     this.loginFormVisible = false;
                     this.$router.push("netTreatRoom");
                     this.$store.state.commonStore.isUserLogin = true;
+                    this.$store.state.commonStore.isRefresh = true;
                   } else if (response.data.returnCode == 401) {
                     this.$message({
                       message: response.data.returnType,
