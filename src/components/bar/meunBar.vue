@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="head">
-    <span v-if="this.$store.state.commonStore.isUserLogin" style="margin-left:65%">你好,{{phone}}</span>
+    <span v-if="this.$store.state.commonStore.isUserLogin" style="margin-left:65%">你好,{{this.$store.state.phone}}</span>
     <span v-if="this.$store.state.commonStore.isUserLogin" id="logout" @click="logout()">退出</span>
   </div>
   <el-container>
@@ -74,14 +74,10 @@ export default {
       this.$store.state.commonStore.isUserLogin = false;
     },
     getLoginDetail() {
-      let phone = this.$store.state.phone;
-      if (phone == '') {
-        phone = localStorage.getItem("phone");
-      }
+      this.$store.state.phone = localStorage.getItem("phone");
       let token = localStorage.getItem("token");
-      if (phone != null && token != null) {
+      if (this.$store.state.phone != null && token != null) {
         this.$store.state.commonStore.isUserLogin = true;
-        this.phone = phone;
       }
     }
   },

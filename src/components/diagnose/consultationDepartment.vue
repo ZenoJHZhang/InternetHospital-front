@@ -1,15 +1,33 @@
 <template>
-<div>
-    <div class="title-line">今日接诊科室<i class="fas fa-hand-point-right" style="float:right"> 更多</i></div>
-    <no-comment v-if="!this.$store.state.consultationDepartmentStore.isDepartment" style="margin-top:50px"></no-comment>
-    <el-carousel v-if="this.$store.state.consultationDepartmentStore.isDepartment" :interval="4000" type="card" height="200px" style="width:100%" :autoplay="false" indicator-position='none'	>      
-            <el-carousel-item v-for="department in departments" :key="department.id">
-                <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)" >
-                <div class="department-message-style">{{department.departmentName}}</div>
-                <el-button  type="primary" :key="department.id" @click="toReservation(department)">挂号({{department.timeMessage}})</el-button>
-            </el-carousel-item>
+  <div>
+    <div class="title-line">
+      今日接诊科室
+      <i class="fas fa-hand-point-right" style="float:right">更多</i>
+    </div>
+    <no-comment
+      v-if="!this.$store.state.consultationDepartmentStore.isDepartment"
+      style="margin-top:50px"
+    ></no-comment>
+    <el-carousel
+      v-if="this.$store.state.consultationDepartmentStore.isDepartment"
+      :interval="4000"
+      type="card"
+      height="200px"
+      style="width:100%"
+      :autoplay="false"
+      indicator-position="none"
+    >
+      <el-carousel-item v-for="department in departments" :key="department.id">
+        <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)">
+        <div class="department-message-style">{{department.departmentName}}</div>
+        <el-button
+          type="primary"
+          :key="department.id"
+          @click="toReservation(department)"
+        >挂号({{department.timeMessage}})</el-button>
+      </el-carousel-item>
     </el-carousel>
-</div>
+  </div>
 </template>
 
 <script>
@@ -42,17 +60,17 @@ export default {
             if (this.departments.length > 0) {
               this.$store.state.consultationDepartmentStore.isDepartment = true;
             }
+          } else {
+            this.$message.error("服务器异常，请稍后重试！");
           }
-         else{
-           this.$message.error('服务器异常，请稍后重试！')
-         }
         });
     },
     toReservation(department) {
-      this.$router.push({
-        name: "reservationData",
-        params: { treatmentInformation: department }
-      });
+      sessionStorage.setItem(
+        "treatmentInformation",
+        JSON.stringify(department)
+      );
+      this.$router.push("reservationData");
     }
   },
   mounted() {

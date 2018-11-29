@@ -162,7 +162,6 @@ export default {
                     this.loginFormVisible = false;
                     this.$router.push("netTreatRoom");
                     this.$store.state.commonStore.isUserLogin = true;
-                    this.$store.state.commonStore.isRefresh = true;
                   } else if (response.data.returnCode == 401) {
                     this.$message({
                       message: response.data.returnType,
@@ -179,7 +178,8 @@ export default {
             axion
               .register({
                 phone: this.registerForm.phone,
-                password: this.registerForm.password
+                password: this.registerForm.password,
+                roleId: 1
               })
               .then(response => {
                 console.log(response);

@@ -19,8 +19,7 @@ export default new Vuex.Store({
         localStorage.setItem("phone",user.phone)
       },
       remove_token(state){
-        localStorage.removeItem("token");
-        localStorage.removeItem("phone")
+        localStorage.clear();
         state.token = '';
         state.phone = '';
       }
