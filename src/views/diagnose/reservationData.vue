@@ -36,40 +36,43 @@
                 <label>时间：</label>
                 <span>{{treatmentInformation.scheduleTime}}</span>
               </div>
-              <div>
-                <label>就诊时段：</label>
-                <el-select
-                  v-model="timeSelected"
-                  placeholder="请选择就诊时段"
-                  v-if="!isExpert"
-                  style="margin-left:10px"
-                >
-                  <el-option
-                    v-for="item in timeHas"
-                    :key="item.value"
-                    :label="item.value"
-                    :value="item.value"
-                  ></el-option>
-                </el-select>
+              <el-form ref="userReservation" :rules="treatmentInformationRules">
+                <label v-if="isExpert">就诊时段：</label>
                 <span v-if="isExpert">{{treatmentInformation.timeInterval}}</span>
-              </div>
+                <el-form-item label="就诊时段：" v-if="!isExpert" prop="timeInterval">
+                  <el-select
+                    v-model="timeSelected"
+                    placeholder="请选择就诊时段"
+                    v-if="!isExpert"
+                    style="margin-left:10px"
+                  >
+                    <el-option
+                      v-for="item in timeHas"
+                      :key="item.value"
+                      :label="item.value"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-form>
             </div>
           </el-main>
           <el-footer style="backgroundColor:white;width:100%;height:100%;padding:20px;">
             <div class="title-line">个人信息</div>
             <el-form
-              ref="patientInformationForm"
-              :model="patientInformationForm"
+              ref="userReservation"
+              :model="userReservation"
               label-width="100px"
               label-position="left"
               style="margin-left:20px;width:80%"
+              :rules="treatmentInformationRules"
             >
-              <el-form-item label="姓名:">
+              <el-form-item label="姓名:" prop="paientName">
                 <el-select
-                  v-model="patintSelectValue"
+                  v-model="userReservation.patientId"
                   placeholder="请选择就诊人"
                   style="width:25%"
-                  @change="wantInsertPatinet(patintSelectValue)"
+                  @change="wantInsertPatinet(userReservation.patientId)"
                 >
                   <el-option
                     v-for="item in beChoicedPatient"
@@ -82,23 +85,22 @@
                 </el-select>
                 <el-button type="primary" style="margin-left:12%" v-if="insertPatinetVisiable">添加就诊人</el-button>
               </el-form-item>
-              <el-form-item label="初/复诊:">
-                <el-radio v-model="patientInformationForm.accentVisit" label="初诊"></el-radio>
-                <el-radio v-model="patientInformationForm.accentVisit" label="复诊"></el-radio>
+              <el-form-item label="初/复诊:" prop="accentVisit">
+                <el-radio v-model="userReservation.accentVisit" label="初诊"></el-radio>
+                <el-radio v-model="userReservation.accentVisit" label="复诊"></el-radio>
               </el-form-item>
-              <el-form-item label="疾病描述:">
+              <el-form-item label="疾病描述:" prop="accentDetail">
                 <el-input
                   type="textarea"
                   :rows="5"
                   style="width:100%"
                   placeholder="请详细描述疾病、症状、发病时间、已服用的药物……"
-                  v-model="patientInformationForm.accentDetail"
+                  v-model="userReservation.accentDetail"
                 ></el-input>
               </el-form-item>
-              <el-form-item>
+              <el-form-item label="病情图片：">
                 <el-upload
                   action="http://localhost:8080/userReservation/insertReservationImg"
-                  
                   list-type="picture-card"
                   :before-upload="beforeImgUpload"
                 >
@@ -107,7 +109,7 @@
               </el-form-item>
               <el-form-item style="text-align:center ">
                 <el-button type="info">上一步</el-button>
-                <el-button type="primary">提交申请</el-button>
+                <el-button type="primary" @click="insertUserReservation()">提交申请</el-button>
               </el-form-item>
             </el-form>
           </el-footer>
@@ -123,12 +125,8 @@ export default {
   data() {
     return {
       treatmentInformation: {},
-      patientInformationForm: {
-        patientName: "",
-        accentVisit: "初诊",
-        IdCard: "",
-        phone: "",
-        accentDetail: ""
+      userReservation: {
+        accentVisit: "初诊"
       },
       /**选择就诊人 */
       beChoicedPatient: [
@@ -145,11 +143,24 @@ export default {
           name: "需要添加就诊人"
         }
       ],
-      patintSelectValue: "",
       isExpert: "",
       timeSelected: "",
       timeHas: [],
-      insertPatinetVisiable: false
+      insertPatinetVisiable: false,
+      treatmentInformationRules: {
+        paientName: [
+          { required: true, message: "请选择就诊人", trigger: "blur" }
+        ],
+        accentVisit: [
+          { required: true, message: "请填写疾病描述", trigger: "blur" }
+        ],
+        accentDetail: [
+          { required: true, message: "请填写疾病描述", trigger: "blur" }
+        ],
+        timeInterval: [
+          { required: true, message: "请选择就诊时间段", trigger: "blur" }
+        ]
+      }
     };
   },
   components: {
@@ -176,40 +187,64 @@ export default {
         this.insertPatinetVisiable = false;
       }
     },
-    insertReservationimg(file) {
-      console.log(file);
+    insertUserReservation() {
+      this.$refs.userReservation.validate(valid => {
+        if (valid) {
+          this.userReservation.doctorId = this.treatmentInformation.doctorId;
+          this.userReservation.doctorName = this.treatmentInformation.doctorName;
+          this.userReservation.departmentId = this.treatmentInformation.departmentId;
+          this.userReservation.departmentName = this.treatmentInformation.departmentName;
+          this.userReservation.deptType = this.treatmentInformation.deptType;
+          this.userReservation.hospitalId = this.treatmentInformation.hospitalId;
+          this.userReservation.price = this.treatmentInformation.price;
+          this.userReservation.scheduleDoctorId = this.treatmentInformation.scheduleDoctorId;
+          this.userReservation.scheduleTime = this.treatmentInformation.scheduleTime;
+          if (this.isExpert) {
+            this.userReservation.timeInterval = this.treatmentInformation.timeInterval;
+          } else {
+            this.userReservation.timeInterval = this.timeSelected;
+          }
+          console.log(this.userReservation);
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     }
   },
   mounted() {
     this.$nextTick(function generate() {
       this.$store.state.treatmentProcessStore.active = 1;
-      this.treatmentInformation = JSON.parse(sessionStorage.getItem('treatmentInformation'));
+      this.treatmentInformation = JSON.parse(
+        sessionStorage.getItem("treatmentInformation")
+      );
       if (this.treatmentInformation == null) {
         this.$router.push("netTreatRoom");
-      }
-      if (this.treatmentInformation.deptType == 0) {
-        this.isExpert = false;
-        if (this.treatmentInformation.morningHas == 1) {
+      } else {
+        if (this.treatmentInformation.deptType == 0) {
+          this.isExpert = false;
+          if (this.treatmentInformation.morningHas == 1) {
+            this.timeHas.push({
+              value: "早上"
+            });
+          }
+          if (this.treatmentInformation.afternoonHas == 1) {
+            this.timeHas.push({
+              value: "下午"
+            });
+          }
+          if (this.treatmentInformation.nightHas == 1) {
+            this.timeHas.push({
+              value: "晚上"
+            });
+          }
+        }
+        if (this.treatmentInformation.deptType == 1) {
+          this.isExpert = true;
           this.timeHas.push({
-            value: "早上"
+            value: this.treatmentInformation.timeInterval
           });
         }
-        if (this.treatmentInformation.afternoonHas == 1) {
-          this.timeHas.push({
-            value: "下午"
-          });
-        }
-        if (this.treatmentInformation.nightHas == 1) {
-          this.timeHas.push({
-            value: "晚上"
-          });
-        }
-      }
-      if (this.treatmentInformation.deptType == 1) {
-        this.isExpert = true;
-        this.timeHas.push({
-          value: this.treatmentInformation.timeInterval
-        });
       }
     });
   }

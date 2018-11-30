@@ -33,6 +33,7 @@
 <script>
 import noComment from "@/components/common/noComment";
 import axion from "@/utils/http_url";
+import dateUtil from "@/utils/dateUtil";
 export default {
   data() {
     return {
@@ -47,30 +48,33 @@ export default {
   },
   methods: {
     listDepartmentSchedule() {
-      let date = new Date();
-      this.month = date.getMonth() + 1;
-      this.strDate = date.getDate();
-      this.year = date.getFullYear();
-      let today = this.year + "-" + this.month + "-" + this.strDate;
+      let today = dateUtil.getDay(0, "-");
       axion
         .listDepartmentSchedule(today, this.pageNo, this.pageSize)
         .then(response => {
-          if (response.status == 200) {
+          if (response != null) {
             this.departments = response.data.returnData.list;
             if (this.departments.length > 0) {
               this.$store.state.consultationDepartmentStore.isDepartment = true;
             }
-          } else {
-            this.$message.error("服务器异常，请稍后重试！");
           }
         });
     },
     toReservation(department) {
-      sessionStorage.setItem(
-        "treatmentInformation",
-        JSON.stringify(department)
-      );
-      this.$router.push("reservationData");
+      if (localStorage.getItem("token") == null) {
+        this.$router.push("/");
+        this.$message({
+          message: "请登录！",
+          type: "error",
+          duration: 1000
+        });
+      } else {
+        sessionStorage.setItem(
+          "treatmentInformation",
+          JSON.stringify(department)
+        );
+        this.$router.push("reservationData");
+      }
     }
   },
   mounted() {

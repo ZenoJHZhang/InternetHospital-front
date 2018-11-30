@@ -36,7 +36,7 @@ axios.interceptors.response.use(
         case 401:
           // 返回 401 清除token信息并跳转到登录页面
           store.commit('remove_token');
-          Message.error("请登录!");
+          Message.error("token失效,请重新登录！");
           router.push("/");
       }
     }

@@ -1,59 +1,92 @@
 <template>
-<div style="height:calc(100vh - 86px)">
-  <el-container style="height:100%">
-    <el-main style="" direction='vertical' >
-      <div style="position:relative;overflow:hidden;height:100%">
-        <el-carousel :autoplay='autoplay' height="calc(100vh - 81px)">
-          <el-carousel-item v-for="img in imgs" :key="img.key" style="height:100%">
-            <img :src="img.path">
-          </el-carousel-item>
-        </el-carousel>
-        <div class="lrButton">
-          <img src="@/assets/index/sign.png">
-          <el-button id="login" type="primary" @click="loginFormVisible = true" v-if="!this.$store.state.commonStore.isUserLogin">登录</el-button>
-          <el-button id="register" @click="registerFormVisible = true" v-if="!this.$store.state.commonStore.isUserLogin">注册</el-button>
+  <div style="height:calc(100vh - 86px)">
+    <el-container style="height:100%">
+      <el-main style direction="vertical">
+        <div style="position:relative;overflow:hidden;height:100%">
+          <el-carousel :autoplay="autoplay" height="calc(100vh - 81px)">
+            <el-carousel-item v-for="img in imgs" :key="img.key" style="height:100%">
+              <img :src="img.path">
+            </el-carousel-item>
+          </el-carousel>
+          <div class="lrButton">
+            <img src="@/assets/index/sign.png">
+            <el-button
+              id="login"
+              type="primary"
+              @click="loginFormVisible = true"
+              v-if="!this.$store.state.commonStore.isUserLogin"
+            >登录</el-button>
+            <el-button
+              id="register"
+              @click="registerFormVisible = true"
+              v-if="!this.$store.state.commonStore.isUserLogin"
+            >注册</el-button>
+          </div>
         </div>
-      </div>
-    </el-main>
-  </el-container>
+      </el-main>
+    </el-container>
 
-  <el-dialog title="登录" :visible.sync="loginFormVisible" width="400px" @close="resetForm('loginForm')">
-    <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="100px" class="demo-ruleForm" label-position="left">
-      <el-form-item label="手机号" prop="phone" >
-        <el-input v-model="loginForm.phone" ></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input type='password' v-model="loginForm.password"></el-input>
-      </el-form-item>
-      <el-form-item style="margin-left:11.25%">
-        <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
-      </el-form-item>
-      <el-form-item style="margin-left:7.5%">
-        <el-button type="text" @click="toRegister()">未有账号去注册</el-button>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
-  <el-dialog title="注册" :visible.sync="registerFormVisible" width="400px" @close="resetForm('registerForm')">
-    <el-form :model="registerForm" :rules="registerRules" ref="registerForm" label-width="100px" class="demo-ruleForm" label-position="left">
-      <el-form-item label="手机号" prop="phone" >
-        <el-input v-model="registerForm.phone" ></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input minlength="8" maxlength="16" type ='password' v-model="registerForm.password"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码" prop="confirmPassword">
-        <el-input type ='password' v-model="registerForm.confirmPassword"></el-input>
-      </el-form-item>
-      <el-form-item style="margin-left:11.25%">
-        <el-button type="primary" @click="submitForm('registerForm')">注册</el-button>
-      </el-form-item>
-      <el-form-item style="margin-left:7.5%">
-        <el-button type="text" @click="toLogin()">已有账号去登录</el-button>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
-   <el-alert title="用户不存在或密码错误" type="error" show-icon style="width:250px" center v-if="alertShow"></el-alert>
-</div>
+    <el-dialog
+      title="登录"
+      :visible.sync="loginFormVisible"
+      width="400px"
+      @close="resetForm('loginForm')"
+    >
+      <el-form
+        :model="loginForm"
+        :rules="loginRules"
+        ref="loginForm"
+        label-width="100px"
+        class="demo-ruleForm"
+        label-position="left"
+      >
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="loginForm.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="loginForm.password"></el-input>
+        </el-form-item>
+        <el-form-item style="margin-left:11.25%">
+          <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
+        </el-form-item>
+        <el-form-item style="margin-left:7.5%">
+          <el-button type="text" @click="toRegister()">未有账号去注册</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <el-dialog
+      title="注册"
+      :visible.sync="registerFormVisible"
+      width="400px"
+      @close="resetForm('registerForm')"
+    >
+      <el-form
+        :model="registerForm"
+        :rules="registerRules"
+        ref="registerForm"
+        label-width="100px"
+        class="demo-ruleForm"
+        label-position="left"
+      >
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="registerForm.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input minlength="8" maxlength="16" type="password" v-model="registerForm.password"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input type="password" v-model="registerForm.confirmPassword"></el-input>
+        </el-form-item>
+        <el-form-item style="margin-left:11.25%">
+          <el-button type="primary" @click="submitForm('registerForm')">注册</el-button>
+        </el-form-item>
+        <el-form-item style="margin-left:7.5%">
+          <el-button type="text" @click="toLogin()">已有账号去登录</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <el-alert title="用户不存在或密码错误" type="error" show-icon style="width:250px" center v-if="alertShow"></el-alert>
+  </div>
 </template>
 
 
@@ -135,7 +168,7 @@ export default {
       },
       registerFormVisible: false,
       alertShow: false,
-      roleId :1 
+      roleId: 1
     };
   },
   components: {},
@@ -145,15 +178,15 @@ export default {
         if (valid) {
           if (formName == "loginForm") {
             axion
-              .login(this.loginForm.phone, this.loginForm.password,this.roleId)
+              .login(this.loginForm.phone, this.loginForm.password, this.roleId)
               .then(response => {
-                if (response.status == 200) {
+                if (response != null) {
                   if (response.data.returnCode == 200) {
                     let token = response.data.returnData.token;
                     let phone = response.data.returnData.phone;
                     this.$store.commit("add_token", {
                       token: token,
-                      phone: phone,
+                      phone: phone
                     });
                     this.$message({
                       message: "登录成功",
@@ -170,8 +203,6 @@ export default {
                       duration: 1000
                     });
                   }
-                } else {
-                  this.$message.error("服务器异常，请稍后重试！");
                 }
               });
           }
@@ -183,8 +214,7 @@ export default {
                 roleId: this.roleId
               })
               .then(response => {
-                console.log(response);
-                if (response.status == 200) {
+                if (response != null) {
                   if (response.data.returnCode == 200) {
                     this.$message({
                       message: "注册成功",
@@ -200,8 +230,6 @@ export default {
                       duration: 1000
                     });
                   }
-                } else {
-                  this.$message.error("服务器异常，请稍后重试！");
                 }
               });
           }

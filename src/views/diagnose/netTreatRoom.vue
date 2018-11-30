@@ -41,7 +41,7 @@ export default {
     return {
       imgs: [
         { path: require("../../assets/diagnose/default_carousel_picture.png") },
-        { path: require("../../assets/diagnose/default_carousel_picture.png") }
+        { path: require("../../assets/diagnose/96ddbddd-cdd7-40b4-a0ca-a57504885a01.png") }
       ]
     };
   },

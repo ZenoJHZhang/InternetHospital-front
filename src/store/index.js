@@ -18,7 +18,9 @@ export default new Vuex.Store({
       },
       remove_token(state){
         localStorage.clear();
+        sessionStorage.clear();
         state.phone = '';
+        state.commonStore.isUserLogin = false;
       }
   },
   actions: {

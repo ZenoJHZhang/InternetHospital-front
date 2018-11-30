@@ -21,12 +21,12 @@
         <label class="title-label">就诊日期</label>
         <el-radio-group
           v-model="expertreatRoomDateRadio"
-          v-for="t in 5"
-          :key="t"
+          v-for="t in dateList"
+          :key="t.value"
           size="medium"
           @change="listExpertDoctor()"
         >
-          <el-radio-button :label="month+'-'+(strDate+t)"></el-radio-button>
+          <el-radio-button :label="t.value"></el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item>
@@ -63,11 +63,10 @@
 <script>
 import noComment from "@/components/common/noComment";
 import axion from "@/utils/http_url";
+import dateUtil from "@/utils/dateUtil";
 export default {
   data() {
     return {
-      strDate: "",
-      month: "",
       expertreatRoomNameRadio: "",
       expertreatRoomDateRadio: "",
       expertreatRoomTimeRadio: "上午",
@@ -76,109 +75,96 @@ export default {
       pageNo: 1,
       pageSize: 5,
       isExpertDoctor: true,
-      year: "",
       treatmentInformation: {
-        departmentId: "",
-        departmentName: "",
-        morningHas: "",
-        afternoonHas: "",
-        nightHas: "",
-        scheduleTime: "",
-        price: "",
-        deptType: "",
-        doctorId: "",
-        doctorName: "",
-        goodat: "",
-        timeInterval: ""
-      }
+      },
+      dateList: []
     };
   },
   methods: {
     listExpertDepartment() {
       axion.listExpertDepartment().then(response => {
-        if (response.status == 200) {
+        if (response != null) {
           this.expertreatRooms = response.data.returnData;
           this.expertreatRoomNameRadio =
             response.data.returnData[0].departmentName;
           axion
             .listExpertDoctor(
               response.data.returnData[0].departmentName,
-              this.year + "-" + this.month + "-" + (this.strDate + 1),
+              this.expertreatRoomDateRadio,
               this.expertreatRoomTimeRadio,
               this.pageNo,
               this.pageSize
             )
             .then(response => {
-              if (response.status == 200) {
+              if (response != null) {
                 this.scheduleDoctors = response.data.returnData.list;
                 if (response.data.returnData.list.length > 0) {
                   this.isExpertDoctor = true;
                 } else {
                   this.isExpertDoctor = false;
                 }
-              } else {
-                this.$message.error("服务器异常，请稍后重试！");
               }
             });
-        } else {
-          this.$message.error("服务器异常，请稍后重试！");
         }
       });
     },
     getDateFormat() {
-      var date = new Date();
-      this.month = date.getMonth() + 1;
-      this.strDate = date.getDate();
-      this.year = date.getFullYear();
-      this.expertreatRoomDateRadio = this.month + "-" + (this.strDate + 1);
+      this.expertreatRoomDateRadio = dateUtil.getDay(1, "-");
+      for (let i = 0; i < 5; i++) {
+        let date = dateUtil.getDay(i + 1, "-");
+        this.dateList.push({
+          value: date
+        });
+      }
     },
     reservation(treatRoom) {
       if (localStorage.getItem("token") == null) {
         this.$router.push("/");
         this.$message({
-          message: "请登录",
-          type: "erro",
+          message: "请登录！",
+          type: "error",
           duration: 1000
         });
+      } else {
+        this.treatmentInformation.departmentName =
+          treatRoom.department.departmentName;
+        this.treatmentInformation.departmentId = treatRoom.department.id;
+        this.treatmentInformation.price = treatRoom.department.price;
+        this.treatmentInformation.deptType = treatRoom.department.deptType;
+        this.treatmentInformation.scheduleTime = treatRoom.scheduleTime;
+        this.treatmentInformation.morningHas = treatRoom.doctorMorningHas;
+        this.treatmentInformation.afternoonHas = treatRoom.doctorAfternoonHas;
+        this.treatmentInformation.nightHas = treatRoom.doctorNightHas;
+        this.treatmentInformation.doctorId = treatRoom.doctorDto.id;
+        this.treatmentInformation.doctorName = treatRoom.doctorDto.doctorName;
+        this.treatmentInformation.goodat = treatRoom.doctorDto.goodat;
+        this.treatmentInformation.timeInterval = this.expertreatRoomTimeRadio;
+        this.treatmentInformation.scheduleDoctorId = treatRoom.id;
+        this.treatmentInformation.hospitalId = treatRoom.doctorDto.hospitalId;
+        sessionStorage.setItem(
+          "treatmentInformation",
+          JSON.stringify(this.treatmentInformation)
+        );
+        this.$router.push("reservationData");
       }
-      this.treatmentInformation.departmentName =
-        treatRoom.department.departmentName;
-      this.treatmentInformation.departmentId = treatRoom.department.id;
-      this.treatmentInformation.price = treatRoom.department.price;
-      this.treatmentInformation.deptType = treatRoom.department.deptType;
-      this.treatmentInformation.scheduleTime = treatRoom.scheduleTime;
-      this.treatmentInformation.morningHas = treatRoom.doctorMorningHas;
-      this.treatmentInformation.afternoonHas = treatRoom.doctorAfternoonHas;
-      this.treatmentInformation.nightHas = treatRoom.doctorNightHas;
-      this.treatmentInformation.doctorId = treatRoom.doctorDto.id;
-      this.treatmentInformation.doctorName = treatRoom.doctorDto.doctorName;
-      this.treatmentInformation.goodat = treatRoom.doctorDto.goodat;
-      this.treatmentInformation.timeInterval = this.expertreatRoomTimeRadio;
-      sessionStorage.setItem(
-        "treatmentInformation",
-        JSON.stringify(this.treatmentInformation)
-      );
-      this.$router.push("reservationData");
     },
     listExpertDoctor() {
       axion
         .listExpertDoctor(
           this.expertreatRoomNameRadio,
-          this.year + "-" + this.expertreatRoomDateRadio,
+          this.expertreatRoomDateRadio,
           this.expertreatRoomTimeRadio,
           this.pageNo,
           this.pageSize
         )
         .then(response => {
-          if (response.status == 200) {
+          if (response != null) {
             this.scheduleDoctors = response.data.returnData.list;
             if (response.data.returnData.list.length > 0) {
               this.isExpertDoctor = true;
             } else {
               this.isExpertDoctor = false;
             }
-          } else {
-            this.$message.error("服务器异常，请稍后重试！");
           }
         });
     }
