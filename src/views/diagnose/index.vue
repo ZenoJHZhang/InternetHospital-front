@@ -152,7 +152,8 @@ export default {
                     let phone = response.data.returnData.phone;
                     this.$store.commit("add_token", {
                       token: token,
-                      phone: phone
+                      phone: phone,
+                      roleId: 1
                     });
                     this.$message({
                       message: "登录成功",

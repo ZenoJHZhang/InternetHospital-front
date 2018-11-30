@@ -13,11 +13,12 @@ Vue.config.productionTip = false
 //http request拦截器
 axios.interceptors.request.use(
   config => {
-    var token = localStorage.getItem('token');
-    store.state.token = token;
+    let token = localStorage.getItem('token');
+    let roleId = localStorage.getItem('roleId')
     if (token) {
       // 判断是否存在token，如果存在的话，则每个http header都加上token
       config.headers.Authorization = token;
+      config.headers.roleId = roleId;
     }
     return config;
   },

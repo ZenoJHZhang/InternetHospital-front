@@ -8,19 +8,16 @@ import consultation_department_store from './consultationDepartmentStore.js'
 import common_store from "./commonStore.js"
 export default new Vuex.Store({
   state: {
-    token:'',
     phone:''
   },
   mutations: {
       add_token(state,user){
-        state.token = user.token;
         state.phone = user.phone;
-        localStorage.setItem("token",user.token);
-        localStorage.setItem("phone",user.phone)
+        localStorage.setItem("token",user.token)
+        localStorage.setItem('token',user.roleId)
       },
       remove_token(state){
         localStorage.clear();
-        state.token = '';
         state.phone = '';
       }
   },

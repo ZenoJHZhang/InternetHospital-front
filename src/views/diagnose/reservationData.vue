@@ -175,9 +175,6 @@ export default {
       } else {
         this.insertPatinetVisiable = false;
       }
-    },
-    insertReservationimg(file) {
-      console.log(file);
     }
   },
   mounted() {
