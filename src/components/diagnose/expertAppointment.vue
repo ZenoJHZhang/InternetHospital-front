@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="title-line">专家预约
+    <div class="title-line">
+      专家预约
       <i class="fas fa-hand-point-right" style="float:right;">更多</i>
     </div>
     <el-form ref="treatRoomForm">
@@ -132,10 +133,17 @@ export default {
       this.expertreatRoomDateRadio = this.month + "-" + (this.strDate + 1);
     },
     reservation(treatRoom) {
+      if (localStorage.getItem("token") == null) {
+        this.$router.push("/");
+        this.$message({
+          message: "请登录",
+          type: "erro",
+          duration: 1000
+        });
+      }
       this.treatmentInformation.departmentName =
         treatRoom.department.departmentName;
-      this.treatmentInformation.departmentId =
-        treatRoom.department.id;
+      this.treatmentInformation.departmentId = treatRoom.department.id;
       this.treatmentInformation.price = treatRoom.department.price;
       this.treatmentInformation.deptType = treatRoom.department.deptType;
       this.treatmentInformation.scheduleTime = treatRoom.scheduleTime;
@@ -146,7 +154,10 @@ export default {
       this.treatmentInformation.doctorName = treatRoom.doctorDto.doctorName;
       this.treatmentInformation.goodat = treatRoom.doctorDto.goodat;
       this.treatmentInformation.timeInterval = this.expertreatRoomTimeRadio;
-      sessionStorage.setItem("treatmentInformation",JSON.stringify(this.treatmentInformation))
+      sessionStorage.setItem(
+        "treatmentInformation",
+        JSON.stringify(this.treatmentInformation)
+      );
       this.$router.push("reservationData");
     },
     listExpertDoctor() {

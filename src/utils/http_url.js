@@ -45,7 +45,7 @@ const postimg =  (_url, obj) => axios.post(_url, obj,{ baseURL: baseURL,headers:
 const test = (name) => post('/test',name)
 
 /**登录 */
-const login = (phone,password)  => get('/user/login?phone='+phone+'&password='+password)
+const login = (phone,password,roleId)  => get('/user/login?phone='+phone+'&password='+password+'&roleId='+roleId)
 const register = (phone,password,roleId) => post('/user/register',phone,password,roleId)
 /** 分页获取当日诊室信息及其排班信息 */
 const listDepartmentSchedule = (date,pageNo,pageSize) => get('/department/scheduleOfDay?date='+date+'&pageNo='+pageNo+'&pageSize='+pageSize)

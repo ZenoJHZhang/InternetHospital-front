@@ -13,14 +13,11 @@ export default new Vuex.Store({
   },
   mutations: {
       add_token(state,user){
-        state.token = user.token;
         state.phone = user.phone;
         localStorage.setItem("token",user.token);
-        localStorage.setItem("phone",user.phone)
       },
       remove_token(state){
         localStorage.clear();
-        state.token = '';
         state.phone = '';
       }
   },

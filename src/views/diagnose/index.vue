@@ -134,7 +134,8 @@ export default {
         ]
       },
       registerFormVisible: false,
-      alertShow: false
+      alertShow: false,
+      roleId :1 
     };
   },
   components: {},
@@ -144,7 +145,7 @@ export default {
         if (valid) {
           if (formName == "loginForm") {
             axion
-              .login(this.loginForm.phone, this.loginForm.password)
+              .login(this.loginForm.phone, this.loginForm.password,this.roleId)
               .then(response => {
                 if (response.status == 200) {
                   if (response.data.returnCode == 200) {
@@ -152,7 +153,7 @@ export default {
                     let phone = response.data.returnData.phone;
                     this.$store.commit("add_token", {
                       token: token,
-                      phone: phone
+                      phone: phone,
                     });
                     this.$message({
                       message: "登录成功",
@@ -179,7 +180,7 @@ export default {
               .register({
                 phone: this.registerForm.phone,
                 password: this.registerForm.password,
-                roleId: 1
+                roleId: this.roleId
               })
               .then(response => {
                 console.log(response);
