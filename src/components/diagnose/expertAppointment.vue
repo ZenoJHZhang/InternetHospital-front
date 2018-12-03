@@ -2,7 +2,7 @@
   <div>
     <div class="title-line">
       专家预约
-      <i class="fas fa-hand-point-right" style="float:right;">更多</i>
+      <i class="fas fa-hand-point-right" style="float:right;"><span style="margin-left:5px">更多</span></i>
     </div>
     <el-form ref="treatRoomForm">
       <el-form-item>

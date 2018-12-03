@@ -32,16 +32,16 @@
 </template>
 
 <script>
-import treatmentProcess from "../../components/diagnose/treatmentProcess";
-import consultationDepartment from "../../components/diagnose/consultationDepartment";
-import expertAppointment from "../../components/diagnose/expertAppointment";
-import helpCenter from "../../components/diagnose/helpCenter";
+import treatmentProcess from "@/components/diagnose/treatmentProcess";
+import consultationDepartment from "@/components/diagnose/consultationDepartment";
+import expertAppointment from "@/components/diagnose/expertAppointment";
+import helpCenter from "@/components/diagnose/helpCenter";
 export default {
   data() {
     return {
       imgs: [
-        { path: require("../../assets/diagnose/default_carousel_picture.png") },
-        { path: require("../../assets/diagnose/96ddbddd-cdd7-40b4-a0ca-a57504885a01.png") }
+        { path: require("@/assets/diagnose/default_carousel_picture.png") },
+        { path: require("@/assets/diagnose/96ddbddd-cdd7-40b4-a0ca-a57504885a01.png") }
       ]
     };
   },

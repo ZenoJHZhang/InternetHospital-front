@@ -2,7 +2,7 @@
   <div>
     <div class="title-line">
       今日接诊科室
-      <i class="fas fa-hand-point-right" style="float:right">更多</i>
+      <i class="fas fa-hand-point-right" style="float:right;"><span style="margin-left:5px">预约明后天</span></i>
     </div>
     <no-comment
       v-if="!this.$store.state.consultationDepartmentStore.isDepartment"

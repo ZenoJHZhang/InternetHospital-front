@@ -25,6 +25,11 @@ export default new Router({
         path: '/reservationData',
         name: 'reservationData',
         component: () => import('./views/diagnose/reservationData.vue')
+      },
+      {
+        path: '/receptionDepartment',
+        name: 'receptionDepartment',
+        component: () => import('./views/diagnose/receptionDepartment.vue')
       }
     ]
     }

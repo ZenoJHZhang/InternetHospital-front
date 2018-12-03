@@ -272,23 +272,26 @@ export default {
   left: 35%;
   z-index: 10;
   width: 30%;
-  min-width: 500px;
+  /* min-width: 500px; */
   height: 110px;
   text-align: center;
 }
 
+.lrButton img{
+  width: 100%;
+}
 #login {
   margin-top: 10px;
   z-index: 10;
-  width: 175px;
+  width: 40%;
   height: 40px;
 }
 
 #register {
   margin-top: 10px;
-  margin-left: 20px;
+  margin-left: 5%;
   z-index: 10;
-  width: 175px;
+  width: 40%;
   height: 40px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="title-line">就诊流程</div>
-    <div style="height:60px;margin-top:30px">
+    <div style="height:60px;margin-top:30px;">
         <el-steps :active="this.$store.state.treatmentProcessStore.active" align-center >
             <el-step title="选择科室医生" icon="fas fa-user-md fa-2x"></el-step>
             <el-step title="填写问诊信息" icon="fas fa-pencil-alt fa-2x"></el-step>
@@ -34,4 +34,11 @@
   overflow: hidden;
 }
 </style>
+
+<style>
+.el-step__title{
+    font-size:14px !important;
+}
+</style>
+
 
