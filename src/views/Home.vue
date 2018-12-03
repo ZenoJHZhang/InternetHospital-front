@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div style="text-align:center"  v-if="!isMobile" >
-      <el-container direction="vertical">
-        <menu-bar></menu-bar>
-        <router-view></router-view>
-      </el-container>
-    </div>
-    <div v-if="isMobile">
-      <img src="@/assets/index/app.png">
-    </div>
+    <el-container direction="vertical" v-if="!this.$store.state.commonStore.isMobile">
+      <menu-bar></menu-bar>
+      <router-view></router-view>
+    </el-container>
+    <img
+      v-if="this.$store.state.commonStore.isMobile"
+      src="@/assets/index/app.png"
+      :style="imgWidth"
+    >
   </div>
 </template>
 
@@ -19,36 +19,40 @@ export default {
   data() {
     return {
       screenWidth: document.body.clientWidth, // 屏幕尺寸
-      isMobile: true
+      imgWidth: {
+        height: "auto",
+        width: ""
+      }
     };
   },
   components: {
     menuBar
   },
-  method: {},
+  methods: {
+    judgeMobile() {
+      return (() => {
+        window.screenWidth = document.body.clientWidth;
+        this.screenWidth = window.screenWidth;
+        if (this.screenWidth <= 1200) {
+          this.$store.state.commonStore.isMobile = true;
+          this.imgWidth.width = this.screenWidth + "px";
+        } else {
+          this.$store.state.commonStore.isMobile = false;
+        }
+      })();
+    }
+  },
   mounted() {
     this.$nextTick(function generate() {
+      this.judgeMobile();
       window.onresize = () => {
-        return (() => {
-          window.screenWidth = document.body.clientWidth;
-          this.screenWidth = window.screenWidth;
-          if (this.screenWidth <= 1200) {
-            this.isMobile = true;
-          } else {
-            this.isMobile = false;
-          }
-        })();
+        this.judgeMobile();
       };
     });
   }
 };
 </script>
-<style scoped>
-img{
-  width: 100vm;
-  height: auto
-}
-</style>
+
 
 
 

@@ -1,5 +1,6 @@
 export default {
     state:{
-        isUserLogin: false
+        isUserLogin: false,
+        isMobile:false
     }
 }
