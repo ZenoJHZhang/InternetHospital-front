@@ -1,34 +1,36 @@
 <template>
   <div>
-    <div class="title-line">
-      今日接诊科室
-      <i class="fas fa-hand-point-right" style="float:right;">
-        <span style="margin-left:5px">查看详情</span>
-      </i>
-    </div>
+    <div class="title-line">接诊科室</div>
+
+    <label class="title-label">选择日期</label>
+    <el-radio-group
+      v-model="date"
+      v-for="t in dateList"
+      :key="t.value"
+      size="medium"
+      @change="listDepartmentSchedule()"
+    >
+      <el-radio-button :label="t.value"></el-radio-button>
+    </el-radio-group>
     <no-comment
       v-if="!this.$store.state.consultationDepartmentStore.isDepartment"
       style="margin-top:50px"
     ></no-comment>
-    <el-carousel
-      v-if="this.$store.state.consultationDepartmentStore.isDepartment"
-      :interval="4000"
-      type="card"
-      height="200px"
-      style="width:100%"
-      :autoplay="false"
-      indicator-position="none"
+    <br>
+    <el-card
+      v-for="department in departments"
+      :key="department.id"
+      class="departmentLi"
+      shadow="hover"
     >
-      <el-carousel-item v-for="department in departments" :key="department.id">
-        <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)">
-        <div class="department-message-style">{{department.departmentName}}</div>
-        <el-button
-          type="primary"
-          :key="department.id"
-          @click="toReservation(department)"
-        >挂号({{department.timeMessage}})</el-button>
-      </el-carousel-item>
-    </el-carousel>
+      <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)">
+      <div class="department-message-style">{{department.departmentName}}</div>
+      <el-button
+        plain
+        :key="department.id"
+        @click="toReservation(department)"
+      >挂号({{department.timeMessage}})</el-button>
+    </el-card>
   </div>
 </template>
 
@@ -42,17 +44,28 @@ export default {
       departments: "",
       treatmentInformation: "",
       pageNo: 1,
-      pageSize: 5
+      pageSize: 8,
+      date: "",
+      dateList: [],
+      departments: ""
     };
   },
   components: {
     noComment
   },
   methods: {
+    getDateFormat() {
+      this.date = dateUtil.getDay(0, "-");
+      for (let i = 0; i < 3; i++) {
+        let date = dateUtil.getDay(i, "-");
+        this.dateList.push({
+          value: date
+        });
+      }
+    },
     listDepartmentSchedule() {
-      let today = dateUtil.getDay(0, "-");
       axion
-        .listDepartmentSchedule(today, this.pageNo, this.pageSize)
+        .listDepartmentSchedule(this.date, this.pageNo, this.pageSize)
         .then(response => {
           if (response != null) {
             this.departments = response.data.returnData.list;
@@ -73,7 +86,6 @@ export default {
           duration: 1000
         });
       } else {
-        department.
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(department)
@@ -84,6 +96,7 @@ export default {
   },
   mounted() {
     this.$nextTick(function generate() {
+      this.getDateFormat();
       this.listDepartmentSchedule();
     });
   }
@@ -97,30 +110,49 @@ export default {
   height: 40px;
   line-height: 40px;
   color: #a71820;
-  font-size: 16px;
+  font-size: 1;
   font-family: "microsoft yahei";
   font-weight: 700;
   margin-bottom: 20px;
 }
+.el-radio-group {
+  margin-left: 2%;
+}
+.title-label {
+  color: #ada0a5;
+  font-size: 15px;
+  width: 10%;
+  padding-right: 5%;
+  font-weight: 600;
+  border-right: 2px solid #ada0a5;
+  margin-right: 3%;
+}
 .el-button {
   text-align: center;
-  width: 30%;
-  margin-left: 35%;
+  width: 100%;
   margin-top: 20px;
   font-size: 12px;
   padding-left: 0;
   padding-right: 0;
 }
 .department-img-style {
-  width: 40%;
+  width: 100%;
   height: 55%;
-  padding-left: 30%;
 }
 .department-message-style {
-  width: 40%;
-  text-align: center;
-  margin-left: 30%;
   margin-top: 10px;
   font-weight: 600;
+}
+.departmentLi {
+  margin-top: 50px;
+  width: 16%;
+  text-align: center;
+  list-style-type: none;
+  float: left;
+  margin: 2.5%;
+}
+.el-card {
+  padding: 2%;
+  border: none;
 }
 </style>
