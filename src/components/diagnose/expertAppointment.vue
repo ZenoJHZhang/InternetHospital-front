@@ -2,7 +2,7 @@
   <div>
     <div class="title-line">
       专家预约
-      <i class="fas fa-hand-point-right" style="float:right;"><span style="margin-left:5px">更多</span></i>
+      <i class="fas fa-hand-point-right" style="float:right;" v-if="this.$store.state.commonStore.isComponent"><span style="margin-left:5px" >查看详情</span></i>
     </div>
     <el-form ref="treatRoomForm">
       <el-form-item>
@@ -141,6 +141,7 @@ export default {
         this.treatmentInformation.timeInterval = this.expertreatRoomTimeRadio;
         this.treatmentInformation.scheduleDoctorId = treatRoom.id;
         this.treatmentInformation.hospitalId = treatRoom.doctorDto.hospitalId;
+        this.treatmentInformation.userReservationType = 3;
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(this.treatmentInformation)

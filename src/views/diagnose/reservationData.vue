@@ -24,9 +24,13 @@
                   <span>{{treatmentInformation.doctorName}}</span>
                 </span>
                 <span v-if="isExpert">
-                  <label style="color:black">擅长：</label>
+                  <label style="color:black">专家擅长：</label>
                   <span>{{treatmentInformation.goodat}}</span>
                 </span>
+              </div>
+              <div>
+                <label>挂号类型：</label>
+                <span>{{departmentTypeDescription}}</span>
               </div>
               <div>
                 <label>挂号费：</label>
@@ -36,25 +40,10 @@
                 <label>时间：</label>
                 <span>{{treatmentInformation.scheduleTime}}</span>
               </div>
-              <el-form ref="userReservation" :rules="treatmentInformationRules">
-                <label v-if="isExpert">就诊时段：</label>
-                <span v-if="isExpert">{{treatmentInformation.timeInterval}}</span>
-                <el-form-item label="就诊时段：" v-if="!isExpert" prop="timeInterval">
-                  <el-select
-                    v-model="timeSelected"
-                    placeholder="请选择就诊时段"
-                    v-if="!isExpert"
-                    style="margin-left:10px"
-                  >
-                    <el-option
-                      v-for="item in timeHas"
-                      :key="item.value"
-                      :label="item.value"
-                      :value="item.value"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-form>
+              <div>
+                <label>就诊时段：</label>
+                <span>{{treatmentInformation.timeInterval}}</span>
+              </div>
             </div>
           </el-main>
           <el-footer style="backgroundColor:white;width:100%;height:100%;padding:20px;">
@@ -67,7 +56,7 @@
               style="margin-left:20px;width:80%"
               :rules="treatmentInformationRules"
             >
-              <el-form-item label="姓名:" prop="paientName">
+              <el-form-item label="姓名:" prop="patientId">
                 <el-select
                   v-model="userReservation.patientId"
                   placeholder="请选择就诊人"
@@ -115,6 +104,7 @@
           </el-footer>
         </el-container>
       </el-main>
+      <el-footer style="height:100px;backgroundColor:#a33238"></el-footer>
     </el-container>
   </div>
 </template>
@@ -128,6 +118,7 @@ export default {
       userReservation: {
         accentVisit: "初诊"
       },
+      departmentTypeDescription: "",
       /**选择就诊人 */
       beChoicedPatient: [
         {
@@ -144,21 +135,17 @@ export default {
         }
       ],
       isExpert: "",
-      timeSelected: "",
       timeHas: [],
       insertPatinetVisiable: false,
       treatmentInformationRules: {
-        paientName: [
-          { required: true, message: "请选择就诊人", trigger: "blur" }
+        patientId: [
+          { required: true, message: "请选择就诊人", trigger: "change" }
         ],
         accentVisit: [
           { required: true, message: "请填写疾病描述", trigger: "blur" }
         ],
         accentDetail: [
           { required: true, message: "请填写疾病描述", trigger: "blur" }
-        ],
-        timeInterval: [
-          { required: true, message: "请选择就诊时间段", trigger: "blur" }
         ]
       }
     };
@@ -199,11 +186,7 @@ export default {
           this.userReservation.price = this.treatmentInformation.price;
           this.userReservation.scheduleDoctorId = this.treatmentInformation.scheduleDoctorId;
           this.userReservation.scheduleTime = this.treatmentInformation.scheduleTime;
-          if (this.isExpert) {
-            this.userReservation.timeInterval = this.treatmentInformation.timeInterval;
-          } else {
-            this.userReservation.timeInterval = this.timeSelected;
-          }
+          this.userReservation.timeInterval = this.treatmentInformation.timeInterval;
           console.log(this.userReservation);
         } else {
           console.log("error submit!!");
@@ -223,24 +206,13 @@ export default {
       } else {
         if (this.treatmentInformation.deptType == 0) {
           this.isExpert = false;
-          if (this.treatmentInformation.morningHas == 1) {
-            this.timeHas.push({
-              value: "早上"
-            });
-          }
-          if (this.treatmentInformation.afternoonHas == 1) {
-            this.timeHas.push({
-              value: "下午"
-            });
-          }
-          if (this.treatmentInformation.nightHas == 1) {
-            this.timeHas.push({
-              value: "晚上"
-            });
-          }
-        }
-        if (this.treatmentInformation.deptType == 1) {
+          this.departmentTypeDescription = "普通号";
+          this.timeHas.push({
+            value: this.treatmentInformation.timeInterval
+          });
+        } else if (this.treatmentInformation.deptType == 1) {
           this.isExpert = true;
+          this.departmentTypeDescription = "专家号";
           this.timeHas.push({
             value: this.treatmentInformation.timeInterval
           });

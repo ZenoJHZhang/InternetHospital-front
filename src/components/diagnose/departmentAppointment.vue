@@ -1,36 +1,56 @@
 <template>
   <div>
     <div class="title-line">接诊科室</div>
-
-    <label class="title-label">选择日期</label>
-    <el-radio-group
-      v-model="date"
-      v-for="t in dateList"
-      :key="t.value"
-      size="medium"
-      @change="listDepartmentSchedule()"
-    >
-      <el-radio-button :label="t.value"></el-radio-button>
-    </el-radio-group>
-    <no-comment
-      v-if="!this.$store.state.consultationDepartmentStore.isDepartment"
-      style="margin-top:50px"
-    ></no-comment>
-    <br>
-    <el-card
-      v-for="department in departments"
-      :key="department.id"
-      class="departmentLi"
-      shadow="hover"
-    >
-      <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)">
-      <div class="department-message-style">{{department.departmentName}}</div>
-      <el-button
-        plain
-        :key="department.id"
-        @click="toReservation(department)"
-      >挂号({{department.timeMessage}})</el-button>
-    </el-card>
+    <div>
+      <label class="title-label">选择日期</label>
+      <el-radio-group
+        v-model="date"
+        v-for="t in dateList"
+        :key="t.value"
+        size="medium"
+        @change="listDepartmentSchedule()"
+      >
+        <el-radio-button :label="t.value" style="margin-bottom:5px"></el-radio-button>
+      </el-radio-group>
+    </div>
+    <div style="margin-top:30px">
+      <label class="title-label">就诊时段</label>
+      <el-radio-group
+        v-model="departmentTimeInterval"
+        size="medium"
+        @change="listDepartmentSchedule()"
+      >
+        <el-radio-button label="上午"></el-radio-button>
+        <el-radio-button label="下午"></el-radio-button>
+        <el-radio-button label="晚上"></el-radio-button>
+      </el-radio-group>
+    </div>
+    <el-container>
+      <el-main>
+        <no-comment
+          v-if="!this.$store.state.consultationDepartmentStore.isDepartment"
+          style="margin-top:100px;padding-bottom:103.32px"
+        ></no-comment>
+        <br>
+        <el-card
+          v-for="department in departments"
+          :key="department.id"
+          class="departmentLi"
+          shadow="hover"
+        >
+          <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)">
+          <div class="department-message-style">{{department.departmentName}}</div>
+          <el-button
+            plain
+            :key="department.id"
+            @click="toReservation(department)"
+          >挂号</el-button>
+        </el-card>
+      </el-main>
+      <el-footer style="text-align:center">
+          <el-pagination layout="prev, pager, next" :total="total" :current-page.sync="pageNo" :pager-count="11" :page-size="pageSize" background @current-change="listDepartmentSchedule"></el-pagination>
+      </el-footer>
+    </el-container>
   </div>
 </template>
 
@@ -44,10 +64,12 @@ export default {
       departments: "",
       treatmentInformation: "",
       pageNo: 1,
-      pageSize: 8,
+      pageSize: 1,
+      total:10,
       date: "",
       dateList: [],
-      departments: ""
+      departments: "",
+      departmentTimeInterval: "上午"
     };
   },
   components: {
@@ -56,7 +78,7 @@ export default {
   methods: {
     getDateFormat() {
       this.date = dateUtil.getDay(0, "-");
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 7; i++) {
         let date = dateUtil.getDay(i, "-");
         this.dateList.push({
           value: date
@@ -65,10 +87,16 @@ export default {
     },
     listDepartmentSchedule() {
       axion
-        .listDepartmentSchedule(this.date, this.pageNo, this.pageSize)
+        .listDepartmentSchedule(
+          this.date,
+          this.departmentTimeInterval,
+          this.pageNo,
+          this.pageSize
+        )
         .then(response => {
           if (response != null) {
             this.departments = response.data.returnData.list;
+            this.total = response.data.returnData.total;
             if (this.departments.length > 0) {
               this.$store.state.consultationDepartmentStore.isDepartment = true;
             } else {
@@ -86,6 +114,7 @@ export default {
           duration: 1000
         });
       } else {
+        department.userReservationType = 2;
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(department)
@@ -154,5 +183,7 @@ export default {
 .el-card {
   padding: 2%;
   border: none;
+}
+.pageDiv {
 }
 </style>
