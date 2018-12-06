@@ -41,6 +41,8 @@ const post2 = (_url, body) => axios.post(_url, body, modelBase).then(codeerror).
 const get = (_url) => axios.get(_url, objBase).then(codeerror).catch(errorFn)
 const postimg =  (_url, obj) => axios.post(_url, obj,{ baseURL: baseURL,headers:{'Content-Type':'multipart/form-data'}}).then(codeerror).catch(errorFn)
 
+/**token认证，防止token被篡改或过期 */
+const authorizationTest = () => get("/authorizationTest")
 /**登录 */
 const login = (phone,password,roleId)  => get('/user/login?phone='+phone+'&password='+password+'&roleId='+roleId)
 const register = (phone,password,roleId) => post('/user/register',phone,password,roleId)
@@ -51,6 +53,8 @@ const listExpertDoctor = (departmentName,scheduleTime,timeInterval,pageNo,pageSi
 +departmentName+'&scheduleTime='+scheduleTime+'&timeInterval='+timeInterval+'&pageNo='+pageNo+'&pageSize='+pageSize)
 /** 获取所有的专家科室 */
 const listExpertDepartment = () =>get("/department/listExpertDepartment");
+/**获取首页轮播图 */
+const listIndexImg = () => get("/img/listIndexImg")
 
 const test = () =>get("/test");
 export default {
@@ -60,5 +64,7 @@ export default {
   listDepartmentSchedule,
   listExpertDoctor,
   listExpertDepartment,
+  authorizationTest,
+  listIndexImg,
   test
 }

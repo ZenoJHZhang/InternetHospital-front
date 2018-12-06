@@ -2,7 +2,9 @@
   <div>
     <div class="title-line">
       专家预约
-      <i class="fas fa-hand-point-right" style="float:right;"><span style="margin-left:5px">更多</span></i>
+      <i class="fas fa-hand-point-right" style="float:right;">
+        <span style="margin-left:5px">更多</span>
+      </i>
     </div>
     <el-form ref="treatRoomForm">
       <el-form-item>
@@ -75,8 +77,7 @@ export default {
       pageNo: 1,
       pageSize: 5,
       isExpertDoctor: true,
-      treatmentInformation: {
-      },
+      treatmentInformation: {},
       dateList: []
     };
   },
@@ -126,6 +127,7 @@ export default {
           duration: 1000
         });
       } else {
+        axion.authorizationTest();
         this.treatmentInformation.departmentName =
           treatRoom.department.departmentName;
         this.treatmentInformation.departmentId = treatRoom.department.id;

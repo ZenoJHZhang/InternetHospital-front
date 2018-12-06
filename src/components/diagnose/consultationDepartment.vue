@@ -81,6 +81,7 @@ export default {
           duration: 1000
         });
       } else {
+        axion.authorizationTest();
         department.timeInterval = this.timeInterval;
         sessionStorage.setItem(
           "treatmentInformation",

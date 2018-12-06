@@ -1,23 +1,28 @@
 <template>
   <div>
     <div class="title-line">接诊科室</div>
+    <div>
+      <label class="title-label">选择日期</label>
+      <el-radio-group
+        v-model="date"
+        v-for="t in dateList"
+        :key="t.value"
+        size="medium"
+        @change="listDepartmentSchedule()"
+        style="margin-bottom:15px"
+      >
+        <el-radio-button :label="t.value"></el-radio-button>
+      </el-radio-group>
+    </div>
+    <div>
+      <label class="title-label">就诊时段</label>
+      <el-radio-group v-model="timeInterval" size="medium" @change="listDepartmentSchedule()">
+        <el-radio-button label="上午"></el-radio-button>
+        <el-radio-button label="下午"></el-radio-button>
+        <el-radio-button label="晚上"></el-radio-button>
+      </el-radio-group>
+    </div>
 
-    <label class="title-label">选择日期</label>
-    <el-radio-group
-      v-model="date"
-      v-for="t in dateList"
-      :key="t.value"
-      size="medium"
-      @change="listDepartmentSchedule()"
-    >
-      <el-radio-button :label="t.value"></el-radio-button>
-    </el-radio-group>
-    <label class="title-label">就诊时段</label>
-    <el-radio-group v-model="timeInterval" size="medium" @change="listDepartmentSchedule()">
-      <el-radio-button label="上午"></el-radio-button>
-      <el-radio-button label="下午"></el-radio-button>
-      <el-radio-button label="晚上"></el-radio-button>
-    </el-radio-group>
     <no-comment
       v-if="!this.$store.state.consultationDepartmentStore.isDepartment"
       style="margin-top:50px"
@@ -31,11 +36,7 @@
     >
       <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)">
       <div class="department-message-style">{{department.departmentName}}</div>
-      <el-button
-        plain
-        :key="department.id"
-        @click="toReservation(department)"
-      >挂号</el-button>
+      <el-button plain :key="department.id" @click="toReservation(department)">挂号</el-button>
     </el-card>
   </div>
 </template>
@@ -54,7 +55,7 @@ export default {
       date: "",
       dateList: [],
       departments: "",
-      timeInterval:'上午'
+      timeInterval: "上午"
     };
   },
   components: {
@@ -63,7 +64,7 @@ export default {
   methods: {
     getDateFormat() {
       this.date = dateUtil.getDay(0, "-");
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 7; i++) {
         let date = dateUtil.getDay(i, "-");
         this.dateList.push({
           value: date
@@ -72,7 +73,12 @@ export default {
     },
     listDepartmentSchedule() {
       axion
-        .listDepartmentSchedule(this.date,this.timeInterval,this.pageNo, this.pageSize)
+        .listDepartmentSchedule(
+          this.date,
+          this.timeInterval,
+          this.pageNo,
+          this.pageSize
+        )
         .then(response => {
           if (response != null) {
             this.departments = response.data.returnData.list;
@@ -93,6 +99,7 @@ export default {
           duration: 1000
         });
       } else {
+        axion.authorizationTest();
         department.timeInterval = this.timeInterval;
         sessionStorage.setItem(
           "treatmentInformation",

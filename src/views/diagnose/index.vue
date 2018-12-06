@@ -4,7 +4,7 @@
       <el-main style direction="vertical">
         <div style="position:relative;overflow:hidden;height:100%">
           <el-carousel :autoplay="autoplay" height="calc(100vh - 81px)">
-            <el-carousel-item v-for="img in imgs" :key="img.key" style="height:100%">
+            <el-carousel-item v-for="img in indexCarousel" :key="img.id" style="height:100%">
               <img :src="img.path">
             </el-carousel-item>
           </el-carousel>
@@ -168,7 +168,8 @@ export default {
       },
       registerFormVisible: false,
       alertShow: false,
-      roleId: 1
+      roleId: 1,
+      indexCarousel:''
     };
   },
   components: {},
@@ -249,7 +250,19 @@ export default {
     toLogin() {
       this.loginFormVisible = true;
       this.registerFormVisible = false;
+    },
+    listIndexImg() {
+      axion.listIndexImg().then(response => {
+        if(response != null){
+          this.indexCarousel = response.data.returnData
+        }
+      });
     }
+  },
+  mounted() {
+    this.$nextTick(function generate() {
+      this.listIndexImg();
+    });
   }
 };
 </script>
@@ -277,7 +290,7 @@ export default {
   text-align: center;
 }
 
-.lrButton img{
+.lrButton img {
   width: 100%;
 }
 #login {
