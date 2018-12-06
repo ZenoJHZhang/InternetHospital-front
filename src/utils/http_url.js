@@ -47,8 +47,8 @@ const test = (name) => post('/test',name)
 /**登录 */
 const login = (phone,password,roleId)  => get('/user/login?phone='+phone+'&password='+password+'&roleId='+roleId)
 const register = (phone,password,roleId) => post('/user/register',phone,password,roleId)
-/** 分页获取当日诊该时段普通诊室信息及其排班信息 */
-const listDepartmentSchedule = (date,timeInterval,pageNo,pageSize) => get('/department/scheduleOfDay?date='+date+'&timeInterval='+timeInterval+'&pageNo='+pageNo+'&pageSize='+pageSize)
+/** 分页获取当日诊室信息及其排班信息 */
+const listDepartmentSchedule = (date,pageNo,pageSize) => get('/department/scheduleOfDay?date='+date+'&pageNo='+pageNo+'&pageSize='+pageSize)
 /** 分页获取当日，该时段该科室内的排班医生 */
 const listExpertDoctor = (departmentName,scheduleTime,timeInterval,pageNo,pageSize) => get('/schedule/listExpertDoctor?departmentName='
 +departmentName+'&scheduleTime='+scheduleTime+'&timeInterval='+timeInterval+'&pageNo='+pageNo+'&pageSize='+pageSize)

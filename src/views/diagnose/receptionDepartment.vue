@@ -20,7 +20,6 @@
           </el-container>
         </el-main>
       </el-container>
-      <el-footer style="height:100px;backgroundColor:#a33238"></el-footer>
     </el-container>
   </div>
 </template>
@@ -32,12 +31,6 @@ export default {
   components: {
     treatmentProcess,
     departmentAppointment
-  },
-  methods: {},
-  mounted() {
-    this.$nextTick(function generate() {
-      this.$store.state.treatmentProcessStore.active = 0;
-    });
   }
 };
 </script>
@@ -48,5 +41,6 @@ export default {
   height: 100%;
   background-size: cover;
 }
+
 </style>
 

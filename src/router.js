@@ -27,20 +27,10 @@ export default new Router({
         component: () => import('./views/diagnose/reservationData.vue')
       },
       {
-        path: '/reservationDepartment',
-        name: 'reservationDepartment',
-        component: () => import('./views/diagnose/reservationDepartment.vue')
-      },
-      {
-        path: '/reservationExpert',
-        name: 'reservationExpert',
-        component: () => import('./views/diagnose/reservationExpert.vue')
-      },
-      {
-        path: '/personalCenter',
-        name: 'personalCenter',
-        component: () => import('./views/diagnose/personalCenter.vue')
-      },
+        path: '/receptionDepartment',
+        name: 'receptionDepartment',
+        component: () => import('./views/diagnose/receptionDepartment.vue')
+      }
     ]
     }
   ]

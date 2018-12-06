@@ -3,37 +3,30 @@
     <div class="title-line">
       今日接诊科室
       <i class="fas fa-hand-point-right" style="float:right;">
-        <span style="margin-left:5px">预约本周</span>
+        <span style="margin-left:5px">查看详情</span>
       </i>
     </div>
-    <label class="title-label">就诊时段</label>
-    <el-radio-group
-      v-model="departmentTimeInterval"
-      size="medium"
-      @change="listDepartmentSchedule()"
-    >
-      <el-radio-button label="上午"></el-radio-button>
-      <el-radio-button label="下午"></el-radio-button>
-      <el-radio-button label="晚上"></el-radio-button>
-    </el-radio-group>
-    <div></div>
     <no-comment
       v-if="!this.$store.state.consultationDepartmentStore.isDepartment"
-      style="margin-top:70px"
+      style="margin-top:50px"
     ></no-comment>
     <el-carousel
       v-if="this.$store.state.consultationDepartmentStore.isDepartment"
       :interval="4000"
       type="card"
       height="200px"
-      style="width:100%;margin-top:50px"
+      style="width:100%"
       :autoplay="false"
       indicator-position="none"
     >
       <el-carousel-item v-for="department in departments" :key="department.id">
         <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)">
         <div class="department-message-style">{{department.departmentName}}</div>
-        <el-button type="primary" :key="department.id" @click="toReservation(department)">挂号</el-button>
+        <el-button
+          type="primary"
+          :key="department.id"
+          @click="toReservation(department)"
+        >挂号({{department.timeMessage}})</el-button>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -48,9 +41,8 @@ export default {
     return {
       departments: "",
       treatmentInformation: "",
-      pageNo: 0,
-      pageSize: 0,
-      departmentTimeInterval: "上午"
+      pageNo: 1,
+      pageSize: 5
     };
   },
   components: {
@@ -60,12 +52,7 @@ export default {
     listDepartmentSchedule() {
       let today = dateUtil.getDay(0, "-");
       axion
-        .listDepartmentSchedule(
-          today,
-          this.departmentTimeInterval,
-          this.pageNo,
-          this.pageSize
-        )
+        .listDepartmentSchedule(today, this.pageNo, this.pageSize)
         .then(response => {
           if (response != null) {
             this.departments = response.data.returnData.list;
@@ -86,7 +73,7 @@ export default {
           duration: 1000
         });
       } else {
-        department.userReservationType = 1;
+        department.
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(department)
@@ -135,14 +122,5 @@ export default {
   margin-left: 30%;
   margin-top: 10px;
   font-weight: 600;
-}
-.title-label {
-  color: #ada0a5;
-  font-size: 15px;
-  width: 10%;
-  padding-right: 5%;
-  font-weight: 600;
-  border-right: 2px solid #ada0a5;
-  margin-right: 3%;
 }
 </style>
