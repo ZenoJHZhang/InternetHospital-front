@@ -12,6 +12,12 @@
     >
       <el-radio-button :label="t.value"></el-radio-button>
     </el-radio-group>
+    <label class="title-label">就诊时段</label>
+    <el-radio-group v-model="timeInterval" size="medium" @change="listDepartmentSchedule()">
+      <el-radio-button label="上午"></el-radio-button>
+      <el-radio-button label="下午"></el-radio-button>
+      <el-radio-button label="晚上"></el-radio-button>
+    </el-radio-group>
     <no-comment
       v-if="!this.$store.state.consultationDepartmentStore.isDepartment"
       style="margin-top:50px"
@@ -29,7 +35,7 @@
         plain
         :key="department.id"
         @click="toReservation(department)"
-      >挂号({{department.timeMessage}})</el-button>
+      >挂号</el-button>
     </el-card>
   </div>
 </template>
@@ -47,7 +53,8 @@ export default {
       pageSize: 8,
       date: "",
       dateList: [],
-      departments: ""
+      departments: "",
+      timeInterval:'上午'
     };
   },
   components: {
@@ -65,7 +72,7 @@ export default {
     },
     listDepartmentSchedule() {
       axion
-        .listDepartmentSchedule(this.date, this.pageNo, this.pageSize)
+        .listDepartmentSchedule(this.date,this.timeInterval,this.pageNo, this.pageSize)
         .then(response => {
           if (response != null) {
             this.departments = response.data.returnData.list;
@@ -82,10 +89,11 @@ export default {
         this.$router.push("/");
         this.$message({
           message: "请登录！",
-          type: "error",
+          type: "info",
           duration: 1000
         });
       } else {
+        department.timeInterval = this.timeInterval;
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(department)

@@ -122,7 +122,7 @@ export default {
         this.$router.push("/");
         this.$message({
           message: "请登录！",
-          type: "error",
+          type: "info",
           duration: 1000
         });
       } else {

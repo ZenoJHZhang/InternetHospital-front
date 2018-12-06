@@ -6,27 +6,29 @@
         <span style="margin-left:5px">查看详情</span>
       </i>
     </div>
+    <label class="title-label">就诊时段</label>
+    <el-radio-group v-model="timeInterval" size="medium" @change="listDepartmentSchedule()">
+      <el-radio-button label="上午"></el-radio-button>
+      <el-radio-button label="下午"></el-radio-button>
+      <el-radio-button label="晚上"></el-radio-button>
+    </el-radio-group>
     <no-comment
       v-if="!this.$store.state.consultationDepartmentStore.isDepartment"
-      style="margin-top:50px"
+      style="margin-top:75px"
     ></no-comment>
     <el-carousel
       v-if="this.$store.state.consultationDepartmentStore.isDepartment"
       :interval="4000"
       type="card"
       height="200px"
-      style="width:100%"
+      style="width:100%;margin-top:65px"
       :autoplay="false"
       indicator-position="none"
     >
       <el-carousel-item v-for="department in departments" :key="department.id">
         <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)">
         <div class="department-message-style">{{department.departmentName}}</div>
-        <el-button
-          type="primary"
-          :key="department.id"
-          @click="toReservation(department)"
-        >挂号({{department.timeMessage}})</el-button>
+        <el-button type="primary" :key="department.id" @click="toReservation(department)">挂号</el-button>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -41,8 +43,9 @@ export default {
     return {
       departments: "",
       treatmentInformation: "",
-      pageNo: 1,
-      pageSize: 5
+      pageNo: 0,
+      pageSize: 0,
+      timeInterval: "上午"
     };
   },
   components: {
@@ -52,7 +55,12 @@ export default {
     listDepartmentSchedule() {
       let today = dateUtil.getDay(0, "-");
       axion
-        .listDepartmentSchedule(today, this.pageNo, this.pageSize)
+        .listDepartmentSchedule(
+          today,
+          this.timeInterval,
+          this.pageNo,
+          this.pageSize
+        )
         .then(response => {
           if (response != null) {
             this.departments = response.data.returnData.list;
@@ -69,11 +77,11 @@ export default {
         this.$router.push("/");
         this.$message({
           message: "请登录！",
-          type: "error",
+          type: "info",
           duration: 1000
         });
       } else {
-        department.
+        department.timeInterval = this.timeInterval;
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(department)
@@ -101,6 +109,15 @@ export default {
   font-family: "microsoft yahei";
   font-weight: 700;
   margin-bottom: 20px;
+}
+.title-label {
+  color: #ada0a5;
+  font-size: 15px;
+  width: 10%;
+  padding-right: 5%;
+  font-weight: 600;
+  border-right: 2px solid #ada0a5;
+  margin-right: 3%;
 }
 .el-button {
   text-align: center;
