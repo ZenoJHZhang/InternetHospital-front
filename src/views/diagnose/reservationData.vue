@@ -85,7 +85,7 @@
               </el-form-item>
               <el-form-item label="病情图片：">
                 <el-upload
-                  action="http://localhost:8080/userReservation/insertReservationImg"
+                  action="http://47.100.241.49:8080/userReservation/insertReservationImg"
                   list-type="picture-card"
                   :before-upload="beforeImgUpload"
                 >

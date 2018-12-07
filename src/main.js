@@ -40,7 +40,9 @@ axios.interceptors.response.use(
           router.push("/");
       }
     }
-    return Promise.reject(error.response.data)   // 返回接口返回的错误信息
+    else if(error.message){
+      Message.error(error.message);
+    }
   });
 
 new Vue({
