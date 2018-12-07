@@ -26,7 +26,7 @@
       indicator-position="none"
     >
       <el-carousel-item v-for="department in departments" :key="department.id">
-        <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)">
+        <img class="department-img-style" src="@/assets/defaultDepartment.png">
         <div class="department-message-style">{{department.departmentName}}</div>
         <el-button type="primary" :key="department.id" @click="toReservation(department)">挂号</el-button>
       </el-carousel-item>

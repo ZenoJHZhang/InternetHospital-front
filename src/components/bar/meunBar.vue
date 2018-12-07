@@ -7,7 +7,7 @@
   <el-container>
   <el-header style="height:66px;padding-top:0"> 
     <el-container style="padding-top:5px">
-      <el-aside width="25%"> <img id="logo" src="@/assets/index/logo.png"></el-aside>
+      <el-aside width="25%"> <img id="logo" src="@/assets/logo.png"></el-aside>
       <el-main style="padding-left:20%;height:61px;overflow:hidden">  
         <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal" router background-color=#F2F2F2>
             <el-menu-item index="/">首页</el-menu-item>

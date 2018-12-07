@@ -37,7 +37,7 @@ export default {
 
 <style scoped>
 .headerImg {
-  background: url("../../assets/diagnose/specialistClinic.png") center;
+  background: url("../../assets/specialistClinic.png") center;
   height: 100%;
   background-size: cover;
 }

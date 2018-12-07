@@ -21,8 +21,9 @@ const listExpertDoctor = (departmentName,scheduleTime,timeInterval,pageNo,pageSi
 /** 获取所有的专家科室 */
 const listExpertDepartment = () =>get("/department/listExpertDepartment");
 /**获取首页轮播图 */
-const listIndexImg = () => get("/img/listIndexImg")
-
+const listIndexCarousel = () => get("/img/listIndexCarousel");
+/**获得网络诊室页面轮播图 */
+const listNetTreatmentRoomCarousel = () => get("/img/listNetTreatmentRoomCarousel");
 const test = () =>get("/test");
 export default {
   test,
@@ -32,6 +33,7 @@ export default {
   listExpertDoctor,
   listExpertDepartment,
   authorizationTest,
-  listIndexImg,
+  listIndexCarousel,
+  listNetTreatmentRoomCarousel,
   test
 }

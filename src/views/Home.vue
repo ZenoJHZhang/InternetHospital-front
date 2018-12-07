@@ -6,7 +6,7 @@
     </el-container>
     <img
       v-if="this.$store.state.commonStore.isMobile"
-      src="@/assets/index/app.png"
+      src="@/assets/app.png"
       :style="imgWidth"
     >
   </div>

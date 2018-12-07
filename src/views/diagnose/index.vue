@@ -9,7 +9,7 @@
             </el-carousel-item>
           </el-carousel>
           <div class="lrButton">
-            <img src="@/assets/index/sign.png">
+            <img src="@/assets/sign.png">
             <el-button
               id="login"
               type="primary"
@@ -107,11 +107,6 @@ export default {
     return {
       autoplay: false,
       // screenHeight: document.documentElement.clientHeight - 81+'px', //减去header的60px
-      imgs: [
-        { path: require("@/assets/index/home1.jpg") },
-        { path: require("@/assets/index/home2.jpg") },
-        { path: require("@/assets/index/home3.jpg") }
-      ],
       loginForm: {
         phone: "",
         password: ""
@@ -251,8 +246,8 @@ export default {
       this.loginFormVisible = true;
       this.registerFormVisible = false;
     },
-    listIndexImg() {
-      axion.listIndexImg().then(response => {
+    listIndexCarousel() {
+      axion.listIndexCarousel().then(response => {
         if(response != null){
           this.indexCarousel = response.data.returnData
         }
@@ -261,7 +256,7 @@ export default {
   },
   mounted() {
     this.$nextTick(function generate() {
-      this.listIndexImg();
+      this.listIndexCarousel();
     });
   }
 };

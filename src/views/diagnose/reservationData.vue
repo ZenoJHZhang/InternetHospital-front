@@ -2,7 +2,7 @@
   <div>
     <el-container style="padding:0">
       <el-header style="height:100%;padding:0px">
-        <img src="@/assets/diagnose/specialistClinic.png">
+        <img src="@/assets/specialistClinic.png">
       </el-header>
       <el-main style="backgroundColor:#eeeeee;padding-left:15%;padding-right:15%;padding-top:50px">
         <el-container>

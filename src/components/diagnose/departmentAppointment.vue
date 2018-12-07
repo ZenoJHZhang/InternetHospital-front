@@ -34,7 +34,7 @@
       class="departmentLi"
       shadow="hover"
     >
-      <img class="department-img-style" :src="require('@/assets/diagnose/'+department.imgPath)">
+      <img class="department-img-style"  src="@/assets/defaultDepartment.png">
       <div class="department-message-style">{{department.departmentName}}</div>
       <el-button plain :key="department.id" @click="toReservation(department)">挂号</el-button>
     </el-card>

@@ -46,7 +46,7 @@
       <no-comment v-if="!this.isExpertDoctor" style="height:220px;margin-top:80px"></no-comment>
       <el-form-item v-if="this.isExpertDoctor">
         <li class="expertLi" v-for="t in scheduleDoctors" :key="t.id">
-          <img class="expertImg" :src="require('@/assets/diagnose/'+t.doctorDto.imgPath)">
+          <img class="expertImg"  src="@/assets/defaultDoctor.png">
           <div class="expertName">
             <span>{{t.doctorDto.doctorName}}</span>
           </div>
