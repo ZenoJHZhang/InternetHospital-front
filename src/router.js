@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Home from '@/views/Home.vue'
+import PersonalCenter from '@/views/diagnose/personalCenter'
 
 Vue.use(Router)
 
@@ -14,22 +15,39 @@ export default new Router({
       {
         path: '/',
         name: 'index',
-        component: () => import('./views/diagnose/index.vue')
+        component: () => import('@/views/diagnose/index.vue')
       },
       {
-        path: '/netTreatRoom',
+        path: 'netTreatRoom',
         name: 'netTreatRoom',
-        component: () => import('./views/diagnose/netTreatRoom.vue')
+        component: () => import('@/views/diagnose/netTreatRoom.vue')
       },
       {
-        path: '/reservationData',
+        path: 'reservationData',
         name: 'reservationData',
-        component: () => import('./views/diagnose/reservationData.vue')
+        component: () => import('@/views/diagnose/reservationData.vue')
       },
       {
-        path: '/receptionDepartment',
+        path: 'receptionDepartment',
         name: 'receptionDepartment',
-        component: () => import('./views/diagnose/receptionDepartment.vue')
+        component: () => import('@/views/diagnose/receptionDepartment.vue')
+      },
+      {
+        path:'receptionExpert',
+        name:'receptionExpert',
+        component: () => import('@/views/diagnose/receptionExpert.vue')
+      },
+      {
+        path:'personalCenter',
+        name:'personalCenter',
+        component: PersonalCenter,
+        children :[
+          {
+            path: 'a',
+            name: 'a',
+            component: () =>  import('@/views/diagnose/personalCenterPage/userReservationInformation.vue'),
+          },
+        ]
       }
     ]
     }

@@ -3,7 +3,7 @@
     <div class="title-line">
       专家预约
       <i class="fas fa-hand-point-right" style="float:right;">
-        <span style="margin-left:5px">更多</span>
+        <span style="margin-left:5px;cursor:pointer" @click="getExpertDetail()">查看详情</span>
       </i>
     </div>
     <el-form ref="treatRoomForm">
@@ -169,6 +169,10 @@ export default {
             }
           }
         });
+    },
+    getExpertDetail(){
+      axion.authorizationTest();
+      this.$router.push("receptionExpert");
     }
   },
   mounted() {

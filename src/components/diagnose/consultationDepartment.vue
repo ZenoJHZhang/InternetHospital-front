@@ -3,7 +3,7 @@
     <div class="title-line">
       今日接诊科室
       <i class="fas fa-hand-point-right" style="float:right;">
-        <span style="margin-left:5px">查看详情</span>
+        <span style="margin-left:5px;cursor:pointer" @click="getDepartmentDetail()">查看详情</span>
       </i>
     </div>
     <label class="title-label">就诊时段</label>
@@ -38,7 +38,6 @@
 import noComment from "@/components/common/noComment";
 import axion from "@/utils/http_url";
 import dateUtil from "@/utils/dateUtil";
-import defaultDepartmentImgPath from '@/assets/defaultDepartment.png'
 export default {
   data() {
     return {
@@ -90,6 +89,10 @@ export default {
         );
         this.$router.push("reservationData");
       }
+    },
+    getDepartmentDetail(){
+      axion.authorizationTest();
+      this.$router.push("receptionDepartment")
     }
   },
   mounted() {

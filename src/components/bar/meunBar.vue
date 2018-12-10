@@ -13,8 +13,8 @@
             <el-menu-item index="/">首页</el-menu-item>
             <el-menu-item index="/netTreatRoom">网络诊间</el-menu-item>
             <el-menu-item index="/receptionDepartment">专科门诊</el-menu-item>
-            <el-menu-item index="/e">专家预约</el-menu-item>
-            <el-menu-item index="/d">个人中心</el-menu-item>
+            <el-menu-item index="/receptionExpert">专家预约</el-menu-item>
+            <el-menu-item index="/personalCenter">个人中心</el-menu-item>
             <el-menu-item index="/f">获得帮助</el-menu-item>  
         </el-menu>
       </el-main>
