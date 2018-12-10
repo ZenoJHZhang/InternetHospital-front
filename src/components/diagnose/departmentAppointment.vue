@@ -34,7 +34,7 @@
       class="departmentLi"
       shadow="hover"
     >
-      <img class="department-img-style"  src="@/assets/defaultDepartment.png">
+      <img class="department-img-style"  :src="department.imgPath">
       <div class="department-message-style">{{department.departmentName}}</div>
       <el-button plain :key="department.id" @click="toReservation(department)">挂号</el-button>
     </el-card>
@@ -96,7 +96,7 @@ export default {
         this.$message({
           message: "请登录！",
           type: "info",
-          duration: 1000
+          duration: 2000
         });
       } else {
         axion.authorizationTest();

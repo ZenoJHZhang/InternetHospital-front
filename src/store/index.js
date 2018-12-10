@@ -9,7 +9,8 @@ import common_store from "./commonStore.js"
 export default new Vuex.Store({
   state: {
     token:'',
-    phone:''
+    phone:'',
+    errorTokenVisible:false
   },
   mutations: {
       add_token(state,user){

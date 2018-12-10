@@ -26,7 +26,7 @@
       indicator-position="none"
     >
       <el-carousel-item v-for="department in departments" :key="department.id">
-        <img class="department-img-style" src="@/assets/defaultDepartment.png">
+        <img class="department-img-style" :src="department.imgPath">
         <div class="department-message-style">{{department.departmentName}}</div>
         <el-button type="primary" :key="department.id" @click="toReservation(department)">挂号</el-button>
       </el-carousel-item>
@@ -38,6 +38,7 @@
 import noComment from "@/components/common/noComment";
 import axion from "@/utils/http_url";
 import dateUtil from "@/utils/dateUtil";
+import defaultDepartmentImgPath from '@/assets/defaultDepartment.png'
 export default {
   data() {
     return {
@@ -78,7 +79,7 @@ export default {
         this.$message({
           message: "请登录！",
           type: "info",
-          duration: 1000
+          duration: 2000
         });
       } else {
         axion.authorizationTest();

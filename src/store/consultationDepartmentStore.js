@@ -1,5 +1,5 @@
 export default {
     state:{
-        isDepartment: false
+        isDepartment: true
     }
 }

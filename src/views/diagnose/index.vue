@@ -85,7 +85,7 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-alert title="用户不存在或密码错误" type="error" show-icon style="width:250px" center v-if="alertShow"></el-alert>
+    <error-token></error-token>
   </div>
 </template>
 
@@ -93,6 +93,7 @@
 
 <script>
 import axion from "@/utils/http_url.js";
+import errorToken from "@/components/common/errorToken.vue";
 export default {
   data() {
     var confirmPasswordRule = (rule, value, callback) => {
@@ -162,12 +163,13 @@ export default {
         ]
       },
       registerFormVisible: false,
-      alertShow: false,
       roleId: 1,
-      indexCarousel:''
+      indexCarousel: ""
     };
   },
-  components: {},
+  components: {
+    errorToken
+  },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -192,11 +194,11 @@ export default {
                     this.loginFormVisible = false;
                     this.$router.push("netTreatRoom");
                     this.$store.state.commonStore.isUserLogin = true;
-                  } else if (response.data.returnCode == 401) {
+                  } else if (response.data.returnCode == 400) {
                     this.$message({
                       message: response.data.returnType,
                       type: "error",
-                      duration: 1000
+                      duration: 2000
                     });
                   }
                 }
@@ -248,10 +250,11 @@ export default {
     },
     listIndexCarousel() {
       axion.listIndexCarousel().then(response => {
-        if(response != null){
-          this.indexCarousel = response.data.returnData
+        if (response != null) {
+          this.indexCarousel = response.data.returnData;
         }
       });
+      axion.authorizationTest();
     }
   },
   mounted() {

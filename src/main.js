@@ -6,7 +6,9 @@ import axios from 'axios'
 import './plugins/element.js'
 import './utils/normalize.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
-import { Message } from 'element-ui';
+import {
+  Message
+} from 'element-ui';
 
 Vue.config.productionTip = false
 
@@ -36,11 +38,10 @@ axios.interceptors.response.use(
         case 401:
           // 返回 401 清除token信息并跳转到登录页面
           store.commit('remove_token');
-          Message.error("token失效,请重新登录！");
-          router.push("/");
+          store.state.errorTokenVisible = true;
+          router.push("/" );
       }
-    }
-    else if(error.message){
+    } else if (error.message) {
       Message.error(error.message);
     }
   });
@@ -50,4 +51,3 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
-
