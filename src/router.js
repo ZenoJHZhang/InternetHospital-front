@@ -1,19 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/Home.vue'
-import PersonalCenter from '@/views/diagnose/personalCenter'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  routes: [
-    {
-      path: '/',
-      component: Home,
-      children :[
-      {
-        path: '/',
+  routes: [{
+    path: '/',
+    component: () => import('@/views/Home.vue'),
+    children: [{
+        path: '',
         name: 'index',
         component: () => import('@/views/diagnose/index.vue')
       },
