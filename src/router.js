@@ -33,23 +33,28 @@ export default new Router({
         component: () => import('@/views/diagnose/receptionDepartment.vue')
       },
       {
-        path:'receptionExpert',
-        name:'receptionExpert',
+        path: 'receptionExpert',
+        name: 'receptionExpert',
         component: () => import('@/views/diagnose/receptionExpert.vue')
       },
       {
-        path:'personalCenter',
-        name:'personalCenter',
-        component: PersonalCenter,
-        children :[
-          {
-            path: 'a',
-            name: 'a',
-            component: () =>  import('@/views/diagnose/personalCenterPage/userReservationInformation.vue'),
-          },
-        ]
+        path: 'personalCenter',
+        name: 'personalCenter',
+        component: () => import('@/views/diagnose/personalCenter'),
+        children: [{
+          path: '',
+          name: 'userReservationInformation',
+          component: () => import('@/views/diagnose/personalCenterPage/userReservationInformation.vue')
+        }, {
+          path: 'userReservationInformation',
+          name: 'userReservationInformation',
+          component: () => import('@/views/diagnose/personalCenterPage/userReservationInformation.vue')
+        }, {
+          path: 'patientManagement',
+          name: 'patientManagement',
+          component: () => import('@/views/diagnose/personalCenterPage/patientManagement.vue')
+        }]
       }
     ]
-    }
-  ]
+  }]
 })
