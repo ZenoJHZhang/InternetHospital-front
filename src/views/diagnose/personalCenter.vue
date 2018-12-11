@@ -7,19 +7,17 @@
       <el-container
         style="backgroundColor:#eeeeee;padding-top:20px;padding-left:12%;padding-right:12%;height:100%;padding-bottom:50px"
       >
-        <el-aside style="backgroundColor:red;margin-right:5%" width="20%">
+        <el-aside style="padding:20px;" width="20%">
           <el-menu
             class="el-menu-vertical-demo"
-            background-color="#545c64"
-            text-color="#fff"
-            active-text-color="#ffd04b"
-            :default-active="$route.path"
+            default-active="/personalCenter/userReservationInformation"
+            router
           >
-            <el-menu-item @click="toTest()" index="1">
+            <el-menu-item index="/personalCenter/userReservationInformation">
               <i class="el-icon-menu"></i>
               <span slot="title">问诊信息</span>
             </el-menu-item>
-            <el-menu-item index="2" @click="toTest2()">
+            <el-menu-item index="/personalCenter/patientManagement">
               <i class="el-icon-document"></i>
               <span slot="title">就诊人管理</span>
             </el-menu-item>
@@ -50,12 +48,6 @@ export default {
     expertAppointment
   },
   methods: {
-    toTest() {
-      this.$router.push({ name: "userReservationInformation" });
-    },
-    toTest2() {
-      this.$router.push({ name: "patientManagement" });
-    }
   }
 };
 </script>

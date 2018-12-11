@@ -39,7 +39,6 @@ export default new Router({
         component: () => import('@/views/diagnose/personalCenter'),
         children: [{
           path: '',
-          name: 'userReservationInformation',
           component: () => import('@/views/diagnose/personalCenterPage/userReservationInformation.vue')
         }, {
           path: 'userReservationInformation',

@@ -24,6 +24,10 @@ const listExpertDepartment = () =>get("/department/listExpertDepartment");
 const listIndexCarousel = () => get("/img/listIndexCarousel");
 /**获得网络诊室页面轮播图 */
 const listNetTreatmentRoomCarousel = () => get("/img/listNetTreatmentRoomCarousel");
+/**获取用户就诊人列表 */
+const listPatient = (userId)  => get("/patient/listPatient?userId="+userId);
+/**添加就诊人 */
+const insertPatient = (patient) => post("/patient/inertPatient",patient);
 const test = () =>get("/test");
 export default {
   test,

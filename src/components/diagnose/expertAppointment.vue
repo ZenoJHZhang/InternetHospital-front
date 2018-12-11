@@ -6,59 +6,75 @@
         <span style="margin-left:5px;cursor:pointer" @click="getExpertDetail()">查看详情</span>
       </i>
     </div>
-    <el-form ref="treatRoomForm">
-      <el-form-item>
-        <label class="title-label">科室筛选</label>
-        <el-radio-group
-          v-model="expertreatRoomNameRadio"
-          v-for="room in expertreatRooms"
-          :key="room.id"
-          size="medium"
-          @change="listExpertDoctor()"
-        >
-          <el-radio-button :label="room.departmentName"></el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item>
-        <label class="title-label">就诊日期</label>
-        <el-radio-group
-          v-model="expertreatRoomDateRadio"
-          v-for="t in dateList"
-          :key="t.value"
-          size="medium"
-          @change="listExpertDoctor()"
-        >
-          <el-radio-button :label="t.value"></el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item>
-        <label class="title-label">就诊时段</label>
-        <el-radio-group
-          v-model="expertreatRoomTimeRadio"
-          size="medium"
-          @change="listExpertDoctor()"
-        >
-          <el-radio-button label="上午"></el-radio-button>
-          <el-radio-button label="下午"></el-radio-button>
-          <el-radio-button label="晚上"></el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <no-comment v-if="!this.isExpertDoctor" style="height:220px;margin-top:80px"></no-comment>
-      <el-form-item v-if="this.isExpertDoctor">
-        <li class="expertLi" v-for="t in scheduleDoctors" :key="t.id">
-          <img class="expertImg"  :src="t.doctorDto.imgPath">
-          <div class="expertName">
-            <span>{{t.doctorDto.doctorName}}</span>
-          </div>
-          <div class="expertMajor">{{t.doctorDto.goodat}}</div>
-          <el-button
-            size="small"
-            :disabled="!t.timeIntervalNumber>0"
-            @click="reservation(t)"
-          >预约（{{t.timeIntervalNumber}}个号源）</el-button>
-        </li>
-      </el-form-item>
-    </el-form>
+    <el-container>
+      <el-main>
+        <el-form ref="treatRoomForm">
+          <el-form-item>
+            <label class="title-label">科室筛选</label>
+            <el-radio-group
+              v-model="expertreatRoomNameRadio"
+              v-for="room in expertreatRooms"
+              :key="room.id"
+              size="medium"
+              @change="listExpertDoctor()"
+            >
+              <el-radio-button :label="room.departmentName"></el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item>
+            <label class="title-label">就诊日期</label>
+            <el-radio-group
+              v-model="expertreatRoomDateRadio"
+              v-for="t in dateList"
+              :key="t.value"
+              size="medium"
+              @change="listExpertDoctor()"
+            >
+              <el-radio-button :label="t.value"></el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item>
+            <label class="title-label">就诊时段</label>
+            <el-radio-group
+              v-model="expertreatRoomTimeRadio"
+              size="medium"
+              @change="listExpertDoctor()"
+            >
+              <el-radio-button label="上午"></el-radio-button>
+              <el-radio-button label="下午"></el-radio-button>
+              <el-radio-button label="晚上"></el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+
+          <no-comment v-if="!this.isExpertDoctor" style="height:220px;margin-top:80px"></no-comment>
+          <el-form-item v-if="this.isExpertDoctor">
+            <li class="expertLi" v-for="t in scheduleDoctors" :key="t.id">
+              <img class="expertImg" :src="t.doctorDto.imgPath">
+              <div class="expertName">
+                <span>{{t.doctorDto.doctorName}}</span>
+              </div>
+              <div class="expertMajor">{{t.doctorDto.goodat}}</div>
+              <el-button
+                size="small"
+                :disabled="!t.timeIntervalNumber>0"
+                @click="reservation(t)"
+              >预约（{{t.timeIntervalNumber}}个号源）</el-button>
+            </li>
+          </el-form-item>
+        </el-form>
+      </el-main>
+      <el-footer style="text-align:center">
+        <el-pagination
+          layout="prev, pager, next"
+          :total="total"
+          :current-page.sync="pageNo"
+          :pager-count="11"
+          :page-size="pageSize"
+          @current-change="listDepartmentSchedule"
+          v-if="this.isExpertDoctor"
+        ></el-pagination>
+      </el-footer>
+    </el-container>
   </div>
 </template>
 
@@ -75,7 +91,8 @@ export default {
       expertreatRooms: "",
       scheduleDoctors: "",
       pageNo: 1,
-      pageSize: 5,
+      pageSize: 1,
+      total: "",
       isExpertDoctor: true,
       treatmentInformation: {},
       dateList: []
@@ -162,6 +179,8 @@ export default {
         .then(response => {
           if (response != null) {
             this.scheduleDoctors = response.data.returnData.list;
+            this.total = response.data.returnData.total;
+            this.pageNo = response.data.returnData.pageNum;
             if (response.data.returnData.list.length > 0) {
               this.isExpertDoctor = true;
             } else {
@@ -170,7 +189,7 @@ export default {
           }
         });
     },
-    getExpertDetail(){
+    getExpertDetail() {
       axion.authorizationTest();
       this.$router.push("receptionExpert");
     }

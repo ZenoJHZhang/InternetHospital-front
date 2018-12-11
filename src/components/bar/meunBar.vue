@@ -9,12 +9,12 @@
     <el-container style="padding-top:5px">
       <el-aside width="25%"> <img id="logo" src="@/assets/logo.png"></el-aside>
       <el-main style="padding-left:20%;height:61px;overflow:hidden">  
-        <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal"  background-color=#F2F2F2>
+        <el-menu :default-active="$route.path" class="el-menu-demo" mode="horizontal"  background-color=#F2F2F2 router>
             <el-menu-item index="/">首页</el-menu-item>
             <el-menu-item index="/netTreatRoom">网络诊间</el-menu-item>
             <el-menu-item index="/receptionDepartment">专科门诊</el-menu-item>
-            <el-menu-item index="/receptionExpert" @click="toReceptionExpert()">专家预约</el-menu-item>
-            <el-menu-item index="/personalCenter" @click="toPersonalCenter()">个人中心</el-menu-item>
+            <el-menu-item index="/receptionExpert">专家预约</el-menu-item>
+            <el-menu-item index="/personalCenter">个人中心</el-menu-item>
             <el-menu-item index="/f">获得帮助</el-menu-item>  
         </el-menu>
       </el-main>
@@ -79,12 +79,6 @@ export default {
       if (this.$store.state.phone != null && token != null) {
         this.$store.state.commonStore.isUserLogin = true;
       }
-    },
-    toPersonalCenter(){
-      this.$router.push({'name':'personalCenter'})
-    },
-    toReceptionExpert(){
-      this.$router.push({'name':'receptionExpert'})
     }
   },
   mounted() {
