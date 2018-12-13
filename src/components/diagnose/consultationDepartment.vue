@@ -2,8 +2,12 @@
   <div>
     <div class="title-line">
       今日接诊科室
-      <i class="fas fa-hand-point-right" style="float:right;">
-        <span style="margin-left:5px;cursor:pointer" @click="getDepartmentDetail()">查看详情</span>
+      <i
+        class="fas fa-hand-point-right"
+        style="float:right;cursor:pointer"
+        @click="getDepartmentDetail()"
+      >
+        <span style="margin-left:5px;">查看详情</span>
       </i>
     </div>
     <label class="title-label">就诊时段</label>
@@ -73,26 +77,16 @@ export default {
         });
     },
     toReservation(department) {
-      if (localStorage.getItem("token") == null) {
-        this.$router.push("/");
-        this.$message({
-          message: "请登录！",
-          type: "info",
-          duration: 2000
-        });
-      } else {
-        axion.authorizationTest();
         department.timeInterval = this.timeInterval;
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(department)
         );
         this.$router.push("reservationData");
-      }
     },
-    getDepartmentDetail(){
-      axion.authorizationTest();
-      this.$router.push("receptionDepartment")
+    getDepartmentDetail() {
+      axion.authenticationTest();
+      this.$router.push("receptionDepartment");
     }
   },
   mounted() {

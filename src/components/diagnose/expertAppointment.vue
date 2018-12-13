@@ -2,8 +2,12 @@
   <div>
     <div class="title-line">
       专家预约
-      <i class="fas fa-hand-point-right" style="float:right;">
-        <span style="margin-left:5px;cursor:pointer" @click="getExpertDetail()">查看详情</span>
+      <i
+        class="fas fa-hand-point-right"
+        style="float:right;cursor:pointer"
+        @click="getExpertDetail()"
+      >
+        <span style="margin-left:5px;">查看详情</span>
       </i>
     </div>
     <el-container>
@@ -70,7 +74,7 @@
           :current-page.sync="pageNo"
           :pager-count="11"
           :page-size="pageSize"
-          @current-change="listDepartmentSchedule"
+          @current-change="listExpertDoctor()"
           v-if="this.isExpertDoctor"
         ></el-pagination>
       </el-footer>
@@ -92,7 +96,7 @@ export default {
       scheduleDoctors: "",
       pageNo: 1,
       pageSize: 1,
-      total: "",
+      total: 1,
       isExpertDoctor: true,
       treatmentInformation: {},
       dateList: []
@@ -144,7 +148,7 @@ export default {
           duration: 2000
         });
       } else {
-        axion.authorizationTest();
+        axion.authenticationTest();
         this.treatmentInformation.departmentName =
           treatRoom.department.departmentName;
         this.treatmentInformation.departmentId = treatRoom.department.id;
@@ -190,7 +194,7 @@ export default {
         });
     },
     getExpertDetail() {
-      axion.authorizationTest();
+      axion.authenticationTest();
       this.$router.push("receptionExpert");
     }
   },

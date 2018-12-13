@@ -108,22 +108,12 @@ export default {
         });
     },
     toReservation(department) {
-      if (localStorage.getItem("token") == null) {
-        this.$router.push("/");
-        this.$message({
-          message: "请登录！",
-          type: "info",
-          duration: 2000
-        });
-      } else {
-        axion.authorizationTest();
         department.timeInterval = this.timeInterval;
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(department)
         );
         this.$router.push("reservationData");
-      }
     }
   },
   mounted() {

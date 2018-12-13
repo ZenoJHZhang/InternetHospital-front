@@ -195,11 +195,10 @@ export default {
                     this.$router.push("netTreatRoom");
                     this.$store.state.commonStore.isUserLogin = true;
                   } else if (response.data.returnCode == 400) {
-                    this.$message({
-                      message: response.data.returnType,
-                      type: "error",
-                      duration: 2000
-                    });
+                    this.$store.commit("remove_token");
+                    this.$store.state.errorTokenVisible = true;
+                    this.$store.state.errorTokenMessage =
+                      response.data.returnType;
                   }
                 }
               });
@@ -222,11 +221,10 @@ export default {
                     this.registerFormVisible = false;
                     this.$router.push("/");
                   } else if (response.data.returnCode == 400) {
-                    this.$message({
-                      message: response.data.returnType,
-                      type: "error",
-                      duration: 1000
-                    });
+                    this.$store.commit("remove_token");
+                    this.$store.state.errorTokenVisible = true;
+                    this.$store.state.errorTokenMessage =
+                      response.data.returnType;
                   }
                 }
               });
@@ -254,7 +252,7 @@ export default {
           this.indexCarousel = response.data.returnData;
         }
       });
-      axion.authorizationTest();
+      axion.authenticationTest();
     }
   },
   mounted() {

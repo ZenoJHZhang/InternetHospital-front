@@ -6,9 +6,6 @@ import axios from 'axios'
 import './plugins/element.js'
 import './utils/normalize.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
-import {
-  Message
-} from 'element-ui';
 
 Vue.config.productionTip = false
 
@@ -33,16 +30,33 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
+    console.log(error)
     if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          // 返回 401 清除token信息并跳转到登录页面
+      // 返回 401 
+      if (error.response.status == 401) {
+        console.log(error.response)
+        //身份认证失败,清除token信息并跳转到登录页面
+        if (error.response.data.returnData == 40101) {
           store.commit('remove_token');
           store.state.errorTokenVisible = true;
-          router.push("/" );
+          store.state.errorTokenMessage = error.response.data.returnType;
+          router.push("/");
+        }
+        //权限不够，直接跳转无需清除
+        if (error.response.data.returnData == 40102) {
+          store.state.errorTokenVisible = true;
+          store.state.errorTokenMessage = error.response.data.returnType;
+          router.push("/");
+        }
+      } else {
+        store.state.errorTokenVisible = true;
+        store.state.errorTokenMessage = error.response.data.returnType;
       }
     } else if (error.message) {
-      Message.error(error.message);
+      store.commit('remove_token');
+      store.state.errorTokenVisible = true;
+      store.state.errorTokenMessage = error.message;
+      router.push("/");
     }
   });
 

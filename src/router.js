@@ -41,13 +41,13 @@ export default new Router({
           path: '',
           component: () => import('@/views/diagnose/personalCenterPage/userReservationInformation.vue')
         }, {
-          path: 'userReservationInformation',
-          name: 'userReservationInformation',
-          component: () => import('@/views/diagnose/personalCenterPage/userReservationInformation.vue')
-        }, {
           path: 'patientManagement',
           name: 'patientManagement',
           component: () => import('@/views/diagnose/personalCenterPage/patientManagement.vue')
+        }, {
+          path: 'insertPatient',
+          name: 'insertPatient',
+          component: () => import('@/views/diagnose/personalCenterPage/insertPatient.vue')
         }]
       }
     ]

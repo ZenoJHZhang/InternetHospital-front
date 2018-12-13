@@ -5,15 +5,11 @@
         <div class="headerImg"></div>
       </el-header>
       <el-container
-        style="backgroundColor:#eeeeee;padding-top:20px;padding-left:12%;padding-right:12%;height:100%;padding-bottom:50px"
+        style="backgroundColor:#eeeeee;padding-top:20px;padding-left:12%;padding-right:12%;height:100%;padding-bottom:50px;"
       >
         <el-aside style="padding:20px;" width="20%">
-          <el-menu
-            class="el-menu-vertical-demo"
-            default-active="/personalCenter/userReservationInformation"
-            router
-          >
-            <el-menu-item index="/personalCenter/userReservationInformation">
+          <el-menu class="el-menu-vertical-demo" :default-active="$route.path" router>
+            <el-menu-item index="/personalCenter">
               <i class="el-icon-menu"></i>
               <span slot="title">问诊信息</span>
             </el-menu-item>
@@ -31,10 +27,11 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
-        <el-main>
+        <el-main style="min-height:700px;backgroundColor:white;margin-top:20px">
           <router-view></router-view>
         </el-main>
       </el-container>
+      <el-footer style="height:200px;backgroundColor:#a33238"></el-footer>
     </el-container>
   </div>
 </template>
@@ -42,12 +39,23 @@
 <script>
 import treatmentProcess from "@/components/diagnose/treatmentProcess";
 import expertAppointment from "@/components/diagnose/expertAppointment";
+import axion from "@/utils/http_url";
 export default {
   components: {
     treatmentProcess,
     expertAppointment
   },
-  methods: {
+  mounted() {
+    this.$nextTick(function generate() {
+      if (localStorage.getItem("token") == null) {
+        this.$router.push("/");
+        this.$store.commit("remove_token");
+        this.$store.state.errorTokenVisible = true;
+        this.$store.state.errorTokenMessage = "请登录！";
+      } else {
+        axion.userAuthorizationTest();
+      }
+    });
   }
 };
 </script>

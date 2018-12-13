@@ -9,7 +9,9 @@ const post = (_url, obj) => axios.post(_url, obj, objBase)
 const post2 = (_url, body) => axios.post(_url, body, modelBase)
 const get = (_url) => axios.get(_url, objBase)
 /**token认证，防止token被篡改或过期 */
-const authorizationTest = () => get("/authorizationTest")
+const authenticationTest = () => get("/authenticationTest")
+/**普通用户权限认证 */
+const userAuthorizationTest = () =>get("/userAuthorizationTest")
 /**登录 */
 const login = (phone,password,roleId)  => get('/user/login?phone='+phone+'&password='+password+'&roleId='+roleId)
 const register = (phone,password,roleId) => post('/user/register',phone,password,roleId)
@@ -25,19 +27,21 @@ const listIndexCarousel = () => get("/img/listIndexCarousel");
 /**获得网络诊室页面轮播图 */
 const listNetTreatmentRoomCarousel = () => get("/img/listNetTreatmentRoomCarousel");
 /**获取用户就诊人列表 */
-const listPatient = (userId)  => get("/patient/listPatient?userId="+userId);
+const listPatient = (pageNo,pageSize)  => get("/patient/listPatient?&pageNo="+pageNo+'&pageSize='+pageSize);
 /**添加就诊人 */
-const insertPatient = (patient) => post("/patient/inertPatient",patient);
-const test = () =>get("/test");
+const insertPatient = (patient) => post2("/patient/insertPatient",patient);
+const deletePatient = (patientList) => post2("/patient/deletePatient",patientList);
 export default {
-  test,
   login,
   register,
   listDepartmentSchedule,
   listExpertDoctor,
   listExpertDepartment,
-  authorizationTest,
+  authenticationTest,
+  userAuthorizationTest,
   listIndexCarousel,
   listNetTreatmentRoomCarousel,
-  test
+  listPatient,
+  insertPatient,
+  deletePatient
 }

@@ -106,6 +106,7 @@
 
 <script>
 import treatmentProcess from "@/components/diagnose/treatmentProcess";
+import axion from "@/utils/http_url.js";
 export default {
   data() {
     return {
@@ -191,12 +192,22 @@ export default {
   },
   mounted() {
     this.$nextTick(function generate() {
-      this.$store.state.treatmentProcessStore.active = 1;
-      this.treatmentInformation = JSON.parse(
-        sessionStorage.getItem("treatmentInformation")
-      );
-      if (this.treatmentInformation == null) {
-        this.$router.push("netTreatRoom");
+      if (localStorage.getItem("token") == null) {
+        this.$router.push("/");
+        this.$store.commit("remove_token");
+        this.$store.state.errorTokenVisible = true;
+        this.$store.state.errorTokenMessage = "请登录！";
+      } else {
+        axion.userAuthorizationTest();
+        this.$store.state.treatmentProcessStore.active = 1;
+        this.treatmentInformation = JSON.parse(
+          sessionStorage.getItem("treatmentInformation")
+        );
+        if (this.treatmentInformation == null) {
+          this.$router.push("netTreatRoom");
+          this.$store.state.errorTokenVisible = true;
+          this.$store.state.errorTokenMessage = "请先选择专科科室或专家医生！";
+        }
       }
     });
   }

@@ -1,92 +1,134 @@
 <template>
   <div>
-    <el-container style="backgroundColor:white">
+    <el-container>
       <el-header style="padding:20px">
-        <div class="title-line">专家预约</div>
+        <div class="title-line">
+          就诊人详情
+          <span v-if="!isDelete">
+            <i class="el-icon-delete" style="float:right;cursor:pointer" @click="wantToDelete()">
+              <span style="margin-right:5px;">删除就诊人</span>
+            </i>
+            <i class="el-icon-plus" style="float:right;cursor:pointer" @click="insertPatient()">
+              <span style="margin-right:25px;">添加就诊人</span>
+            </i>
+          </span>
+          <span v-if="isDelete">
+            <i class="el-icon-close" style="float:right;cursor:pointer" @click="cancelDelete()">
+              <span style="margin-right:5px;">取消</span>
+            </i>
+            <i class="el-icon-delete" style="float:right;cursor:pointer" @click="toConfirmDelete()">
+              <span style="margin-right:25px;">确认删除</span>
+            </i>
+          </span>
+        </div>
       </el-header>
-      <el-main style="padding-top:5px">
-        <el-table ref="filterTable" :data="tableData" style="width: 100%;">
-          <el-table-column
-            prop="date"
-            label="日期"
-            sortable
-            width="180"
-            column-key="date"
-            :filters="[{text: '2016-05-01', value: '2016-05-01'}, {text: '2016-05-02', value: '2016-05-02'}, {text: '2016-05-03', value: '2016-05-03'}, {text: '2016-05-04', value: '2016-05-04'}]"
-            :filter-method="filterHandler"
-          ></el-table-column>
-          <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-          <el-table-column prop="address" label="地址" :formatter="formatter"></el-table-column>
-          <el-table-column
-            prop="tag"
-            label="标签"
-            width="100"
-            :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
-            :filter-method="filterTag"
-            filter-placement="bottom-end"
-          >
-            <template slot-scope="scope">
-              <el-tag
-                :type="scope.row.tag === '家' ? 'primary' : 'success'"
-                disable-transitions
-              >{{scope.row.tag}}</el-tag>
-            </template>
-          </el-table-column>
+      <el-main style="padding-top:5px;min-height:600px">
+        <el-table
+          :data="patientTable"
+          style="width: 100%;"
+          stripe
+          ref="patientTable"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" v-if="isDelete"></el-table-column>
+          <el-table-column prop="realName" label="就诊人姓名"></el-table-column>
+          <el-table-column prop="idCard" label="身份证号"></el-table-column>
+          <el-table-column prop="phone" label="手机号"></el-table-column>
         </el-table>
       </el-main>
+      <el-footer style="text-align:center">
+        <el-pagination
+          layout="prev, pager, next"
+          :total="total"
+          :current-page.sync="pageNo"
+          :pager-count="11"
+          :page-size="pageSize"
+          @current-change="listPatient()"
+          v-if="isPatientExist"
+        ></el-pagination>
+      </el-footer>
     </el-container>
+    <el-dialog title="提示" :visible.sync="isConfirmDelete" width="30%">
+      <span>是否确认删除就诊人？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmDelete()">确 定</el-button>
+        <el-button @click="isConfirmDelete = false">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import axion from "@/utils/http_url";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          tag: "家"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-          tag: "公司"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          tag: "家"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-          tag: "公司"
-        }
-      ]
+      patientTable: [],
+      isDelete: false,
+      isConfirmDelete: false,
+      multipleSelection: [],
+      pageNo: 1,
+      pageSize: 8,
+      total: 5,
+      isPatientExist:false
     };
   },
   methods: {
-    resetDateFilter() {
-      this.$refs.filterTable.clearFilter("date");
+    wantToDelete() {
+      this.isDelete = true;
     },
-    clearFilter() {
-      this.$refs.filterTable.clearFilter();
+    cancelDelete() {
+      this.isDelete = false;
     },
-    formatter(row, column) {
-      return row.address;
+    toConfirmDelete() {
+      this.isConfirmDelete = true;
     },
-    filterTag(value, row) {
-      return row.tag === value;
+    confirmDelete() {
+      this.isConfirmDelete = false;
+      axion.deletePatient(this.multipleSelection).then(response => {
+        if (response != null) {
+          if (response.data.returnCode == 200) {
+            this.$message({
+              message: "就诊人删除成功",
+              type: "success",
+              duration: 2000
+            });
+            this.isDelete = false;
+            this.listPatient();
+          } else if (response.data.returnCode == 400) {
+            this.$message({
+              message: "就诊人删除失败",
+              type: "error",
+              duration: 2000
+            });
+          }
+        }
+      });
     },
-    filterHandler(value, row, column) {
-      const property = column["property"];
-      return row[property] === value;
+    insertPatient() {
+      this.$router.push("/personalCenter/insertPatient");
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    listPatient() {
+      axion.listPatient(this.pageNo, this.pageSize).then(response => {
+        this.patientTable = response.data.returnData.list;
+        this.total = response.data.returnData.total;
+        if(this.total != 0){
+            this.isPatientExist = true;
+        }
+       else{
+         this.isPatientExist = false;
+       }
+      });
     }
+  },
+  mounted() {
+    this.$nextTick(function generate() {
+      axion.userAuthorizationTest();
+      this.listPatient();
+    });
   }
 };
 </script>
@@ -102,3 +144,4 @@ export default {
   margin-bottom: 20px;
 }
 </style>
+
