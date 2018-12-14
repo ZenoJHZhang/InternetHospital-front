@@ -4,16 +4,14 @@
       <menu-bar></menu-bar>
       <router-view></router-view>
     </el-container>
-    <img
-      v-if="this.$store.state.commonStore.isMobile"
-      src="@/assets/app.png"
-      :style="imgWidth"
-    >
+    <error-token></error-token>
+    <img v-if="this.$store.state.commonStore.isMobile" src="@/assets/app.png" :style="imgWidth">
   </div>
 </template>
 
 <script>
 import menuBar from "@/components/bar/meunBar";
+import errorToken from "@/components/common/errorToken.vue";
 export default {
   name: "home",
   data() {
@@ -26,7 +24,8 @@ export default {
     };
   },
   components: {
-    menuBar
+    menuBar,
+    errorToken
   },
   methods: {
     judgeMobile() {

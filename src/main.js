@@ -34,7 +34,6 @@ axios.interceptors.response.use(
     if (error.response) {
       // 返回 401 
       if (error.response.status == 401) {
-        console.log(error.response)
         //身份认证失败,清除token信息并跳转到登录页面
         if (error.response.data.returnData == 40101) {
           store.commit('remove_token');
@@ -42,21 +41,20 @@ axios.interceptors.response.use(
           store.state.errorTokenMessage = error.response.data.returnType;
           router.push("/");
         }
-        //权限不够，直接跳转无需清除
+        //权限不够，回退一步,token无需清除
         if (error.response.data.returnData == 40102) {
           store.state.errorTokenVisible = true;
           store.state.errorTokenMessage = error.response.data.returnType;
-          router.push("/");
+          router.go("-1");
         }
       } else {
         store.state.errorTokenVisible = true;
         store.state.errorTokenMessage = error.response.data.returnType;
       }
-    } else if (error.message) {
-      store.commit('remove_token');
+    }
+    else{
       store.state.errorTokenVisible = true;
-      store.state.errorTokenMessage = error.message;
-      router.push("/");
+      store.state.errorTokenMessage = '服务器错误,请稍后再试';
     }
   });
 

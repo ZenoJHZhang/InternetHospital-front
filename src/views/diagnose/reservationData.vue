@@ -62,10 +62,10 @@
                   <el-option
                     v-for="item in beChoicedPatient"
                     :key="item.id"
-                    :label="item.name"
+                    :label="item.realName"
                     :value="item.id"
                   >
-                    <span style="float: left">{{ item.name }}</span>
+                    <span style="float: left">{{ item.realName }}</span>
                   </el-option>
                 </el-select>
                 <el-button type="primary" style="margin-left:12%" v-if="insertPatinetVisiable">添加就诊人</el-button>
@@ -85,9 +85,11 @@
               </el-form-item>
               <el-form-item label="病情图片：">
                 <el-upload
-                  action="http://47.100.241.49:8080/userReservation/insertReservationImg"
                   list-type="picture-card"
                   :before-upload="beforeImgUpload"
+                  :http-request="uploadImg"
+                  :on-remove="deleteImg"
+                  action
                 >
                   <i class="el-icon-plus"></i>
                 </el-upload>
@@ -115,20 +117,7 @@ export default {
         accentVisit: "初诊"
       },
       /**选择就诊人 */
-      beChoicedPatient: [
-        {
-          id: 1,
-          name: "ZJH"
-        },
-        {
-          id: 2,
-          name: "ZJH2"
-        },
-        {
-          id: 0,
-          name: "需要添加就诊人"
-        }
-      ],
+      beChoicedPatient: [],
       isExpert: "",
       timeSelected: "",
       insertPatinetVisiable: false,
@@ -142,7 +131,8 @@ export default {
         accentDetail: [
           { required: true, message: "请填写疾病描述", trigger: "blur" }
         ]
-      }
+      },
+      imgIdMap: new Map()
     };
   },
   components: {
@@ -180,12 +170,80 @@ export default {
           this.userReservation.hospitalId = this.treatmentInformation.hospitalId;
           this.userReservation.price = this.treatmentInformation.price;
           this.userReservation.scheduleDoctorId = this.treatmentInformation.scheduleDoctorId;
+          this.userReservation.scheduleDepartmentId = this.treatmentInformation.scheduleDepartmentId;
           this.userReservation.scheduleTime = this.treatmentInformation.scheduleTime;
           this.userReservation.timeInterval = this.treatmentInformation.timeInterval;
-          console.log(this.userReservation);
+          this.userReservation.imgIdMap = this.imgIdMap;
+          this.userReservation.type = this.treatmentInformation.type;
+          axion.insertUserReservation(this.userReservation);
         } else {
           console.log("error submit!!");
           return false;
+        }
+      });
+    },
+    deleteImg(data) {
+      let id = this.imgIdMap.get(data.uid);
+      this.imgIdMap.delete(data.uid);
+      axion
+        .deleteUserReservationImg({
+          id: id
+        })
+        .then(response => {
+          if (response != null) {
+            if (response.data.returnCode == 200) {
+              this.$message({
+                message: "图片删除成功",
+                type: "success",
+                duration: 2000
+              });
+            } else if (response.data.returnCode == 400) {
+              this.$message({
+                message: "图片删除失败",
+                type: "erro",
+                duration: 2000
+              });
+            }
+          }
+        });
+    },
+    uploadImg(data) {
+      let form = new FormData();
+      let uid = data.file.uid;
+      form.append("file", data.file);
+      axion.insertUserReservationImg(form).then(response => {
+        if (response != null) {
+          if (response.data.returnCode == 200) {
+            let id = response.data.returnData.id;
+            this.imgIdMap.set(uid, id);
+            this.$message({
+              message: "图片上传成功",
+              type: "success",
+              duration: 2000
+            });
+          } else if (response.data.returnCode == 400) {
+            this.$message({
+              message: "图片上传失败",
+              type: "erro",
+              duration: 2000
+            });
+          }
+        }
+      });
+    },
+    listPatient() {
+      axion.listPatient(0, 0).then(response => {
+        if (response != null) {
+          this.beChoicedPatient = response.data.returnData.list;
+          if (response.data.returnData.total == 0) {
+            this.insertPatinetVisiable = true;
+          }
+          else {
+            this.beChoicedPatient.push({
+              id:0,
+              realName:'需要添加就诊人'
+            })
+          }
         }
       });
     }
@@ -209,6 +267,7 @@ export default {
           this.$store.state.errorTokenMessage = "请先选择专科科室或专家医生！";
         }
       }
+      this.listPatient();
     });
   }
 };

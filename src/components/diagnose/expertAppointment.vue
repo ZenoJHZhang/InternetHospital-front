@@ -164,6 +164,8 @@ export default {
         this.treatmentInformation.timeInterval = this.expertreatRoomTimeRadio;
         this.treatmentInformation.scheduleDoctorId = treatRoom.id;
         this.treatmentInformation.hospitalId = treatRoom.doctorDto.hospitalId;
+        this.treatmentInformation.scheduleDepartmentId = treatRoom.scheduleDepartmentId;
+        this.treatmentInformation.type = 'expert';
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(this.treatmentInformation)

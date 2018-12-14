@@ -85,7 +85,6 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <error-token></error-token>
   </div>
 </template>
 
@@ -93,7 +92,6 @@
 
 <script>
 import axion from "@/utils/http_url.js";
-import errorToken from "@/components/common/errorToken.vue";
 export default {
   data() {
     var confirmPasswordRule = (rule, value, callback) => {
@@ -168,7 +166,7 @@ export default {
     };
   },
   components: {
-    errorToken
+
   },
   methods: {
     submitForm(formName) {

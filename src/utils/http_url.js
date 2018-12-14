@@ -30,7 +30,14 @@ const listNetTreatmentRoomCarousel = () => get("/img/listNetTreatmentRoomCarouse
 const listPatient = (pageNo,pageSize)  => get("/patient/listPatient?&pageNo="+pageNo+'&pageSize='+pageSize);
 /**添加就诊人 */
 const insertPatient = (patient) => post2("/patient/insertPatient",patient);
+/**删除就诊人 */
 const deletePatient = (patientList) => post2("/patient/deletePatient",patientList);
+/**上传用户就诊信息图片描述 */
+const insertUserReservationImg = (file) => post2("/userReservation/insertUserReservationImg",file);
+/**删除用户就诊信息图片描述 */
+const deleteUserReservationImg = (id) => post("/userReservation/deleteUserReservationImg",id);
+/**添加用户就诊信息 */
+const insertUserReservation = (userReservation) => post2("/userReservation/insertUserReservation",userReservation)
 export default {
   login,
   register,
@@ -43,5 +50,8 @@ export default {
   listNetTreatmentRoomCarousel,
   listPatient,
   insertPatient,
-  deletePatient
+  deletePatient,
+  insertUserReservationImg,
+  deleteUserReservationImg,
+  insertUserReservation
 }
