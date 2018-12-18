@@ -103,6 +103,7 @@
         </el-container>
       </el-main>
     </el-container>
+    <div>{{imgIdMap}}</div>
   </div>
 </template>
 
@@ -173,11 +174,19 @@ export default {
           this.userReservation.scheduleDepartmentId = this.treatmentInformation.scheduleDepartmentId;
           this.userReservation.scheduleTime = this.treatmentInformation.scheduleTime;
           this.userReservation.timeInterval = this.treatmentInformation.timeInterval;
-          this.userReservation.imgIdMap = this.imgIdMap;
+          this.userReservation.imgIdList = [...this.imgIdMap.values()];
           this.userReservation.type = this.treatmentInformation.type;
-          axion.insertUserReservation(this.userReservation);
+          axion.insertUserReservation(this.userReservation).then(response => {
+            if (response != null) {
+              this.$router.push("reservationResult");
+              this.$message({
+                message: "提交就诊申请成功",
+                type: "success",
+                duration: 2000
+              });
+            }
+          });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -237,12 +246,11 @@ export default {
           this.beChoicedPatient = response.data.returnData.list;
           if (response.data.returnData.total == 0) {
             this.insertPatinetVisiable = true;
-          }
-          else {
+          } else {
             this.beChoicedPatient.push({
-              id:0,
-              realName:'需要添加就诊人'
-            })
+              id: 0,
+              realName: "需要添加就诊人"
+            });
           }
         }
       });

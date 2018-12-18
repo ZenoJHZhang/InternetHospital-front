@@ -95,12 +95,6 @@ export default {
             });
             this.isDelete = false;
             this.listPatient();
-          } else if (response.data.returnCode == 400) {
-            this.$message({
-              message: "就诊人删除失败",
-              type: "error",
-              duration: 2000
-            });
           }
         }
       });

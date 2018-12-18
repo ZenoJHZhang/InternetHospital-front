@@ -34,6 +34,11 @@ export default new Router({
         component: () => import('@/views/diagnose/receptionExpert.vue')
       },
       {
+        path: 'reservationResult',
+        name: 'reservationResult',
+        component: () => import('@/views/diagnose/reservationResult.vue')
+      },   
+      {
         path: 'personalCenter',
         name: 'personalCenter',
         component: () => import('@/views/diagnose/personalCenter'),

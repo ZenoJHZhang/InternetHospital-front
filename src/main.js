@@ -47,12 +47,14 @@ axios.interceptors.response.use(
           store.state.errorTokenMessage = error.response.data.returnType;
           router.go("-1");
         }
+      } else if (error.response.status == 400) {
+        store.state.errorTokenVisible = true;
+        store.state.errorTokenMessage = error.response.data.returnType;
       } else {
         store.state.errorTokenVisible = true;
         store.state.errorTokenMessage = error.response.data.returnType;
       }
-    }
-    else{
+    } else {
       store.state.errorTokenVisible = true;
       store.state.errorTokenMessage = '服务器错误,请稍后再试';
     }
