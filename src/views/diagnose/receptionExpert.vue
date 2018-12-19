@@ -31,6 +31,9 @@ export default {
   components: {
     treatmentProcess,
     expertAppointment
+  },
+  mounted(){
+     this.$store.state.treatmentProcessStore.active = 0;
   }
 };
 </script>

@@ -8,12 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.5.0",
+    "@fortawesome/fontawesome-free": "^5.6.1",
     "axios": "^0.18.0",
-    "element-ui": "^2.4.5",
-    "vue": "^2.5.17",
+    "element-ui": "^2.4.11",
+    "vue": "^2.5.21",
     "vue-resource": "^1.5.1",
-    "vue-router": "^3.0.1",
+    "vue-router": "^3.0.2",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -21,10 +21,11 @@
     "@vue/cli-plugin-eslint": "^3.1.1",
     "@vue/cli-service": "^3.1.1",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.8.0",
-    "eslint-plugin-vue": "^5.0.0-0",
+    "eslint": "^5.10.0",
+    "eslint-plugin-vue": "^5.0.0",
     "vue-cli-plugin-element": "^1.0.0",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.5.21",
+    "vue-waterfall-easy": "^2.4.3"
   },
   "eslintConfig": {
     "root": true,

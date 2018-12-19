@@ -31,6 +31,9 @@ export default {
   components: {
     treatmentProcess,
     departmentAppointment
+  },
+  mounted() {
+    this.$store.state.treatmentProcessStore.active = 0;
   }
 };
 </script>
@@ -41,6 +44,5 @@ export default {
   height: 100%;
   background-size: cover;
 }
-
 </style>
 

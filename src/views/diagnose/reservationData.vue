@@ -103,7 +103,6 @@
         </el-container>
       </el-main>
     </el-container>
-    <div>{{imgIdMap}}</div>
   </div>
 </template>
 
@@ -178,7 +177,12 @@ export default {
           this.userReservation.type = this.treatmentInformation.type;
           axion.insertUserReservation(this.userReservation).then(response => {
             if (response != null) {
+              sessionStorage.setItem(
+                "userReservationId",
+                response.data.returnData
+              );
               this.$router.push("reservationResult");
+
               this.$message({
                 message: "提交就诊申请成功",
                 type: "success",
