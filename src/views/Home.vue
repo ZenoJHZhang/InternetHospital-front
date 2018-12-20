@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-container direction="vertical" v-if="!this.$store.state.commonStore.isMobile">
+    <el-container direction="vertical" v-if="!this.$store.state.commonStore.isMobile && !this.$store.state.payStore.isPay">
       <menu-bar></menu-bar>
       <router-view></router-view>
     </el-container>
     <error-token></error-token>
-    <img v-if="this.$store.state.commonStore.isMobile" src="@/assets/app.png" :style="imgWidth">
+    <img v-if="this.$store.state.commonStore.isMobile && !this.$store.state.payStore.isPay" src="@/assets/app.png" :style="imgWidth">
   </div>
 </template>
 

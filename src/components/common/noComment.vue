@@ -1,9 +1,15 @@
 <template>
     <div>
         <img src="@/assets/noComment.png">
-        <p>暂无科室</p>  
+        <p>{{title}}</p>  
     </div>
 </template>
+
+<script>
+export default {
+    props: ['title'],
+}
+</script>
 
 
 <style scoped>

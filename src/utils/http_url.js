@@ -40,6 +40,8 @@ const deleteUserReservationImg = (id) => post("/userReservation/deleteUserReserv
 const insertUserReservation = (userReservation) => post2("/userReservation/insertUserReservation",userReservation);
 /**获取就诊详情 */
 const getUserReservationDetail = (userReservationId) => get('/userReservation/getUserReservationDetail?userReservationId='+userReservationId);
+/**获取用户就诊详情图片 */
+const listUserReservationImg = (userReservationId) => get("/img/listUserReservationImg?userReservationId="+userReservationId);
 export default {
   login,
   register,
@@ -56,5 +58,6 @@ export default {
   insertUserReservationImg,
   deleteUserReservationImg,
   insertUserReservation,
-  getUserReservationDetail
+  getUserReservationDetail,
+  listUserReservationImg
 }

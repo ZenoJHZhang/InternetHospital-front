@@ -50,7 +50,7 @@
             </el-radio-group>
           </el-form-item>
 
-          <no-comment v-if="!this.isExpertDoctor" style="height:220px;margin-top:80px"></no-comment>
+          <no-comment v-if="!this.isExpertDoctor" style="height:220px;margin-top:80px" title="暂无专家"></no-comment>
           <el-form-item v-if="this.isExpertDoctor">
             <li class="expertLi" v-for="t in scheduleDoctors" :key="t.id">
               <img class="expertImg" :src="t.doctorDto.imgPath">
@@ -95,7 +95,7 @@ export default {
       expertreatRooms: "",
       scheduleDoctors: "",
       pageNo: 1,
-      pageSize: 1,
+      pageSize: 8,
       total: 1,
       isExpertDoctor: true,
       treatmentInformation: {},

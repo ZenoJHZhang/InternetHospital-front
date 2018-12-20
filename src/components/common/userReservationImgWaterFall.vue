@@ -1,7 +1,7 @@
 <template>
   <div id="content">
     <vue-waterfall-easy
-      :height="600"
+      :height="400"
       :maxCols="3"
       :gap="50"
       :imgWidth="200"
@@ -14,6 +14,7 @@
 
 <script>
 import vueWaterfallEasy from "vue-waterfall-easy";
+import axion from "@/utils/http_url";
 export default {
   components: {
     vueWaterfallEasy
@@ -25,19 +26,24 @@ export default {
     };
   },
   methods: {
-    initImgsArr(n, m) {
+    initImgsArr() {
       //初始化图片数组的方法，把要加载的图片装入
-      var arr = [];
-      for (var i = n; i < m; i++) {
-        arr.push({
-          id: i,
-          src: `http://47.100.241.49/image/department/ff74c676-984e-4c7c-972f-28b94a3be1bb.png`,
-          link: "https:/",
+      let arr = [];
+      axion
+        .listUserReservationImg(sessionStorage.getItem("userReservationId"))
+        .then(response => {
+          if (response != null) {
+            if (response.data.returnData == null) {
+              this.$store.state.userReservationStore.isClinicPayDialogVisible = false;
+            } else {
+               this.$store.state.userReservationStore.isClinicPayDialogVisible = true;
+              response.data.returnData.forEach(e => {
+                e.src = e.path;
+                arr.push(e);
+              });
+            }
+          }
         });
-
-        //src为加载的图片的地址、link为超链接的链接地址、
-        //info为自定义的图片展示信息，请根据自己的情况自行填写
-      }
       return arr;
     },
     clickFn(event, { index, value }) {
@@ -45,12 +51,12 @@ export default {
       event.preventDefault();
       // 只有当点击到图片时才进行操作
       if (event.target.tagName.toLowerCase() == "img") {
-        console.log("img clicked", index, value);
+        window.open(value.src);
       }
     }
   },
   mounted() {
-    this.imgsArr = this.initImgsArr(0, 100); //初始化第一次（即页面加载完毕时）要加载的图片数据
+    this.imgsArr = this.initImgsArr(); //初始化第一次（即页面加载完毕时）要加载的图片数据
   }
 };
 </script>
@@ -72,6 +78,7 @@ export default {
 }
 .img-inner-box {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 }
 .img-wraper {
   width: 100%;

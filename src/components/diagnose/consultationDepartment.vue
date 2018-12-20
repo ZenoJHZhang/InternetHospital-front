@@ -19,6 +19,7 @@
     <no-comment
       v-if="!this.$store.state.consultationDepartmentStore.isDepartment"
       style="margin-top:75px"
+      title="暂无科室"
     ></no-comment>
     <el-carousel
       v-if="this.$store.state.consultationDepartmentStore.isDepartment"

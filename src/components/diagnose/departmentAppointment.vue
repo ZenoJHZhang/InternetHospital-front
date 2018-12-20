@@ -27,6 +27,7 @@
         <no-comment
           v-if="!this.$store.state.consultationDepartmentStore.isDepartment"
           style="margin-top:100px;padding-bottom:93.72px"
+          title="暂无科室"
         ></no-comment>
         <br>
         <el-card
@@ -65,8 +66,8 @@ export default {
       departments: "",
       treatmentInformation: "",
       pageNo: 1,
-      pageSize: 1,
-      total: 10,
+      pageSize: 8,
+      total: 1,
       date: "",
       dateList: [],
       departments: "",

@@ -37,7 +37,7 @@ export default new Router({
         path: 'reservationResult',
         name: 'reservationResult',
         component: () => import('@/views/diagnose/reservationResult.vue')
-      },   
+      },
       {
         path: 'personalCenter',
         name: 'personalCenter',
@@ -54,7 +54,17 @@ export default new Router({
           name: 'insertPatient',
           component: () => import('@/views/diagnose/personalCenterPage/insertPatient.vue')
         }]
-      }
+      },
+      {
+        path: 'waitDoctorCall',
+        name: 'waitDoctorCall',
+        component: () => import('@/views/diagnose/waitDoctorCall.vue')
+      },
+
     ]
-  }]
+  }, {
+    path: '/pay',
+    name: 'pay',
+    component: () => import('@/components/common/pay.vue')
+  } ]
 })

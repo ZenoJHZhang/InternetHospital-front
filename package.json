@@ -11,6 +11,7 @@
     "@fortawesome/fontawesome-free": "^5.6.1",
     "axios": "^0.18.0",
     "element-ui": "^2.4.11",
+    "qrcode.vue": "^1.6.1",
     "vue": "^2.5.21",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.2",

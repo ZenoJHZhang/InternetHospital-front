@@ -9,7 +9,7 @@
             <treatment-process style="padding:10px"></treatment-process>
           </el-header>
           <el-main style="backgroundColor:white;width:100%;height:100%;padding:20px;">
-            <div class="title-line">专家预约</div>
+            <div class="title-line">{{title}}</div>
             <div class="reservationStyle">
               <div class="lineClass">
                 <div class="detailClass">
@@ -43,6 +43,16 @@
               </div>
               <div class="lineClass">
                 <div class="detailClass">
+                  <label style="color:black">预约日期：</label>
+                  <span style="color: #fe9e20;">{{userReservation.clinicDate}}</span>
+                </div>
+                <div class="detailClass">
+                  <label style="color:black">预约时段：</label>
+                  <span style="color: #fe9e20;">{{userReservation.clinicTime}}</span>
+                </div>
+              </div>
+              <div class="lineClass">
+                <div class="detailClass">
                   <label style="color:black">费用：</label>
                   <span style="color: #fe9e20;">￥{{userReservation.clinicPrice}}</span>
                 </div>
@@ -55,15 +65,41 @@
               </div>
               <div class="lineClass">
                 <div>
-                  <label style="color:black">病情图片：</label>
-                  <user-reservation-img-water-fall></user-reservation-img-water-fall>
+                  <label style="color:black">
+                    病情图片：
+                    <span style="color: #fe9e20;">（点击查看大图）</span>
+                  </label>
+                  <user-reservation-img-water-fall
+                    v-if="this.$store.state.userReservationStore.isClinicPayDialogVisible"
+                  ></user-reservation-img-water-fall>
                 </div>
               </div>
+            </div>
+            <no-comment
+              style="margin-top:50px;margin-bottom:150px;text-align:center"
+              v-if="!this.$store.state.userReservationStore.isClinicPayDialogVisible"
+              title="暂无图片"
+            ></no-comment>
+            <div style="text-align:center">
+              <el-button style="margin-right:50px">取 消</el-button>
+              <el-button type="primary" @click="toPay()">确 认 支 付</el-button>
             </div>
           </el-main>
         </el-container>
       </el-main>
     </el-container>
+    <el-dialog
+      title="请扫描二维码进行支付"
+      :visible.sync=" this.$store.state.payStore.isClinicPayDialogVisible"
+      width="20%"
+      @close = "close()"
+    >
+      <div style="text-align:center">
+        <qrcode-vue :value="value" :size="size" level="H"></qrcode-vue>
+      </div>
+      <span slot="footer" class="dialog-footer">
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -71,22 +107,27 @@
 import treatmentProcess from "@/components/diagnose/treatmentProcess";
 import axion from "@/utils/http_url";
 import userReservationImgWaterFall from "@/components/common/userReservationImgWaterFall";
+import QrcodeVue from "qrcode.vue";
+import noComment from "@/components/common/noComment";
 export default {
   data() {
     return {
-      userReservationId: '',
+      userReservationId: "",
       userReservation: {
-                  patient: {
-      
-        }
+        patient: {}
       },
       title: "",
-      sex: ""
+      sex: "",
+      payDialogVisible: false,
+      value: 'http://www.woniuyiliao.cn/pay',
+      size: 200
     };
   },
   components: {
     treatmentProcess,
-    userReservationImgWaterFall
+    userReservationImgWaterFall,
+    QrcodeVue,
+    noComment
   },
   methods: {
     getUserReservationDetail() {
@@ -109,10 +150,23 @@ export default {
               } else {
                 this.sex = "男";
               }
+              if (this.userReservation.type == 1) {
+                this.title = "普通挂号";
+              } else if (this.userReservation.type == 2) {
+                this.title = "普通预约";
+              } else {
+                this.title = "专家预约";
+              }
             }
           });
       }
-    }
+    },
+    toPay() {
+      this.$store.state.payStore.isClinicPayDialogVisible = true;
+    },
+    close() {
+      this.$store.state.payStore.isClinicPayDialogVisible = false;
+    },
   },
   mounted() {
     this.$nextTick(function generate() {
