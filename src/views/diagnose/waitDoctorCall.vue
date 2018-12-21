@@ -68,6 +68,7 @@
           </el-main>
         </el-container>
       </el-main>
+      <el-button @click='nextPatient()'>下一个</el-button>
     </el-container>
   </div>
 </template>
@@ -75,6 +76,8 @@
 <script>
 import treatmentProcess from "@/components/diagnose/treatmentProcess";
 import axion from "@/utils/http_url";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 export default {
   data() {
     return {
@@ -82,7 +85,8 @@ export default {
       userReservation: {
         patient: {}
       },
-      hasCalled: true
+      hasCalled: true,
+      stompClient: ""
     };
   },
   components: {
@@ -107,14 +111,57 @@ export default {
             }
           });
       }
+    },
+    send() {
+      this.stompClient.send(
+        "/app/pushCallNumberInfo",
+        {},
+        sessionStorage.getItem("userReservationId")
+      ); //用户加入接口
+    },
+    nextPatient(){
+      this.stompClient.send(
+        "/app/nextPatient",
+        {},
+        sessionStorage.getItem("userReservationId")
+      ); //用户加入接口
+    },
+    connect() {
+      let socket = new SockJS("http://localhost:8080/myWebSocket");
+      let headers = {
+        Authorization: ""
+      };
+      this.stompClient = Stomp.over(socket);
+      this.stompClient.connect(
+        headers,
+        frame => {
+          console.log("frame" + frame);
+          this.stompClient.subscribe(
+            "/topic/pushCallNumberInfo",
+            msg => {
+              this.userReservation.callNo = msg.body;
+            },
+            headers
+          );
+          this.send();
+        },
+        err => {
+          // 连接发生错误时的处理函数
+          console.log("失败");
+          console.log(err);
+        }
+      );
     }
   },
   watch: {
     userReservation() {
-      if ((this.userReservation.regNo == this.userReservation.callNo)) {
+      if (this.userReservation.regNo == this.userReservation.callNo) {
         this.hasCalled = false;
       }
     }
+  },
+  created() {
+    this.connect();
   },
   mounted() {
     this.$nextTick(function generate() {
