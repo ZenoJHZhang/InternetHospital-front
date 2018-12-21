@@ -92,12 +92,14 @@
       title="请扫描二维码进行支付"
       :visible.sync=" this.$store.state.payStore.isClinicPayDialogVisible"
       width="20%"
-      @close = "close()"
+      @close="close()"
     >
       <div style="text-align:center">
         <qrcode-vue :value="value" :size="size" level="H"></qrcode-vue>
       </div>
       <span slot="footer" class="dialog-footer">
+        <el-button>取 消</el-button>
+        <el-button type="primary" @click="confirmPay()">支 付 完 成</el-button>
       </span>
     </el-dialog>
   </div>
@@ -119,7 +121,7 @@ export default {
       title: "",
       sex: "",
       payDialogVisible: false,
-      value: 'http://www.woniuyiliao.cn/pay',
+      value: "http://www.woniuyiliao.cn/",
       size: 200
     };
   },
@@ -167,6 +169,14 @@ export default {
     close() {
       this.$store.state.payStore.isClinicPayDialogVisible = false;
     },
+    confirmPay() {
+      this.$router.push("waitDoctorCall");
+      this.$notify({
+        title: "支付成功",
+        message: "谢谢",
+        type: "success"
+      });
+    }
   },
   mounted() {
     this.$nextTick(function generate() {

@@ -62,9 +62,5 @@ export default new Router({
       },
 
     ]
-  }, {
-    path: '/pay',
-    name: 'pay',
-    component: () => import('@/components/common/pay.vue')
-  } ]
+  }]
 })

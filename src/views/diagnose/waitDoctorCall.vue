@@ -8,17 +8,64 @@
           >
             <treatment-process style="padding:10px"></treatment-process>
           </el-header>
-          <el-main style="backgroundColor:white;width:100%;height:100%;padding:20px;"></el-main>
-          <el-footer height="100%" style="backgroundColor:white;width:100%;padding:20px;">
+          <el-main
+            style="backgroundColor:white;width:100%;height:100%;padding:20px;padding-top:50px"
+          >
+            <el-container style="padding-left:25%">
+              <el-aside style="padding-top:30px;width:200px">
+                <i class="el-icon-success"></i>
+              </el-aside>
+              <el-container style="padding-bottom:0px">
+                <el-main>
+                  <div style="font-size:30px;font-weight:700">挂号成功</div>
+                </el-main>
+                <el-footer height="50px">开始叫号后，会有短信通知，请保持手机通讯畅通</el-footer>
+              </el-container>
+            </el-container>
+          </el-main>
+          <el-footer
+            height="100%"
+            style="backgroundColor:white;width:100%;padding:20px;padding-top:0"
+          >
             <div class="vidioDiv">
               <img src="@/assets/vidioOpen.jpg" style="width:90%">
               <span class="title">视频就诊</span>
               <span class="detail">收到短信后，请点击视频就诊按钮，打开视频，进行就诊。</span>
               <span class="button">
-                <el-button type="primary">视频就诊</el-button>
+                <el-button type="primary" :disabled="hasCalled">视频就诊</el-button>
               </span>
             </div>
           </el-footer>
+        </el-container>
+        <el-container
+          style="backgroundColor:white;width:100%;height:250px;padding:20px;padding-left:20%;padding-right:20%"
+        >
+          <el-main>
+            <div>
+              <div class="lineClass">
+                <div class="detailClass">
+                  <label style="color:black">就诊人：</label>
+                  <span style="color: #fe9e20;">{{userReservation.patientName}}</span>
+                </div>
+                <div class="detailClass">
+                  <label style="color:black">就诊时间：</label>
+                  <span
+                    style="color: #fe9e20;"
+                  >{{userReservation.clinicDate}} {{userReservation.clinicTime}}</span>
+                </div>
+              </div>
+              <div class="lineClass">
+                <div class="detailClass">
+                  <label style="color:black">当前叫号：</label>
+                  <span style="color: #fe9e20;">{{userReservation.callNo}}</span>
+                </div>
+                <div class="detailClass">
+                  <label style="color:black">就诊序号：</label>
+                  <span style="color: #fe9e20;">{{userReservation.regNo}}</span>
+                </div>
+              </div>
+            </div>
+          </el-main>
         </el-container>
       </el-main>
     </el-container>
@@ -30,14 +77,49 @@ import treatmentProcess from "@/components/diagnose/treatmentProcess";
 import axion from "@/utils/http_url";
 export default {
   data() {
-    return {};
+    return {
+      userReservationId: "",
+      userReservation: {
+        patient: {}
+      },
+      hasCalled: true
+    };
   },
   components: {
     treatmentProcess
   },
+  methods: {
+    getUserReservationDetail() {
+      this.userReservationId = sessionStorage.getItem("userReservationId");
+      if (this.userReservationId == null) {
+        this.$router.push("netTreatRoom");
+        this.$message({
+          message: "请先选择专科科室或专家医生",
+          type: "warning",
+          duration: 2000
+        });
+      } else {
+        axion
+          .getUserReservationDetail(this.userReservationId)
+          .then(response => {
+            if (response != null) {
+              this.userReservation = response.data.returnData;
+            }
+          });
+      }
+    }
+  },
+  watch: {
+    userReservation() {
+      if ((this.userReservation.regNo == this.userReservation.callNo)) {
+        this.hasCalled = false;
+      }
+    }
+  },
   mounted() {
     this.$nextTick(function generate() {
       this.$store.state.treatmentProcessStore.active = 3;
+      this.getUserReservationDetail();
     });
   }
 };
@@ -66,6 +148,21 @@ export default {
   position: absolute;
   left: 30%;
   top: 65%;
+}
+.el-icon-success {
+  width: 50px;
+  font-size: 50px;
+  color: #a71820;
+}
+.detailClass {
+  display: inline-block;
+  width: 50%;
+}
+.detailClass span {
+  margin-left: 5%;
+}
+.lineClass {
+  margin-bottom: 50px;
 }
 </style>
 

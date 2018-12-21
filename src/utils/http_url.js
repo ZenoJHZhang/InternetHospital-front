@@ -42,6 +42,8 @@ const insertUserReservation = (userReservation) => post2("/userReservation/inser
 const getUserReservationDetail = (userReservationId) => get('/userReservation/getUserReservationDetail?userReservationId='+userReservationId);
 /**获取用户就诊详情图片 */
 const listUserReservationImg = (userReservationId) => get("/img/listUserReservationImg?userReservationId="+userReservationId);
+/**就诊费支付 */
+const clinicPay = () => get('/pay/clinicPay')
 export default {
   login,
   register,
@@ -59,5 +61,6 @@ export default {
   deleteUserReservationImg,
   insertUserReservation,
   getUserReservationDetail,
-  listUserReservationImg
+  listUserReservationImg,
+  clinicPay
 }
