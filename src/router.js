@@ -58,9 +58,13 @@ export default new Router({
       {
         path: 'waitDoctorCall',
         name: 'waitDoctorCall',
-        component: () => import('@/views/diagnose/waitDoctorCall.vue')
+        component: () => import('@/views/diagnose/clinicResult/waitDoctorCall.vue')
       },
-
+      {
+        path: 'overCallNumber',
+        name: 'overCallNumber',
+        component: () => import('@/views/diagnose/clinicResult/overCallNumber.vue')
+      }
     ]
   }]
 })
