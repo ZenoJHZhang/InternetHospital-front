@@ -29,7 +29,8 @@ export default {
       imgWidth: {
         height: "auto",
         width: ""
-      }
+      },
+      userReservationList: []
     };
   },
   components: {
@@ -48,53 +49,7 @@ export default {
           this.$store.state.commonStore.isMobile = false;
         }
       })();
-    },
-    beCalledNotify() {
-      this.$notify({
-        title: "成功",
-        message: "您已经",
-        type: "success"
-      });
-    },
-    pushUserReservationClinicState() {
-      let headers = {
-        Authorization: localStorage.getItem("token")
-      };
-      this.stompClient.send(
-        "/app/pushClinicState",
-        headers,
-        localStorage.getItem("token")
-      ); 
-    },
-    connect() {
-      let socket = new SockJS("http://localhost:8080/myWebSocket");
-      let headers = {
-        Authorization: localStorage.getItem("token")
-      };
-      this.stompClient = Stomp.over(socket);
-      this.stompClient.connect(
-        headers,
-        frame => {
-          this.stompClient.subscribe(
-            "/topic/userReservation",
-            msg => {
-             msg.forEach(e => {
-               console.log("[e]"+e)
-             });
-            },
-            headers
-          );
-        },
-        err => {
-          // 连接发生错误时的处理函数
-          console.log("失败");
-          console.log(err);
-        }
-      );
     }
-  },
-  created() {
-
   },
   mounted() {
     this.$nextTick(function generate() {

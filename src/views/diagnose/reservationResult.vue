@@ -170,6 +170,9 @@ export default {
       this.$store.state.payStore.isClinicPayDialogVisible = false;
     },
     confirmPay() {
+      axion.payUserReservationClinic({
+        userReservationId: this.userReservationId
+      });
       this.$router.push("waitDoctorCall");
       this.$notify({
         title: "支付成功",
@@ -182,6 +185,7 @@ export default {
     this.$nextTick(function generate() {
       this.getUserReservationDetail();
       this.$store.state.treatmentProcessStore.active = 2;
+      this.userReservationId = sessionStorage.getItem("userReservationId")
     });
   }
 };

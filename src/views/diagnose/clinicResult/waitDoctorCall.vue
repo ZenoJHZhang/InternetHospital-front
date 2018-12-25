@@ -11,7 +11,7 @@
           <el-main
             style="backgroundColor:white;width:100%;height:100%;padding:20px;padding-top:50px"
           >
-            <el-container style="padding-left:35%">
+            <el-container style="padding-left:30%">
               <el-aside style="padding-top:30px;width:100px">
                 <i class="el-icon-success"></i>
               </el-aside>
@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     getUserReservationDetail() {
-      this.userReservationId = sessionStorage.getItem("userReservationId");
+      this.userReservationId = this.userReservationId;
       if (this.userReservationId == null) {
         this.$router.push("netTreatRoom");
         this.$message({
@@ -114,23 +114,27 @@ export default {
           });
       }
     },
-        isCall(){
-      if (this.userReservation.regNo > this.userReservation.callNo) {
+    isCall() {
+      if (this.userReservation.regNo == this.userReservation.callNo) {
         this.$notify({
           title: "就诊提示",
           message:
-           "感谢您的耐心等待，已经轮到您就诊，请点击视频就诊按钮，及时就诊。",
+            "感谢您的耐心等待，已经轮到您就诊，请点击视频就诊按钮，及时就诊。",
           type: "success"
         });
       }
     },
-    callWaited(){
+    callWaited() {
       if (this.userReservation.regNo > this.userReservation.callNo) {
         this.$notify({
           title: "就诊提示",
           message:
-            "您的号为"+this.userReservation.regNo+","+现在叫到+this.userReservation.callNo+",请耐心等待。",
-          type: "warning"
+            "您的号为" +
+            this.userReservation.regNo +
+            "号，现在叫到" +
+            this.userReservation.callNo +
+            "号，请耐心等待。",
+          type: "info"
         });
       }
     },
@@ -145,15 +149,11 @@ export default {
       }
     },
     nextPatient() {
-      this.stompClient.send(
-        "/app/nextPatient",
-        {},
-        sessionStorage.getItem("userReservationId")
-      ); //用户加入接口
+      this.stompClient.send("/app/nextPatient", {}, this.userReservationId); //用户加入接口
     },
     pushClinicState() {
       let value = {
-        userReservationId: sessionStorage.getItem("userReservationId"),
+        userReservationId: this.userReservationId,
         token: localStorage.getItem("token")
       };
       this.stompClient.send("/app/pushClinicState", {}, JSON.stringify(value));
@@ -172,7 +172,7 @@ export default {
             msg => {
               let o = JSON.parse(msg.body);
               o.forEach(e => {
-                if (e.id == sessionStorage.getItem("userReservationId")) {
+                if (e.id == this.userReservationId) {
                   this.userReservation.callNo = e.callNo;
                   this.isCall();
                   this.callWaited();
@@ -194,10 +194,19 @@ export default {
   created() {
     this.connect();
   },
+  destroyed() {
+    this.stompClient.disconnect();
+  },
   mounted() {
     this.$nextTick(function generate() {
       this.$store.state.treatmentProcessStore.active = 3;
+      if (this.$route.params.userReservationId != null) {
+        this.userReservationId = this.$route.params.userReservationId;
+      } else {
+        this.userReservationId = sessionStorage.getItem("userReservationId");
+      }
       this.getUserReservationDetail();
+      console.log(this.userReservationId)
     });
   }
 };
