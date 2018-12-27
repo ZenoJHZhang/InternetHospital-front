@@ -32,7 +32,7 @@
               <span class="title">视频就诊</span>
               <span class="detail">收到短信后，请点击视频就诊按钮，打开视频，进行就诊。</span>
               <span class="button">
-                <el-button type="primary">视频就诊</el-button>
+                <el-button type="primary" @click="vidio()">视频就诊</el-button>
               </span>
             </div>
           </el-footer>
@@ -94,25 +94,21 @@ export default {
     treatmentProcess
   },
   methods: {
-    getUserReservationDetail() {
-      this.userReservationId = this.userReservationId;
-      if (this.userReservationId == null) {
-        this.$router.push("netTreatRoom");
-        this.$message({
-          message: "请先选择专科科室或专家医生",
-          type: "warning",
-          duration: 2000
-        });
-      } else {
-        axion
-          .getUserReservationDetail(this.userReservationId)
-          .then(response => {
-            if (response != null) {
-              this.userReservation = response.data.returnData;
-              this.callPassed();
-            }
-          });
+    vidio() {
+      this.isCall();
+      this.callWaited();
+      this.callPassed();
+      if (this.userReservation.regNo == this.userReservation.callNo) {
+        this.$message("开始视频问诊");
       }
+    },
+    getUserReservationDetail() {
+      axion.getUserReservationDetail(this.userReservationId).then(response => {
+        if (response != null) {
+          this.userReservation = response.data.returnData;
+          this.callPassed();
+        }
+      });
     },
     isCall() {
       if (this.userReservation.regNo == this.userReservation.callNo) {
@@ -189,9 +185,27 @@ export default {
           console.log(err);
         }
       );
+    },
+    isUserReservationIdExist() {
+      if (this.$route.params.userReservationId != null) {
+        this.userReservationId = this.$route.params.userReservationId;
+      } else {
+        this.userReservationId = sessionStorage.getItem("userReservationId");
+      }
+      if (this.userReservationId != null) {
+        sessionStorage.setItem("userReservationId", this.userReservationId);
+      } else if (this.userReservationId == null) {
+        this.$router.push("netTreatRoom");
+        this.$message({
+          message: "请先选择专科科室或专家医生",
+          type: "warning",
+          duration: 2000
+        });
+      }
     }
   },
   created() {
+    this.isUserReservationIdExist();
     this.connect();
   },
   destroyed() {
@@ -200,13 +214,9 @@ export default {
   mounted() {
     this.$nextTick(function generate() {
       this.$store.state.treatmentProcessStore.active = 3;
-      if (this.$route.params.userReservationId != null) {
-        this.userReservationId = this.$route.params.userReservationId;
-      } else {
-        this.userReservationId = sessionStorage.getItem("userReservationId");
+      if (this.userReservationId != null) {
+        this.getUserReservationDetail();
       }
-      this.getUserReservationDetail();
-      console.log(this.userReservationId)
     });
   }
 };
