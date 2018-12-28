@@ -30,7 +30,15 @@
           </el-table-column>
         </el-table>
       </el-main>
-      <el-footer style="text-align:center"></el-footer>
+      <el-footer style="text-align:center">        <el-pagination
+          layout="prev, pager, next"
+          :total="total"
+          :current-page.sync="pageNo"
+          :pager-count="11"
+          :page-size="pageSize"
+          @current-change="listUserReservation()"
+          v-if="isUserReservationExist"
+        ></el-pagination></el-footer>
     </el-container>
   </div>
 </template>
@@ -47,6 +55,7 @@ export default {
         { text: "已预约未支付", value: "已预约未支付" },
         { text: "已付款等待视频", value: "已付款等待视频" }
       ]
+      ,isUserReservationExist:false
     };
   },
   methods: {
@@ -54,6 +63,13 @@ export default {
       axion.listUserReservation(this.pageNo, this.pageSize).then(response => {
         if (response != null) {
           this.userReservationList = response.data.returnData.list;
+                  this.total = response.data.returnData.total;
+        if(this.total != 0){
+            this.isUserReservationExist = true;
+        }
+       else{
+         this.isUserReservationExist = false;
+       }
         }
       });
     },

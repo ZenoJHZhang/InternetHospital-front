@@ -30,7 +30,6 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
-    console.log(error)
     if (error.response) {
       // 返回 401 
       if (error.response.status == 401) {
@@ -43,14 +42,12 @@ axios.interceptors.response.use(
         }
         //权限不够，回退一步,token无需清除
         if (error.response.data.returnData == 40102) {
-          store.state.errorTokenVisible = true;
-          store.state.errorTokenMessage = error.response.data.returnType;
-          router.go("-1");
+          router.push('401')
         }
       } else if (error.response.status == 400) {
         store.state.errorTokenVisible = true;
         store.state.errorTokenMessage = error.response.data.returnType;
-      } else {
+      }else {
         store.state.errorTokenVisible = true;
         store.state.errorTokenMessage = error.response.data.returnType;
       }

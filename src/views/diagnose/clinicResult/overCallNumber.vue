@@ -1,7 +1,9 @@
 <template>
   <div>
     <el-container style="padding:0">
-      <el-main style="backgroundColor:#eeeeee;padding-left:15%;padding-right:15%;padding-top:50px">
+      <el-main
+        style="backgroundColor:#eeeeee;padding-left:15%;padding-right:15%;padding-top:50px;min-height:calc(100vh - 81px)"
+      >
         <el-container>
           <el-header
             style="backgroundColor:white;width:100%;margin-bottom:20px;height:100%;padding:20px;"
@@ -9,26 +11,81 @@
             <treatment-process style="padding:10px"></treatment-process>
           </el-header>
           <el-main
-            style="backgroundColor:white;width:100%;height:100%;padding:20px;padding-top:50px"
+            style="backgroundColor:white;width:100%;height:100%;padding:20px;padding-top:100px"
           >
             <el-container style="padding-left:30%;">
               <el-aside style="padding-top:30px;width:100px">
-                <i class="el-icon-success"></i>
+                <i class="el-icon-warning"></i>
               </el-aside>
               <el-container style="padding-bottom:0px;">
                 <el-main>
-                  <div style="font-size:30px;font-weight:700">挂号成功</div>
+                  <div style="font-size:30px;font-weight:700">已过号</div>
                 </el-main>
-                <el-footer height="50px">开始叫号后，会有短信通知，请保持手机通讯畅通</el-footer>
+                <el-footer height="50px">很抱歉，您已过号，请重新预约或联系管理员。</el-footer>
               </el-container>
             </el-container>
           </el-main>
+          <el-footer
+            style="backgroundColor:white;width:100%;height:100%;padding:20px;padding-top:50px;text-align:center;padding-bottom:200px"
+          >
+            <el-button style="margin-right:50px" @click="dialogVisible = true">联系管理员</el-button>
+            <el-button>申请退款</el-button>
+          </el-footer>
         </el-container>
       </el-main>
-      <el-button @click="nextPatient()">下一个</el-button>
     </el-container>
+    <el-dialog title="请联系我" :visible.sync="dialogVisible" width="30%">
+      <div style="margin-left:10%">
+        <a
+          target="_blank"
+          href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=6tPS2dvc39zf2Kqbm8SJhYc"
+          style="text-decoration:none;"
+        >
+          <img
+            src="http://rescdn.qqmail.com/zh_CN/htmledition/images/function/qm_open/ico_mailme_02.png"
+          >
+        </a>
+      </div>
+      <div style="margin-top:20px;margin-left:10%;font-weight:600">将在两小时之内回复，感谢您的谅解。</div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
+
+<script>
+import treatmentProcess from "@/components/diagnose/treatmentProcess";
+import axion from "@/utils/http_url";
+export default {
+  data() {
+    return {
+      userReservationId: "",
+      userReservation: {
+        regNo: "",
+        callNo: "",
+        patient: {}
+      },
+      stompClient: "",
+      dialogVisible: false
+    };
+  },
+  components: {
+    treatmentProcess
+  },
+  methods: {
+    connectAdmin() {}
+  },
+  created() {},
+  destroyed() {},
+  mounted() {
+    this.$nextTick(function generate() {
+      this.$store.state.treatmentProcessStore.active = 4;
+    });
+  }
+};
+</script>
 
 <style scoped>
 .vidioDiv {
@@ -54,10 +111,10 @@
   left: 30%;
   top: 65%;
 }
-.el-icon-success {
+.el-icon-warning {
   width: 50px;
   font-size: 50px;
-  color: #a71820;
+  color: #e08e13;
 }
 .detailClass {
   display: inline-block;

@@ -155,7 +155,8 @@ export default {
       this.stompClient.send("/app/pushClinicState", {}, JSON.stringify(value));
     },
     connect() {
-      let socket = new SockJS("http://localhost:8080/myWebSocket");
+      // let socket = new SockJS("http://localhost:8080/myWebSocket");
+      let socket = new SockJS("http://47.100.241.49:8080/myWebSocket");
       let headers = {
         Authorization: localStorage.getItem("token")
       };
@@ -167,14 +168,10 @@ export default {
             "/topic/userReservation",
             msg => {
               let o = JSON.parse(msg.body);
-              o.forEach(e => {
-                if (e.id == this.userReservationId) {
-                  this.userReservation.callNo = e.callNo;
-                  this.isCall();
-                  this.callWaited();
-                  this.callPassed();
-                }
-              });
+              this.userReservation.callNo = o.callNo;
+              this.isCall();
+              this.callWaited();
+              this.callPassed();
             },
             {}
           );
