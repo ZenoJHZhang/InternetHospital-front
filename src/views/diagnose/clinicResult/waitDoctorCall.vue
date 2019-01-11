@@ -155,8 +155,8 @@ export default {
       this.stompClient.send("/app/pushClinicState", {}, JSON.stringify(value));
     },
     connect() {
-      let socket = new SockJS("http://localhost:8080/myWebSocket");
-      // let socket = new SockJS("http://47.100.241.49:8080/myWebSocket");
+      // let socket = new SockJS("https://localhost:8080/myWebSocket");
+      let socket = new SockJS("https://47.100.241.49:8080/myWebSocket");
       let headers = {
         Authorization: localStorage.getItem("token")
       };

@@ -65,9 +65,14 @@ export default new Router({
         name: 'overCallNumber',
         component: () => import('@/views/diagnose/clinicResult/overCallNumber.vue')
       }, {
-        path: 'vidioTest',
-        name: 'vidioTest',
-        component: () => import('@/views/vidioTest.vue')
+        path: 'webRtcTest',
+        name: 'webRtcTest',
+        component: () => import('@/views/webRtcTest.vue')
+      },
+      {
+        path:'videoTest',
+        name:"videoTest",
+        component: () => import('@/views/videoTest.vue')
       },
       {
         path: '401',
