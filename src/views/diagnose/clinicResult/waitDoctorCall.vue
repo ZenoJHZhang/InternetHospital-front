@@ -11,34 +11,29 @@
           <el-main
             style="backgroundColor:white;width:100%;height:100%;padding:20px;padding-top:50px"
           >
-            <el-container style="padding-left:30%">
-              <el-aside style="padding-top:30px;width:100px">
+            <el-container
+              style="margin-left:10%;padding-left:200px;background-color:#eeeeee;padding-bottom:25px;padding-top:25px;width:80%"
+            >
+              <el-aside style="padding-top:45px;width:100px">
                 <i class="el-icon-success"></i>
               </el-aside>
               <el-container style="padding-bottom:0px">
                 <el-main>
                   <div style="font-size:30px;font-weight:700">挂号成功</div>
                 </el-main>
-                <el-footer height="50px">开始叫号后，会有短信通知，请保持手机通讯畅通</el-footer>
+                <el-footer height="50px">
+                  <div style="margin-bottom:5px">开始叫号后，会有短信通知，请保持手机通讯畅通。</div>
+                  <div>请在收到短信通知后，访问此页面，谢谢。</div>
+                </el-footer>
               </el-container>
             </el-container>
           </el-main>
-          <el-footer
-            height="100%"
-            style="backgroundColor:white;width:100%;padding:20px;padding-top:0"
-          >
-            <div class="vidioDiv">
-              <img src="@/assets/vidioOpen.jpg" style="width:90%">
-              <span class="title">视频就诊</span>
-              <span class="detail">收到短信后，请点击视频就诊按钮，打开视频，进行就诊。</span>
-              <span class="button">
-                <el-button type="primary" @click="vidio()">视频就诊</el-button>
-              </span>
-            </div>
+          <el-footer height="100%" style="backgroundColor:white;padding:20px;padding-top:0">
+            <video-test></video-test>
           </el-footer>
         </el-container>
         <el-container
-          style="backgroundColor:white;width:100%;height:250px;padding:20px;padding-left:20%;padding-right:20%"
+          style="backgroundColor:white;width:100%;height:300px;padding:20px;padding-left:20%;padding-right:20%"
         >
           <el-main>
             <div>
@@ -56,8 +51,18 @@
               </div>
               <div class="lineClass">
                 <div class="detailClass">
+                  <label style="color:black">科室：</label>
+                  <span style="color: #fe9e20;">{{userReservation.departmentName}}</span>
+                </div>
+                <div class="detailClass">
+                  <label style="color:black">医生：</label>
+                  <span style="color: #fe9e20;">{{userReservation.doctorName}}</span>
+                </div>
+              </div>
+              <div class="lineClass">
+                <div class="detailClass">
                   <label style="color:black">当前叫号：</label>
-                  <span style="color: #fe9e20;">{{userReservation.callNo}}</span>
+                  <span style="color: #fe9e20;">{{userReservation.callNo==0?'还未开始叫号':userReservation.callNo}}</span>
                 </div>
                 <div class="detailClass">
                   <label style="color:black">就诊序号：</label>
@@ -68,13 +73,14 @@
           </el-main>
         </el-container>
       </el-main>
-      <el-button @click="pushClinicState()">下一个</el-button>
+      <!-- <el-button @click="pushClinicState()">下一个</el-button> -->
     </el-container>
   </div>
 </template>
 
 <script>
 import treatmentProcess from "@/components/diagnose/treatmentProcess";
+import videoTest from "@/components/diagnose/videoTest";
 import axion from "@/utils/http_url";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
@@ -91,19 +97,12 @@ export default {
     };
   },
   components: {
-    treatmentProcess
+    treatmentProcess,
+    videoTest
   },
   methods: {
-    vidio() {
-      this.isCall();
-      this.callWaited();
-      this.callPassed();
-      if (this.userReservation.regNo == this.userReservation.callNo) {
-        this.$message("开始视频问诊");
-      }
-    },
-    getUserReservationDetail() {
-      axion.getUserReservationDetail(this.userReservationId).then(response => {
+    getUserReservationDetail(userReservationId) {
+      axion.getUserReservationDetail(userReservationId).then(response => {
         if (response != null) {
           this.userReservation = response.data.returnData;
           this.callPassed();
@@ -155,8 +154,8 @@ export default {
       this.stompClient.send("/app/pushClinicState", {}, JSON.stringify(value));
     },
     connect() {
-      // let socket = new SockJS("https://localhost:8080/myWebSocket");
-      let socket = new SockJS("https://47.100.241.49:8080/myWebSocket");
+      let socket = new SockJS("http://localhost:8080/myWebSocket");
+      // let socket = new SockJS("https://www.woniuyiliao.cn/api/myWebSocket");
       let headers = {
         Authorization: localStorage.getItem("token")
       };
@@ -184,14 +183,7 @@ export default {
       );
     },
     isUserReservationIdExist() {
-      if (this.$route.params.userReservationId != null) {
-        this.userReservationId = this.$route.params.userReservationId;
-      } else {
-        this.userReservationId = sessionStorage.getItem("userReservationId");
-      }
-      if (this.userReservationId != null) {
-        sessionStorage.setItem("userReservationId", this.userReservationId);
-      } else if (this.userReservationId == null) {
+      if (this.userReservationId == null) {
         this.$router.push("netTreatRoom");
         this.$message({
           message: "请先选择专科科室或专家医生",
@@ -199,6 +191,14 @@ export default {
           duration: 2000
         });
       }
+    },
+    getUserReservationId() {
+      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
+      axion.getUserReservationIdByUuid(userReservationUuId).then(response => {
+        if (response != null) {
+          this.getUserReservationDetail(response.data.returnData);
+        }
+      });
     }
   },
   created() {
@@ -210,20 +210,14 @@ export default {
   },
   mounted() {
     this.$nextTick(function generate() {
+      this.getUserReservationId();
       this.$store.state.treatmentProcessStore.active = 3;
-      if (this.userReservationId != null) {
-        this.getUserReservationDetail();
-      }
     });
   }
 };
 </script>
 
 <style scoped>
-.vidioDiv {
-  text-align: center;
-  position: relative;
-}
 .title {
   position: absolute;
   left: 30%;

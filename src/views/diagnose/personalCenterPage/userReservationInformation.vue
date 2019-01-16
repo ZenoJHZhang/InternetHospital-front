@@ -12,6 +12,8 @@
           @row-click="handleSelectionChange"
         >
           <el-table-column prop="patientName" label="就诊人姓名"></el-table-column>
+          <el-table-column prop="departmentName" label="科室"></el-table-column>
+          <el-table-column prop="doctorName" label="医生"></el-table-column>
           <el-table-column prop="clinicDate" label="就诊日期"></el-table-column>
           <el-table-column prop="timeInterval" label="就诊时段"></el-table-column>
           <el-table-column
@@ -30,7 +32,8 @@
           </el-table-column>
         </el-table>
       </el-main>
-      <el-footer style="text-align:center">        <el-pagination
+      <el-footer style="text-align:center">
+        <el-pagination
           layout="prev, pager, next"
           :total="total"
           :current-page.sync="pageNo"
@@ -38,7 +41,8 @@
           :page-size="pageSize"
           @current-change="listUserReservation()"
           v-if="isUserReservationExist"
-        ></el-pagination></el-footer>
+        ></el-pagination>
+      </el-footer>
     </el-container>
   </div>
 </template>
@@ -54,8 +58,8 @@ export default {
       filterCondition: [
         { text: "已预约未支付", value: "已预约未支付" },
         { text: "已付款等待视频", value: "已付款等待视频" }
-      ]
-      ,isUserReservationExist:false
+      ],
+      isUserReservationExist: false
     };
   },
   methods: {
@@ -63,18 +67,18 @@ export default {
       axion.listUserReservation(this.pageNo, this.pageSize).then(response => {
         if (response != null) {
           this.userReservationList = response.data.returnData.list;
-                  this.total = response.data.returnData.total;
-        if(this.total != 0){
+          this.total = response.data.returnData.total;
+          if (this.total != 0) {
             this.isUserReservationExist = true;
-        }
-       else{
-         this.isUserReservationExist = false;
-       }
+          } else {
+            this.isUserReservationExist = false;
+          }
         }
       });
     },
     handleSelectionChange(val) {
-     this.$router.push({ name: 'waitDoctorCall', params: { userReservationId:val.id }}) 
+      sessionStorage.setItem("userReservationUuId",val.uuId);
+      this.$router.push("waitDoctorCall");
     },
     clearFilter() {
       this.$refs.filterTable.clearFilter();

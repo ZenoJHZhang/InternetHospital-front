@@ -1,25 +1,24 @@
 
 <template>
   <div>
-    <div class="container">
+    <div class="container" ref="container">
       <div class="bigVideo">
         <video id="remoteVideo" class="video" autoplay playsinline></video>
-        <p>等待对方进入</p>
+        <p>等待医生中</p>
       </div>
       <div class="smallVideo" id="smallVideo">
         <video id="localVideo" class="video" muted autoplay playsinline></video>
       </div>
     </div>
-    <button id="btn-open-room" @click="openRoom()">Open Room</button>
-    <button id="btn-join-room" @click="joinRoom()">Join Room</button>
   </div>
 </template>
  
 <script>
+import axion from "@/utils/http_url";
 export default {
   data() {
     return {
-      predefinedRoomId: 2323232,
+      predefinedRoomId: '',
       connection: ""
     };
   },
@@ -29,10 +28,8 @@ export default {
     },
     joinRoom() {
       this.connection.join(this.predefinedRoomId);
-    }
-  },
-  mounted() {
-    this.$nextTick(function generate() {
+    },
+    connectVideo(){
       this.connection = new RTCMultiConnection();
 
       // this line is VERY_important
@@ -52,55 +49,61 @@ export default {
       };
 
       this.connection.onstream = function(event) {
-        console.log(event);
         if (event.type == "local") {
           document.getElementById("localVideo").srcObject = event.stream;
         } else if (event.type == "remote") {
           document.getElementById("remoteVideo").srcObject = event.stream;
         }
       };
+    }
+  },
+  mounted() {
+    this.$nextTick(function generate() {
+        axion.userAuthorizationTest();
+        this.connectVideo();
+        this.predefinedRoomId = sessionStorage.getItem("userReservationUuId");
+        this.openRoom();
     });
+  },
+  destroyed(){
+    this.connection.closeSocket();
   }
 };
 </script>
 <style scoped>
-		.container {
-			position: relative;
-			width: 640px;
-			height: 480px;
-		}
-
-		.bigVideo {
-			width: 100%;
-			height: 100%;
-			border: 1px solid #ccc;
-		}
-
-		.smallVideo {
-			position: absolute;
-			display: inline-block;
-			right: 0;
-			bottom: 0;
-			width: 25%;
-			height: 25%;
-			cursor: pointer;
-		}
-
-		.smallVideo:hover {
-			background-color: rgba(255, 255, 255, 0.2);
-			opacity: 0.2;
-		}
-
-		.video {
-			position: absolute;
-			width: 100%;
-			height: 100%;
-		}
-
-		.bigVideo p {
-			margin-top: 34%;
-			text-align: center;
-			color: #e2e2e2;
-			vertical-align: middle;
-		}
+    .container{
+        position: relative;
+        width:  80%;
+        padding: 0;
+        height: 600px;
+        padding-left:10%
+    }
+    .bigVideo{
+        width: 100%;
+        height: 100%;
+        border:1px solid #ccc;
+    }
+    .smallVideo{
+        position: absolute;
+        display: inline-block;
+        right: 0;
+        bottom: 0;
+        width: 200px;
+        height: 150px;
+        cursor: pointer;
+    }
+    .smallVideo:hover{
+        background-color: rgba(255,255,255,0.2);
+        opacity: 0.2;
+    }
+    .video{
+        position:absolute;
+        width: 100%;
+        height: 100%;
+    }
+    .bigVideo p
+    {margin-top:25%;
+        text-align: center;color: #e2e2e2;
+        vertical-align: middle;
+    }
 </style>

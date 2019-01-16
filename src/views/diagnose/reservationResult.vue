@@ -132,8 +132,8 @@ export default {
     noComment
   },
   methods: {
-    getUserReservationDetail() {
-      this.userReservationId = sessionStorage.getItem("userReservationId");
+    getUserReservationDetail(userReservationId) {
+      this.userReservationId = userReservationId;
       if (this.userReservationId == null) {
         this.$router.push("netTreatRoom");
         this.$message({
@@ -179,13 +179,20 @@ export default {
         message: "谢谢",
         type: "success"
       });
+    },
+    getUserReservationId() {
+      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
+      axion.getUserReservationIdByUuid(userReservationUuId).then(response => {
+        if (response != null) {
+          this.getUserReservationDetail(response.data.returnData);
+        }
+      });
     }
   },
   mounted() {
     this.$nextTick(function generate() {
-      this.getUserReservationDetail();
+      this.getUserReservationId();
       this.$store.state.treatmentProcessStore.active = 2;
-      this.userReservationId = sessionStorage.getItem("userReservationId")
     });
   }
 };

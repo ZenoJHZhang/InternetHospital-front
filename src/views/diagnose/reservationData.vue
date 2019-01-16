@@ -178,11 +178,10 @@ export default {
           axion.insertUserReservation(this.userReservation).then(response => {
             if (response != null) {
               sessionStorage.setItem(
-                "userReservationId",
+                "userReservationUuId",
                 response.data.returnData
               );
               this.$router.push("reservationResult");
-
               this.$message({
                 message: "提交就诊申请成功",
                 type: "success",

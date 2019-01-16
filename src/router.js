@@ -70,11 +70,6 @@ export default new Router({
         component: () => import('@/views/webRtcTest.vue')
       },
       {
-        path:'videoTest',
-        name:"videoTest",
-        component: () => import('@/views/videoTest.vue')
-      },
-      {
         path: '401',
         name: '401',
         component: () => import('@/views/error/401.vue')

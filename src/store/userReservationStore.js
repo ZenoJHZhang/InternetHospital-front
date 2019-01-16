@@ -1,5 +1,6 @@
 export default {
     state:{
-        isUserReservationImg: false
+        isUserReservationImg: false,
+        userReservationId:0
     }
 }

@@ -48,6 +48,8 @@ const clinicPay = () => get('/pay/clinicPay')
 const listUserReservation = (pageNo,pageSize) => get("/userReservation/listUserReservation?pageNo="+pageNo+'&pageSize='+pageSize);
 /**支付挂号费 */
 const payUserReservationClinic = (userReservationId) => post("/userReservation/payUserReservationClinic",userReservationId)
+/**根据就诊uuid获取真正的用户就诊信息id */
+const getUserReservationIdByUuid = (userReservationUuId) =>get("/userReservation/getUserReservationIdByUuid?userReservationUuId="+userReservationUuId)
 export default {
   login,
   register,
@@ -68,5 +70,6 @@ export default {
   listUserReservationImg,
   clinicPay,
   listUserReservation,
-  payUserReservationClinic
+  payUserReservationClinic,
+  getUserReservationIdByUuid
 }
