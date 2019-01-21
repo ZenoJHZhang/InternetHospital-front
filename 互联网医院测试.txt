@@ -1,2 +1,0 @@
-http://hlwyyys.zwjk.com/modules/m-onlineTreatment/html/login.html 后台管理
-http://hlwyyys.zwjk.com/modules/m-mzgh/html/netTreatRoom.html 前端页面
