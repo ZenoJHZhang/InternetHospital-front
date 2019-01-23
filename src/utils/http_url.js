@@ -33,13 +33,13 @@ const insertPatient = (patient) => post2("/patient/insertPatient",patient);
 /**删除就诊人 */
 const deletePatient = (patientList) => post2("/patient/deletePatient",patientList);
 /**上传用户就诊信息图片描述 */
-const insertUserReservationImg = (file) => post2("/userReservation/insertUserReservationImg",file);
+const insertUserReservationImg = (file) => post2("/img/insertUserReservationImg",file);
 /**删除用户就诊信息图片描述 */
-const deleteUserReservationImg = (id) => post("/userReservation/deleteUserReservationImg",id);
+const deleteUserReservationImg = (id) => post("/img/deleteUserReservationImg",id);
 /**添加用户就诊信息 */
 const insertUserReservation = (userReservation) => post2("/userReservation/insertUserReservation",userReservation);
 /**获取就诊详情 */
-const getUserReservationDetail = (userReservationId) => get('/userReservation/getUserReservationDetail?userReservationId='+userReservationId);
+const getUserReservationDetail = (userReservationUUId) => get('/userReservation/getUserReservationDetail?userReservationUUId='+userReservationUUId);
 /**获取用户就诊详情图片 */
 const listUserReservationImg = (userReservationId) => get("/img/listUserReservationImg?userReservationId="+userReservationId);
 /**就诊费支付 */
@@ -47,7 +47,7 @@ const clinicPay = () => get('/pay/clinicPay')
 /**分页获取用户就诊列表 */
 const listUserReservation = (pageNo,pageSize) => get("/userReservation/listUserReservation?pageNo="+pageNo+'&pageSize='+pageSize);
 /**支付挂号费 */
-const payUserReservationClinic = (userReservationId) => post("/userReservation/payUserReservationClinic",userReservationId)
+const payUserReservationClinic = (userReservationUUId) => post("/userReservation/payUserReservationClinic",userReservationUUId)
 /**根据就诊uuid获取真正的用户就诊信息id */
 const getUserReservationIdByUuid = (userReservationUuId) =>get("/userReservation/getUserReservationIdByUuid?userReservationUuId="+userReservationUuId)
 export default {

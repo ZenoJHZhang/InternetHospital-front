@@ -101,8 +101,9 @@ export default {
     videoTest
   },
   methods: {
-    getUserReservationDetail(userReservationId) {
-      axion.getUserReservationDetail(userReservationId).then(response => {
+    getUserReservationDetail() {
+      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
+      axion.getUserReservationDetail(userReservationUuId).then(response => {
         if (response != null) {
           this.userReservation = response.data.returnData;
           this.callPassed();
@@ -154,8 +155,8 @@ export default {
       this.stompClient.send("/app/pushClinicState", {}, JSON.stringify(value));
     },
     connect() {
-      let socket = new SockJS("http://localhost:8080/myWebSocket");
-      // let socket = new SockJS("https://www.woniuyiliao.cn/api/myWebSocket");
+      // let socket = new SockJS("http://localhost:8080/myWebSocket");
+      let socket = new SockJS("https://www.woniuyiliao.cn/api/myWebSocket");
       let headers = {
         Authorization: localStorage.getItem("token")
       };
@@ -191,14 +192,6 @@ export default {
           duration: 2000
         });
       }
-    },
-    getUserReservationId() {
-      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
-      axion.getUserReservationIdByUuid(userReservationUuId).then(response => {
-        if (response != null) {
-          this.getUserReservationDetail(response.data.returnData);
-        }
-      });
     }
   },
   created() {
@@ -210,7 +203,7 @@ export default {
   },
   mounted() {
     this.$nextTick(function generate() {
-      this.getUserReservationId();
+      this.getUserReservationDetail();
       this.$store.state.treatmentProcessStore.active = 3;
     });
   }

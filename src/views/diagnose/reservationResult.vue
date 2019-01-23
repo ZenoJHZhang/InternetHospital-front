@@ -121,7 +121,7 @@ export default {
       title: "",
       sex: "",
       payDialogVisible: false,
-      value: "http://www.woniuyiliao.cn/",
+      value: "https://www.woniuyiliao.cn/",
       size: 200
     };
   },
@@ -132,9 +132,9 @@ export default {
     noComment
   },
   methods: {
-    getUserReservationDetail(userReservationId) {
-      this.userReservationId = userReservationId;
-      if (this.userReservationId == null) {
+    getUserReservationDetail() {
+       let userReservationUuId = sessionStorage.getItem("userReservationUuId");
+      if (userReservationUuId == null) {
         this.$router.push("netTreatRoom");
         this.$message({
           message: "请先选择专科科室或专家医生",
@@ -143,7 +143,7 @@ export default {
         });
       } else {
         axion
-          .getUserReservationDetail(this.userReservationId)
+          .getUserReservationDetail(userReservationUuId)
           .then(response => {
             if (response != null) {
               this.userReservation = response.data.returnData;
@@ -170,8 +170,9 @@ export default {
       this.$store.state.payStore.isClinicPayDialogVisible = false;
     },
     confirmPay() {
+      let userReservationUuId = sessionStorage.getItem("userReservationUuId"); 
       axion.payUserReservationClinic({
-        userReservationId: this.userReservationId
+        userReservationUUId: userReservationUuId
       });
       this.$router.push("waitDoctorCall");
       this.$notify({
@@ -179,19 +180,11 @@ export default {
         message: "谢谢",
         type: "success"
       });
-    },
-    getUserReservationId() {
-      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
-      axion.getUserReservationIdByUuid(userReservationUuId).then(response => {
-        if (response != null) {
-          this.getUserReservationDetail(response.data.returnData);
-        }
-      });
     }
   },
   mounted() {
     this.$nextTick(function generate() {
-      this.getUserReservationId();
+      this.getUserReservationDetail();
       this.$store.state.treatmentProcessStore.active = 2;
     });
   }
