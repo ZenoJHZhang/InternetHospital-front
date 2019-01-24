@@ -96,7 +96,7 @@ export default {
             if (response != null) {
               if (response.data.returnCode == 200) {
                 this.$message({
-                  message: "更新就诊人成功",
+                  message: "就诊人成功",
                   type: "success",
                   duration: 2000
                 });

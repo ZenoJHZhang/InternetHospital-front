@@ -94,20 +94,12 @@ export default {
         if (valid) {
           axion.insertPatient(this.insertPatient).then(response => {
             if (response != null) {
-              if (response.data.returnCode == 200) {
                 this.$message({
                   message: "添加就诊人成功",
                   type: "success",
                   duration: 2000
                 });
                 this.$router.push("/personalCenter/patientManagement")
-              } else if (response.data.returnCode == 400) {
-                this.$message({
-                  message: response.data.returnType,
-                  type: "error",
-                  duration: 2000
-                });
-              }
             }
           });
         } else {
