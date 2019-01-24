@@ -53,6 +53,11 @@ export default new Router({
           path: 'insertPatient',
           name: 'insertPatient',
           component: () => import('@/views/diagnose/personalCenterPage/insertPatient.vue')
+        },
+        {
+          path: 'updatePatient',
+          name: 'updatePatient',
+          component: () => import('@/views/diagnose/personalCenterPage/updatePatient.vue')
         }]
       },
       {

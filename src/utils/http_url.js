@@ -30,6 +30,8 @@ const listNetTreatmentRoomCarousel = () => get("/img/listNetTreatmentRoomCarouse
 const listPatient = (pageNo,pageSize)  => get("/patient/listPatient?&pageNo="+pageNo+'&pageSize='+pageSize);
 /**添加就诊人 */
 const insertPatient = (patient) => post2("/patient/insertPatient",patient);
+/**更新就诊人 */
+const updatePatient = (patient) => post2("/patient/updatePatient",patient);
 /**删除就诊人 */
 const deletePatient = (patientList) => post2("/patient/deletePatient",patientList);
 /**上传用户就诊信息图片描述 */
@@ -71,5 +73,6 @@ export default {
   clinicPay,
   listUserReservation,
   payUserReservationClinic,
-  getUserReservationIdByUuid
+  getUserReservationIdByUuid,
+  updatePatient
 }

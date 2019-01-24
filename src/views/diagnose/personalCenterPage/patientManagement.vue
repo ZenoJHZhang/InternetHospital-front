@@ -29,6 +29,7 @@
           stripe
           ref="patientTable"
           @selection-change="handleSelectionChange"
+          @row-click="updatePatient"
         >
           <el-table-column type="selection" v-if="isDelete"></el-table-column>
           <el-table-column prop="realName" label="就诊人姓名"></el-table-column>
@@ -116,6 +117,9 @@ export default {
          this.isPatientExist = false;
        }
       });
+    },
+    updatePatient(row){
+        this.$router.push({ name: 'updatePatient', params: { patient: row }})
     }
   },
   mounted() {
