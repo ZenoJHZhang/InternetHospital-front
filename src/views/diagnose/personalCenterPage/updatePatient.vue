@@ -23,7 +23,7 @@
             <el-input v-model="patient.phone">{{patient.phone}}</el-input>
           </el-form-item>
           <el-form-item style="margin-bottom:40px">
-            <el-button type="primary" @click="submitForm('updatePatient')">立即创建</el-button>
+            <el-button type="primary" @click="submitForm('updatePatient')">更新</el-button>
             <el-button @click="cancel()">取消</el-button>
           </el-form-item>
         </el-form>
