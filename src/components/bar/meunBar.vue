@@ -15,7 +15,7 @@
             <el-menu-item index="/receptionDepartment">专科门诊</el-menu-item>
             <el-menu-item index="/receptionExpert">专家预约</el-menu-item>
             <el-menu-item index="/personalCenter">个人中心</el-menu-item>
-            <el-menu-item index="/f">获得帮助</el-menu-item>  
+            <el-menu-item index="/mainHelpCenter">获得帮助</el-menu-item>  
         </el-menu>
       </el-main>
     </el-container>

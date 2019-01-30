@@ -26,11 +26,52 @@
             </el-container>
           </el-main>
           <el-footer
-            style="backgroundColor:white;width:100%;height:100%;padding:20px;padding-top:50px;text-align:center;padding-bottom:200px"
+            style="backgroundColor:white;width:100%;height:100%;padding:20px;padding-top:50px;text-align:center;"
           >
             <el-button style="margin-right:50px" @click="dialogVisible = true">联系管理员</el-button>
             <el-button>申请退款</el-button>
           </el-footer>
+        </el-container>
+        <el-container
+          style="backgroundColor:white;width:100%;height:400px;
+          padding:20px;padding-left:20%;padding-right:20%;text-align:center;"
+        >
+          <el-main>
+            <div>
+              <div class="lineClass">
+                <div class="detailClass">
+                  <label style="color:black">就诊人：</label>
+                  <span style="color: #fe9e20;">{{userReservation.patientName}}</span>
+                </div>
+                <div class="detailClass">
+                  <label style="color:black">就诊时间：</label>
+                  <span
+                    style="color: #fe9e20;"
+                  >{{userReservation.clinicDate}} {{userReservation.clinicTime}}</span>
+                </div>
+              </div>
+              <div class="lineClass">
+                <div class="detailClass">
+                  <label style="color:black">科室：</label>
+                  <span style="color: #fe9e20;">{{userReservation.departmentName}}</span>
+                </div>
+                <div class="detailClass">
+                  <label style="color:black">医生：</label>
+                  <span style="color: #fe9e20;">{{userReservation.doctorName}}</span>
+                </div>
+              </div>
+              <div class="lineClass">
+                <div class="detailClass">
+                  <label style="color:black">当前叫号：</label>
+                  <span style="color: #fe9e20;">{{userReservation.callNo==0?'还未开始叫号':userReservation.callNo}}</span>
+                </div>
+                <div class="detailClass">
+                  <label style="color:black">就诊序号：</label>
+                  <span style="color: #fe9e20;">{{userReservation.regNo}}</span>
+                </div>
+              </div>
+            </div>
+          </el-main>
         </el-container>
       </el-main>
     </el-container>
@@ -63,9 +104,7 @@ export default {
     return {
       userReservationId: "",
       userReservation: {
-        regNo: "",
-        callNo: "",
-        patient: {}
+
       },
       stompClient: "",
       dialogVisible: false
@@ -75,12 +114,22 @@ export default {
     treatmentProcess
   },
   methods: {
-    connectAdmin() {}
+    connectAdmin() {},
+    getUserReservationDetail() {
+      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
+      axion.getUserReservationDetail(userReservationUuId).then(response => {
+        if (response != null) {
+          this.userReservation = response.data.returnData;
+          this.callPassed();
+        }
+      });
+    }
   },
   created() {},
   destroyed() {},
   mounted() {
     this.$nextTick(function generate() {
+      this.getUserReservationDetail();
       this.$store.state.treatmentProcessStore.active = 4;
     });
   }

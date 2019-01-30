@@ -33,7 +33,7 @@
           </el-footer>
         </el-container>
         <el-container
-          style="backgroundColor:white;width:100%;height:300px;padding:20px;padding-left:20%;padding-right:20%"
+          style="backgroundColor:white;width:100%;height:400px;padding:20px;padding-left:20%;padding-right:20%"
         >
           <el-main>
             <div>

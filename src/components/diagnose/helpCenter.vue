@@ -2,12 +2,12 @@
 <div>
   <div class="title-line">帮助中心</div>
   <ul>
-    <li class="border-right"><i class="fas fa-poll-h fa-4x"></i><div>服务条款</div></li>
-    <li><i class="fas fa-poll-h fa-4x"></i><div>使用指南</div></li>
-    <li class="border-right"><i class="fas fa-briefcase-medical fa-4x"></i><div>预约挂号问题</div></li>
-    <li><i class="fas fa-file-medical fa-4x"></i><div>就诊相关问题</div></li>
-    <li class="border-right no-border-bottom"><i class="fas fa-user fa-4x"></i><div>账号相关问题</div></li>  
-    <li class="no-border-bottom"><i class="fas fa-ellipsis-h fa-4x"></i><div>其他问题</div></li>  
+    <li class="border-right"><i class="fas fa-poll-h fa-3x"></i><div>服务条款</div></li>
+    <li><i class="fas fa-poll-h fa-3x"></i><div>使用指南</div></li>
+    <li class="border-right"><i class="fas fa-briefcase-medical fa-3x"></i><div>预约挂号问题</div></li>
+    <li><i class="fas fa-file-medical fa-3x"></i><div>就诊相关问题</div></li>
+    <li class="border-right no-border-bottom"><i class="fas fa-user fa-3x"></i><div>账号相关问题</div></li>  
+    <li class="no-border-bottom"><i class="fas fa-ellipsis-h fa-3x"></i><div>其他问题</div></li>  
   </ul>
 </div>
 </template>

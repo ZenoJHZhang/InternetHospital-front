@@ -71,6 +71,11 @@ export default new Router({
         component: () => import('@/views/diagnose/clinicResult/overCallNumber.vue')
       },
       {
+        path: 'mainHelpCenter',
+        name: 'mainHelpCenter',
+        component: () => import('@/views/diagnose/mainHelpCenter.vue')
+      },
+      {
         path: '401',
         name: '401',
         component: () => import('@/views/error/401.vue')

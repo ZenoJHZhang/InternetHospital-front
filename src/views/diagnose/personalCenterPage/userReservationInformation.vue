@@ -77,8 +77,18 @@ export default {
       });
     },
     handleSelectionChange(val) {
-      sessionStorage.setItem("userReservationUuId",val.uuId);
-      this.$router.push("waitDoctorCall");
+      sessionStorage.setItem("userReservationUuId", val.uuId);
+      let status = val.status;
+      //已预约待支付
+      if (status == '1') {
+        this.$router.push("reservationResult");
+      }
+      //已付款等待视频
+      else if (status == '4') {
+        this.$router.push("waitDoctorCall");
+      } else if (status == '5') {
+        this.$router.push("overCallNumber");
+      }
     },
     clearFilter() {
       this.$refs.filterTable.clearFilter();
