@@ -4,8 +4,8 @@
       <el-main style direction="vertical">
         <div style="position:relative;overflow:hidden;height:100%">
           <el-carousel :autoplay="autoplay" height="calc(100vh - 81px)">
-            <el-carousel-item v-for="img in indexCarousel" :key="img.id" style="height:100%">
-              <img :src="img.path">
+            <el-carousel-item v-for="img in indexCarousel" :key="img.id" style="height:100%;">
+              <img :src="img.path" style="width:100%;height:auto">
             </el-carousel-item>
           </el-carousel>
           <div class="lrButton">

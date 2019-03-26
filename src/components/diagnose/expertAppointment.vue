@@ -240,7 +240,7 @@ export default {
   border: none;
 }
 .expertImg {
-  width: 100%;
+  width: 60%;
 }
 .expertLi {
   margin-top: 15px;
