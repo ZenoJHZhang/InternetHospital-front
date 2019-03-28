@@ -23,19 +23,8 @@ export default {
     };
   },
   methods: {
-    openRoom() {
-      this.connection.open(this.predefinedRoomId, function(
-        isRoomOpened,
-        roomid,
-        error
-      ) {
-        if (isRoomOpened === true) {
-          console.log(isRoomOpened);
-        }
-      });
-    },
-    joinRoom() {
-      this.connection.join(this.predefinedRoomId);
+    openOrJoinRoom() {
+      this.connection.openOrJoin(this.predefinedRoomId);
     },
     connectVideo() {
       this.connection = new RTCMultiConnection();
@@ -57,7 +46,6 @@ export default {
       };
 
       this.connection.onstream = function(event) {
-        console.log(event);
         if (event.type == "local") {
           document.getElementById("localVideo").srcObject = event.stream;
         } else if (event.type == "remote") {
@@ -71,7 +59,7 @@ export default {
       axion.userAuthorizationTest();
       this.connectVideo();
       this.predefinedRoomId = "zjh";
-      this.openRoom();
+      this.openOrJoinRoom();
     });
   },
   destroyed() {
