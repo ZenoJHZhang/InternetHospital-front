@@ -24,7 +24,23 @@ export default {
   },
   methods: {
     openOrJoinRoom() {
-      this.connection.openOrJoin(this.predefinedRoomId);
+      this.connection.openOrJoin(this.predefinedRoomId, function(
+        isRoomExist,
+        roomid,
+        error
+      ) {
+        if (error) {
+          if (error === this.connection.errors.ROOM_NOT_AVAILABLE) {
+            this.$message.error("视频问诊间不存在");
+            return;
+          }
+          if (error === this.connection.errors.ROOM_FULL) {
+            this.$message.error("视频问诊间已满");
+            return;
+          }
+          this.$message.error(error);
+        }
+      });
     },
     connectVideo() {
       this.connection = new RTCMultiConnection();
@@ -39,6 +55,8 @@ export default {
         audio: true,
         video: true
       };
+
+      this.connection.maxParticipantsAllowed = 2;
 
       this.connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
@@ -58,7 +76,7 @@ export default {
     this.$nextTick(function generate() {
       axion.userAuthorizationTest();
       this.connectVideo();
-      this.predefinedRoomId = "zjh";
+      this.predefinedRoomId = sessionStorage.getItem('userReservationUuId');
       this.openOrJoinRoom();
     });
   },
