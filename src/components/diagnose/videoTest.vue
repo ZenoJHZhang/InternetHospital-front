@@ -49,6 +49,7 @@ export default {
       };
 
       this.connection.onstream = function(event) {
+        console.log(event)
         if (event.type == "local") {
           document.getElementById("localVideo").srcObject = event.stream;
         } else if (event.type == "remote") {
@@ -61,7 +62,7 @@ export default {
     this.$nextTick(function generate() {
         axion.userAuthorizationTest();
         this.connectVideo();
-        this.predefinedRoomId = sessionStorage.getItem("userReservationUuId");
+        this.predefinedRoomId = 'zjh';
         this.openRoom();
     });
   },
