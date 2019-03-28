@@ -91,7 +91,6 @@ export default {
   width: 80%;
   padding: 0;
   height: 600px;
-  padding-left: 10%;
 }
 .bigVideo {
   width: 100%;
