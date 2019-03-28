@@ -24,12 +24,15 @@ export default {
   },
   methods: {
     openRoom() {
-      this.connection.open(this.predefinedRoomId),
-        function(isRoomOpened, roomid, error) {
-          if (isRoomOpened === true) {
-            this.joinRoom();
-          }
-        };
+      this.connection.open(this.predefinedRoomId, function(
+        isRoomOpened,
+        roomid,
+        error
+      ) {
+        if (isRoomOpened === true) {
+          console.log(isRoomOpened);
+        }
+      });
     },
     joinRoom() {
       this.connection.join(this.predefinedRoomId);
