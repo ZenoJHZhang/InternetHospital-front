@@ -70,14 +70,15 @@
                     <span style="color: #fe9e20;">（点击查看大图）</span>
                   </label>
                   <user-reservation-img-water-fall
-                    v-if="this.$store.state.userReservationStore.isClinicPayDialogVisible"
+                     v-bind:userReservationId="userReservation.id"
+                    v-if="userReservation.imgPathList !== null"
                   ></user-reservation-img-water-fall>
                 </div>
               </div>
             </div>
             <no-comment
               style="margin-top:50px;margin-bottom:150px;text-align:center"
-              v-if="!this.$store.state.userReservationStore.isClinicPayDialogVisible"
+              v-if="userReservation.imgPathList === null"
               title="暂无图片"
             ></no-comment>
             <div style="text-align:center">
@@ -133,7 +134,7 @@ export default {
   },
   methods: {
     getUserReservationDetail() {
-       let userReservationUuId = sessionStorage.getItem("userReservationUuId");
+      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
       if (userReservationUuId == null) {
         this.$router.push("netTreatRoom");
         this.$message({
@@ -142,25 +143,23 @@ export default {
           duration: 2000
         });
       } else {
-        axion
-          .getUserReservationDetail(userReservationUuId)
-          .then(response => {
-            if (response != null) {
-              this.userReservation = response.data.returnData;
-              if (this.userReservation.patient.sex == 0) {
-                this.sex = "女";
-              } else {
-                this.sex = "男";
-              }
-              if (this.userReservation.type == 1) {
-                this.title = "普通挂号";
-              } else if (this.userReservation.type == 2) {
-                this.title = "普通预约";
-              } else {
-                this.title = "专家预约";
-              }
+        axion.getUserReservationDetail(userReservationUuId).then(response => {
+          if (response != null) {
+            this.userReservation = response.data.returnData;
+            if (this.userReservation.patient.sex == 0) {
+              this.sex = "女";
+            } else {
+              this.sex = "男";
             }
-          });
+            if (this.userReservation.type == 1) {
+              this.title = "普通挂号";
+            } else if (this.userReservation.type == 2) {
+              this.title = "普通预约";
+            } else {
+              this.title = "专家预约";
+            }
+          }
+        });
       }
     },
     toPay() {
@@ -170,7 +169,7 @@ export default {
       this.$store.state.payStore.isClinicPayDialogVisible = false;
     },
     confirmPay() {
-      let userReservationUuId = sessionStorage.getItem("userReservationUuId"); 
+      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
       axion.payUserReservationClinic({
         userReservationUUId: userReservationUuId
       });
