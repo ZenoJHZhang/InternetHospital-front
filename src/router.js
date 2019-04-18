@@ -76,6 +76,11 @@ export default new Router({
         component: () => import('@/views/diagnose/mainHelpCenter.vue')
       },
       {
+        path: 'allUserReservationDetail',
+        name: 'allUserReservationDetail',
+        component: () => import('@/views/diagnose/clinicResult/allUserReservationDetail.vue')
+      },
+      {
         path: '401',
         name: '401',
         component: () => import('@/views/error/401.vue')

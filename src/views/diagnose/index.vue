@@ -9,7 +9,7 @@
             </el-carousel-item>
           </el-carousel>
           <div class="lrButton">
-            <img src="@/assets/sign.png">
+            <img src="@/assets/sign.png" @click="gotoRoom">
             <el-button
               id="login"
               type="primary"
@@ -165,9 +165,7 @@ export default {
       indexCarousel: ""
     };
   },
-  components: {
-
-  },
+  components: {},
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -251,6 +249,9 @@ export default {
         }
       });
       axion.authenticationTest();
+    },
+    gotoRoom() {
+      this.$router.push("netTreatRoom");
     }
   },
   mounted() {

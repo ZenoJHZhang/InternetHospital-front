@@ -28,8 +28,8 @@
               </el-container>
             </el-container>
           </el-main>
-          <el-footer height="100%" style="backgroundColor:white;padding:20px;padding-top:0">
-            <video-test></video-test>
+          <el-footer height="100%" style="backgroundColor:white;padding:20px;padding-top:0;width:100%">
+            <video-test style="margin-left:15%"></video-test>
           </el-footer>
         </el-container>
         <el-container
@@ -73,7 +73,6 @@
           </el-main>
         </el-container>
       </el-main>
-      <!-- <el-button @click="pushClinicState()">下一个</el-button> -->
     </el-container>
   </div>
 </template>

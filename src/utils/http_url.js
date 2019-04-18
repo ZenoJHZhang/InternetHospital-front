@@ -52,6 +52,7 @@ const listUserReservation = (pageNo,pageSize) => get("/userReservation/listUserR
 const payUserReservationClinic = (userReservationUUId) => post("/userReservation/payUserReservationClinic",userReservationUUId)
 /**根据就诊uuid获取真正的用户就诊信息id */
 const getUserReservationIdByUuid = (userReservationUuId) =>get("/userReservation/getUserReservationIdByUuid?userReservationUuId="+userReservationUuId)
+const allUserReservationDetail = (userReservationUuId) =>  post("/userReservation/getAllDetailByUuId",userReservationUuId)
 export default {
   login,
   register,

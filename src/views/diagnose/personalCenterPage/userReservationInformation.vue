@@ -16,20 +16,7 @@
           <el-table-column prop="doctorName" label="医生"></el-table-column>
           <el-table-column prop="clinicDate" label="就诊日期"></el-table-column>
           <el-table-column prop="timeInterval" label="就诊时段"></el-table-column>
-          <el-table-column
-            prop="payStateDescription"
-            label="就诊状态"
-            :filters="filterCondition"
-            :filter-method="filterTag"
-            filter-placement="bottom-end"
-          >
-            <template slot-scope="scope">
-              <el-tag
-                :type="judgeType(scope.row.payStateDescription)"
-                disable-transitions
-              >{{scope.row.payStateDescription}}</el-tag>
-            </template>
-          </el-table-column>
+          <el-table-column prop="payStateDescription" label="就诊状态" style="color:red"></el-table-column>
         </el-table>
       </el-main>
       <el-footer style="text-align:center">
@@ -55,10 +42,6 @@ export default {
       userReservationList: [],
       pageNo: 1,
       pageSize: 8,
-      filterCondition: [
-        { text: "已预约未支付", value: "已预约未支付" },
-        { text: "已付款等待视频", value: "已付款等待视频" }
-      ],
       isUserReservationExist: false
     };
   },
@@ -80,35 +63,19 @@ export default {
       sessionStorage.setItem("userReservationUuId", val.uuId);
       let status = val.status;
       //已预约待支付
-      if (status == '1') {
+      if (status == "1") {
         this.$router.push("reservationResult");
       }
       //已付款等待视频
-      else if (status == '4') {
+      else if (status == "4") {
         this.$router.push("waitDoctorCall");
-      } else if (status == '5') {
+      } else if (status == "5") {
         this.$router.push("overCallNumber");
       }
-    },
-    clearFilter() {
-      this.$refs.filterTable.clearFilter();
-    },
-    filterTag(value, row) {
-      return row.payStateDescription === value;
-    },
-    judgeType(value) {
-      if (
-        value == "已付款等待视频" ||
-        value == "完成就诊待评价" ||
-        value == "已评价" ||
-        value == "就诊中"
-      ) {
-        return "success";
-      } else if (value == "已预约待支付" || value == "已付款已过号") {
-        return "warning";
-      } else {
-        return "error";
-      }
+      else if(status == "11" || status == "13" || status == "14"
+       || status == "14" || status == "17" || status == "18"){
+         this.$router.push("allUserReservationDetail");
+       }
     }
   },
   mounted() {
