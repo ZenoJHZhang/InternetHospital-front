@@ -75,5 +75,6 @@ export default {
   listUserReservation,
   payUserReservationClinic,
   getUserReservationIdByUuid,
-  updatePatient
+  updatePatient,
+  allUserReservationDetail
 }

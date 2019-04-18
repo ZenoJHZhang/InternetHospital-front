@@ -161,9 +161,9 @@
 </template>
 
 <script>
-import noComment from '@/components/common/noComment'
+import noComment from "@/components/common/noComment";
 import axion from "@/utils/http_url.js";
-import userReservationImgWaterFall from '@/components/common/userReservationImgWaterFall'
+import userReservationImgWaterFall from "@/components/common/userReservationImgWaterFall";
 export default {
   components: {
     noComment,
@@ -173,67 +173,69 @@ export default {
     auditFlag: {
       type: Boolean,
       default: function() {
-        return true
+        return true;
       }
     }
   },
   data() {
     return {
       userReservation: {},
-      firstTitle: '',
+      firstTitle: "",
       diagnoseVisableFlag: false,
       recipeVisableFlag: true,
       recipeFlag: false,
       diagnoseFlag: false,
       imgPathList: [],
       patient: {},
-      userReservationUuId:''
-    }
+      userReservationUuId: ""
+    };
   },
   watch: {
     userReservationUuId(newVar, oldVar) {
       if (newVar !== oldVar) {
-        this.getAllDetailByUuId()
+        this.getAllDetailByUuId();
       }
     }
   },
   mounted() {
     this.$nextTick(function generate() {
       if (this.auditFlag) {
-        this.firstTitle = '患者信息'
+        this.firstTitle = "患者信息";
       } else {
-        this.firstTitle = '患者就诊详情'
+        this.firstTitle = "患者就诊详情";
       }
-      this.getAllDetailByUuId()
-    })
+      this.userReservationUuId = sessionStorage.getItem("userReservationUuId");
+      this.getAllDetailByUuId();
+    });
   },
   methods: {
     getAllDetailByUuId() {
-       axion
+      axion
         .allUserReservationDetail({
-          userReservationUuId:this.userReservationUuId
-        }).then(response => {
-        if (response.data.returnCode === 200) {
-          this.userReservation = response.data.returnData
-          this.imgPathList = this.userReservation.imgPathList
-          this.patient = this.userReservation.patient
-          if (this.userReservation.diagnose !== null) {
-            this.diagnoseFlag = true
-          } else {
-            this.diagnoseFlag = false
-          }
-          if (this.userReservation.medicalList !== null) {
-            if (this.userReservation.medicalList.length !== 0) {
-              this.recipeFlag = true
+          userReservationUuId: this.userReservationUuId
+        })
+        .then(response => {
+          if (response.data.returnCode === 200) {
+            this.userReservation = response.data.returnData;
+            this.imgPathList = this.userReservation.imgPathList;
+            this.patient = this.userReservation.patient;
+            if (this.userReservation.diagnose !== null) {
+              this.diagnoseFlag = true;
+            } else {
+              this.diagnoseFlag = false;
             }
-          } else {
-            this.recipeFlag = false
+            if (this.userReservation.medicalList !== null) {
+              if (this.userReservation.medicalList.length !== 0) {
+                this.recipeFlag = true;
+              }
+            } else {
+              this.recipeFlag = false;
+            }
           }
-        }
-      })
+        });
     }
   }
-}
+};
 </script>
 
 <style scoped>

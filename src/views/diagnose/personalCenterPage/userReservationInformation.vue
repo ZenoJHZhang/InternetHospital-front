@@ -71,11 +71,16 @@ export default {
         this.$router.push("waitDoctorCall");
       } else if (status == "5") {
         this.$router.push("overCallNumber");
+      } else if (
+        status == "11" ||
+        status == "13" ||
+        status == "14" ||
+        status == "14" ||
+        status == "17" ||
+        status == "18"
+      ) {
+        this.$router.push("allUserReservationDetail");
       }
-      else if(status == "11" || status == "13" || status == "14"
-       || status == "14" || status == "17" || status == "18"){
-         this.$router.push("allUserReservationDetail");
-       }
     }
   },
   mounted() {
