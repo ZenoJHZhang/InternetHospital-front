@@ -70,7 +70,7 @@
                     <span style="color: #fe9e20;">（点击查看大图）</span>
                   </label>
                   <user-reservation-img-water-fall
-                     v-bind:userReservationId="userReservation.id"
+                     :userReservationId="userReservation.id"
                     v-if="userReservation.imgPathList !== null"
                   ></user-reservation-img-water-fall>
                 </div>
@@ -99,7 +99,7 @@
         <qrcode-vue :value="value" :size="size" level="H"></qrcode-vue>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button>取 消</el-button>
+        <el-button @click="isClinicPayDialogVisibleFalse">取 消</el-button>
         <el-button type="primary" @click="confirmPay()">支 付 完 成</el-button>
       </span>
     </el-dialog>
@@ -179,6 +179,9 @@ export default {
         message: "谢谢",
         type: "success"
       });
+    },
+    isClinicPayDialogVisibleFalse(){
+      this.$store.state.payStore.isClinicPayDialogVisible = false;
     }
   },
   mounted() {

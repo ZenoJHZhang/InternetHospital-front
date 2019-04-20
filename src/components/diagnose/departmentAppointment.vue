@@ -109,12 +109,28 @@ export default {
         });
     },
     toReservation(department) {
+      let nowHour = new Date().getHours();
+      let hour;
+      if (this.timeInterval === "上午") {
+        hour = 12;
+      } else if (this.timeInterval === "下午") {
+        hour = 17;
+      } else {
+        hour = 21;
+      }
+      if (department.scheduleTime ===  dateUtil.getDay(0, "-") && nowHour > hour) {
+        this.$message({
+          message: "挂号时段已过",
+          type: "warning"
+        });
+      } else {
         department.timeInterval = this.timeInterval;
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(department)
         );
         this.$router.push("reservationData");
+      }
     }
   },
   mounted() {

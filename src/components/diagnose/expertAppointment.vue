@@ -57,7 +57,11 @@
               <div class="expertName">
                 <span>{{t.doctorDto.doctorName}}</span>
               </div>
-              <div class="expertMajor">{{t.doctorDto.goodat}}</div>
+              <div style="margin-top:15px">
+                <el-rate disabled text-color="#ff9900" :v-model="t.doctorDto.starLevel"></el-rate>
+              </div>
+
+              <div class="expertMajor">{{t.doctorDto.goodAt}}</div>
               <el-button
                 size="small"
                 :disabled="!t.timeIntervalNumber>0"
@@ -164,8 +168,9 @@ export default {
         this.treatmentInformation.timeInterval = this.expertreatRoomTimeRadio;
         this.treatmentInformation.scheduleDoctorId = treatRoom.id;
         this.treatmentInformation.hospitalId = treatRoom.doctorDto.hospitalId;
-        this.treatmentInformation.scheduleDepartmentId = treatRoom.scheduleDepartmentId;
-        this.treatmentInformation.type = 'expert';
+        this.treatmentInformation.scheduleDepartmentId =
+          treatRoom.scheduleDepartmentId;
+        this.treatmentInformation.type = "expert";
         sessionStorage.setItem(
           "treatmentInformation",
           JSON.stringify(this.treatmentInformation)

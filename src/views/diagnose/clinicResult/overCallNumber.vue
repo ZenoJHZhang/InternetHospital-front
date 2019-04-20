@@ -78,7 +78,6 @@ export default {
       axion.getUserReservationDetail(userReservationUuId).then(response => {
         if (response != null) {
           this.userReservation = response.data.returnData;
-          this.callPassed();
         }
       });
     }

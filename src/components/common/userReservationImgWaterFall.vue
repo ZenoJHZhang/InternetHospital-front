@@ -1,7 +1,7 @@
 <template>
   <div id="content">
     <vue-waterfall-easy
-      :height="400"
+      :height="height"
       :maxCols="3"
       :gap="50"
       :imgWidth="200"
@@ -25,28 +25,29 @@ export default {
       imgsArr: []
     };
   },
-  props: {
-    userReservationId:Number
+  computed: {
+    height() {
+      return (parseInt(this.imgsArr.length / 3) + 1) * 200;
+    }
   },
   methods: {
     initImgsArr() {
+      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
       //初始化图片数组的方法，把要加载的图片装入
       let arr = [];
-      axion
-        .listUserReservationImg(this.userReservationId)
-        .then(response => {
-          if (response != null) {
-            if (response.data.returnData == null) {
-              this.$store.state.userReservationStore.isClinicPayDialogVisible = false;
-            } else {
-              this.$store.state.userReservationStore.isClinicPayDialogVisible = true;
-              response.data.returnData.forEach(e => {
-                e.src = e.path;
-                arr.push(e);
-              });
-            }
+      axion.listUserReservationImg(userReservationUuId).then(response => {
+        if (response != null) {
+          if (response.data.returnData == null) {
+            this.$store.state.userReservationStore.isClinicPayDialogVisible = false;
+          } else {
+            this.$store.state.userReservationStore.isClinicPayDialogVisible = true;
+            response.data.returnData.forEach(e => {
+              e.src = e.path;
+              arr.push(e);
+            });
           }
-        });
+        }
+      });
       return arr;
     },
     clickFn(event, { index, value }) {

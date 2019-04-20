@@ -28,7 +28,10 @@
               </el-container>
             </el-container>
           </el-main>
-          <el-footer height="100%" style="backgroundColor:white;padding:20px;padding-top:0;width:100%">
+          <el-footer
+            height="100%"
+            style="backgroundColor:white;padding:20px;padding-top:0;width:100%"
+          >
             <video-test style="margin-left:15%"></video-test>
           </el-footer>
         </el-container>
@@ -62,7 +65,9 @@
               <div class="lineClass">
                 <div class="detailClass">
                   <label style="color:black">当前叫号：</label>
-                  <span style="color: #fe9e20;">{{userReservation.callNo==0?'还未开始叫号':userReservation.callNo}}</span>
+                  <span
+                    style="color: #fe9e20;"
+                  >{{userReservation.callNo==0?'还未开始叫号':userReservation.callNo}}</span>
                 </div>
                 <div class="detailClass">
                   <label style="color:black">就诊序号：</label>
@@ -114,7 +119,7 @@ export default {
         this.$notify({
           title: "就诊提示",
           message:
-            "感谢您的耐心等待，已经轮到您就诊，请点击视频就诊按钮，及时就诊。",
+            "感谢您的耐心等待，已经轮到您就诊，正在等待医生视频问诊。",
           type: "success"
         });
       }
@@ -137,21 +142,17 @@ export default {
       if (this.userReservation.regNo < this.userReservation.callNo) {
         this.$notify({
           title: "就诊提示",
-          message:
-            "很抱歉，您的号已经过了，请重新挂号或联系管理员，电话为15868154079",
+          message: "很抱歉，您的号已经过了，请重新挂号或联系管理员",
           type: "warning"
         });
       }
-    },
-    nextPatient() {
-      this.stompClient.send("/app/nextPatient", {}, this.userReservationId); //用户加入接口
     },
     pushClinicState() {
       let value = {
         userReservationId: this.userReservationId,
         token: localStorage.getItem("token")
       };
-      this.stompClient.send("/app/pushClinicState", {}, JSON.stringify(value));
+      this.stompClient.send("/doc/pushClinicState", {}, JSON.stringify(value));
     },
     connect() {
       // let socket = new SockJS("https://localhost:8080/myWebSocket");

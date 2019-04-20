@@ -43,7 +43,7 @@ const insertUserReservation = (userReservation) => post2("/userReservation/inser
 /**获取就诊详情 */
 const getUserReservationDetail = (userReservationUUId) => get('/userReservation/getUserReservationDetail?userReservationUUId='+userReservationUUId);
 /**获取用户就诊详情图片 */
-const listUserReservationImg = (userReservationId) => get("/img/listUserReservationImg?userReservationId="+userReservationId);
+const listUserReservationImg = (userReservationUuId) => get("/img/listUserReservationImg?userReservationUuId="+userReservationUuId);
 /**就诊费支付 */
 const clinicPay = () => get('/pay/clinicPay')
 /**分页获取用户就诊列表 */
@@ -53,6 +53,7 @@ const payUserReservationClinic = (userReservationUUId) => post("/userReservation
 /**根据就诊uuid获取真正的用户就诊信息id */
 const getUserReservationIdByUuid = (userReservationUuId) =>get("/userReservation/getUserReservationIdByUuid?userReservationUuId="+userReservationUuId)
 const allUserReservationDetail = (userReservationUuId) =>  post("/userReservation/getAllDetailByUuId",userReservationUuId)
+const giveStar = (doctorId,starRate,uuId) => post("/userReservation/giveStar",doctorId,starRate,uuId)
 export default {
   login,
   register,
@@ -76,5 +77,6 @@ export default {
   payUserReservationClinic,
   getUserReservationIdByUuid,
   updatePatient,
-  allUserReservationDetail
+  allUserReservationDetail,
+  giveStar
 }
