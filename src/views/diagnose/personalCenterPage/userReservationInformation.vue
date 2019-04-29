@@ -67,12 +67,11 @@ export default {
         this.$router.push("reservationResult");
       }
       //已付款等待视频
-      else if (status == "4") {
+      else if (status == "4" || status == "11") {
         this.$router.push("waitDoctorCall");
       } else if (status == "5") {
         this.$router.push("overCallNumber");
       } else if (
-        status == "11" ||
         status == "13" ||
         status == "14" ||
         status == "14" ||
