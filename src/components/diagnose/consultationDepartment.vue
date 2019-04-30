@@ -7,7 +7,7 @@
         style="float:right;cursor:pointer"
         @click="getDepartmentDetail()"
       >
-        <span style="margin-left:5px;">查看详情</span>
+        <span style="margin-left:5px;">查看更多</span>
       </i>
     </div>
     <label class="title-label">就诊时段</label>
@@ -25,15 +25,21 @@
       v-if="this.$store.state.consultationDepartmentStore.isDepartment"
       :interval="4000"
       type="card"
-      height="200px"
-      style="width:100%;margin-top:65px"
+      height="270px"
+      style="width:100%;margin-top:5px"
       :autoplay="false"
       indicator-position="none"
     >
       <el-carousel-item v-for="department in departments" :key="department.id">
         <img class="department-img-style" :src="department.imgPath">
         <div class="department-message-style">{{department.departmentName}}</div>
-        <el-button type="primary" :key="department.id" @click="toReservation(department)">挂号</el-button>
+        <div style="font-weight:400;font-size:14px" class="department-message-style">剩余号源 {{department.timeExistNumber}}</div>
+        <el-button
+          type="primary"
+          :key="department.id"
+          @click="toReservation(department)"
+          :disabled="department.timeExistNumber<=0"
+        >挂号</el-button>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -87,7 +93,10 @@ export default {
       } else {
         hour = 21;
       }
-      if (department.scheduleTime ===  dateUtil.getDay(0, "-") && nowHour > hour) {
+      if (
+        department.scheduleTime === dateUtil.getDay(0, "-") &&
+        nowHour > hour
+      ) {
         this.$message({
           message: "挂号时段已过",
           type: "warning"

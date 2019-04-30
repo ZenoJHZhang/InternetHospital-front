@@ -38,7 +38,13 @@
         >
           <img class="department-img-style" :src="department.imgPath">
           <div class="department-message-style">{{department.departmentName}}</div>
-          <el-button plain :key="department.id" @click="toReservation(department)">挂号</el-button>
+          <div style="margin-top:10px;font-size:14px">剩余号源 {{department.timeExistNumber}}</div>
+          <el-button
+            plain
+            :key="department.id"
+            @click="toReservation(department)"
+            :disabled="department.timeExistNumber<=0"
+          >挂号</el-button>
         </el-card>
       </el-main>
       <el-footer style="text-align:center">
@@ -118,7 +124,10 @@ export default {
       } else {
         hour = 21;
       }
-      if (department.scheduleTime ===  dateUtil.getDay(0, "-") && nowHour > hour) {
+      if (
+        department.scheduleTime === dateUtil.getDay(0, "-") &&
+        nowHour > hour
+      ) {
         this.$message({
           message: "挂号时段已过",
           type: "warning"

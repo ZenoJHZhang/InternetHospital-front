@@ -136,7 +136,7 @@ export default {
     },
     getDateFormat() {
       this.expertreatRoomDateRadio = dateUtil.getDay(1, "-");
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 7; i++) {
         let date = dateUtil.getDay(i + 1, "-");
         this.dateList.push({
           value: date
