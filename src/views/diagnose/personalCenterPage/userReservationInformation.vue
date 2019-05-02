@@ -74,7 +74,6 @@ export default {
       } else if (
         status == "13" ||
         status == "14" ||
-        status == "14" ||
         status == "17" ||
         status == "18"
       ) {
