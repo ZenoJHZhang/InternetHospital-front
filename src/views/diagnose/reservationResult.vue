@@ -70,20 +70,20 @@
                     <span style="color: #fe9e20;">（点击查看大图）</span>
                   </label>
                   <user-reservation-img-water-fall
-                     :userReservationId="userReservation.id"
-                    v-if="userReservation.imgPathList !== null"
+                    :userReservationId="userReservation.id"
+                    v-if="userReservation.imgPathList.length !== 0"
                   ></user-reservation-img-water-fall>
                 </div>
               </div>
             </div>
             <no-comment
               style="margin-top:50px;margin-bottom:150px;text-align:center"
-              v-if="userReservation.imgPathList === null"
+              v-if="userReservation.imgPathList.length === 0"
               title="暂无图片"
             ></no-comment>
             <div style="text-align:center">
-              <el-button style="margin-right:50px">取 消</el-button>
-              <el-button type="primary" @click="toPay()">确 认 支 付</el-button>
+              <el-button style="margin-right:50px" @click="cancelClinic()">取 消</el-button>
+              <el-button type="primary" @click="toPay()">去 支 付</el-button>
             </div>
           </el-main>
         </el-container>
@@ -122,8 +122,11 @@ export default {
       title: "",
       sex: "",
       payDialogVisible: false,
-      value: "https://www.woniuyiliao.cn/",
-      size: 200
+      value: "",
+      size: 200,
+      userReservationUuId: "",
+      outTradeNo: "",
+      time: ""
     };
   },
   components: {
@@ -158,37 +161,88 @@ export default {
             } else {
               this.title = "专家预约";
             }
+            this.outTradeNo = this.userReservation.outTradeNo;
+            this.time = setInterval(this.getPayStatus, 1000);
           }
         });
       }
     },
     toPay() {
       this.$store.state.payStore.isClinicPayDialogVisible = true;
+      axion
+        .createPayQrCode({
+          amount: this.userReservation.clinicPrice,
+          userReservationUuId: this.userReservationUuId
+        })
+        .then(response => {
+          if (response.data.returnCode === 200) {
+            let data = response.data.returnData;
+            if (data === -1) {
+              this.$notify({
+                title: "很抱歉",
+                message: "支付超时",
+                type: "error"
+              });
+            } else {
+              this.value = data.qrCode;
+            }
+          }
+        });
     },
     close() {
       this.$store.state.payStore.isClinicPayDialogVisible = false;
     },
     confirmPay() {
-      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
-      axion.payUserReservationClinic({
-        userReservationUUId: userReservationUuId
-      });
-      this.$router.push("waitDoctorCall");
-      this.$notify({
-        title: "支付成功",
-        message: "谢谢",
-        type: "success"
+      axion.tradeOrder({
+        outTradeNo: this.outTradeNo
       });
     },
-    isClinicPayDialogVisibleFalse(){
+    isClinicPayDialogVisibleFalse() {
       this.$store.state.payStore.isClinicPayDialogVisible = false;
+    },
+    getPayStatus() {
+      axion
+        .getPayStatus({
+          userReservationUuId: this.userReservationUuId
+        })
+        .then(response => {
+          if (response.data.returnCode === 200) {
+            let payStatus = response.data.returnData;
+            if (payStatus === 2) {
+              clearInterval(this.time);
+              this.$router.push("waitDoctorCall");
+              this.$notify({
+                title: "谢谢",
+                message: "支付成功",
+                type: "success"
+              });
+            } else if (payStatus === 7) {
+              clearInterval(this.time);
+              this.$notify({
+                title: "很抱歉",
+                message: "支付超时",
+                type: "error"
+              });
+              this.$router.push("/personalCenter");
+            }
+          }
+        });
+    },
+    cancelClinic() {
+      this.$router.push("/netTreatRoom");
+      sessionStorage.removeItem("treatmentInformation");
+      sessionStorage.removeItem("userReservationUuId");
     }
   },
   mounted() {
     this.$nextTick(function generate() {
+      this.userReservationUuId = sessionStorage.getItem("userReservationUuId");
       this.getUserReservationDetail();
       this.$store.state.treatmentProcessStore.active = 2;
     });
+  },
+  destroyed() {
+    clearInterval(this.time);
   }
 };
 </script>

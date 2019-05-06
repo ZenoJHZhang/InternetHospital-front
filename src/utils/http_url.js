@@ -48,12 +48,16 @@ const listUserReservationImg = (userReservationUuId) => get("/img/listUserReserv
 const clinicPay = () => get('/pay/clinicPay')
 /**分页获取用户就诊列表 */
 const listUserReservation = (pageNo,pageSize) => get("/userReservation/listUserReservation?pageNo="+pageNo+'&pageSize='+pageSize);
-/**支付挂号费 */
-const payUserReservationClinic = (userReservationUUId) => post("/userReservation/payUserReservationClinic",userReservationUUId)
 /**根据就诊uuid获取真正的用户就诊信息id */
 const getUserReservationIdByUuid = (userReservationUuId) =>get("/userReservation/getUserReservationIdByUuid?userReservationUuId="+userReservationUuId)
 const allUserReservationDetail = (userReservationUuId) =>  post("/userReservation/getAllDetailByUuId",userReservationUuId)
+/**评分 */
 const giveStar = (doctorId,starRate,uuId) => post("/userReservation/giveStar",doctorId,starRate,uuId)
+/**获取支付二维码和商户订单号 */
+const createPayQrCode = (amount,userReservationUuId) => post("/pay/createPayQrCode",amount,userReservationUuId);
+/**获取支付状态 */
+const getPayStatus = (userReservationUuId) => post('/pay/getPayStatus',userReservationUuId);
+const tradeOrder = (outTradeNo) => post('/pay/tradeOrder',outTradeNo);
 export default {
   login,
   register,
@@ -74,9 +78,11 @@ export default {
   listUserReservationImg,
   clinicPay,
   listUserReservation,
-  payUserReservationClinic,
   getUserReservationIdByUuid,
   updatePatient,
   allUserReservationDetail,
-  giveStar
+  giveStar,
+  createPayQrCode,
+  getPayStatus,
+  tradeOrder
 }
