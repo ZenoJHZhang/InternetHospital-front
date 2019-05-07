@@ -77,7 +77,7 @@
               <el-form-item label="疾病描述:" prop="accentDetail">
                 <el-input
                   type="textarea"
-                  :rows="5"
+                  :autosize="{ minRows: 4}"
                   style="width:100%"
                   placeholder="请详细描述疾病、症状、发病时间、已服用的药物……"
                   v-model="userReservation.accentDetail"

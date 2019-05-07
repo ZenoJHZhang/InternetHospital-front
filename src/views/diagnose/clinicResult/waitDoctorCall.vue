@@ -97,7 +97,10 @@ export default {
         callNo: "",
         patient: {}
       },
-      stompClient: ""
+      stompClient: "",
+      code: 0,
+      callMessage: "",
+      callNo: 0
     };
   },
   components: {
@@ -110,49 +113,34 @@ export default {
       axion.getUserReservationDetail(userReservationUuId).then(response => {
         if (response != null) {
           this.userReservation = response.data.returnData;
-          this.callPassed();
         }
       });
     },
     isCall() {
-      if (this.userReservation.regNo == this.userReservation.callNo) {
-        this.$notify({
-          title: "就诊提示",
-          message:
-            "感谢您的耐心等待，已经轮到您就诊，正在等待医生视频问诊。",
-          type: "success"
-        });
-      }
+      this.$notify({
+        title: "就诊提示",
+        message: "感谢您的耐心等待，已经轮到您就诊，正在等待医生视频问诊。",
+        type: "success"
+      });
     },
     callWaited() {
-      if (this.userReservation.regNo > this.userReservation.callNo) {
-        this.$notify({
-          title: "就诊提示",
-          message:
-            "您的号为" +
-            this.userReservation.regNo +
-            "号，现在叫到" +
-            this.userReservation.callNo +
-            "号，请耐心等待。",
-          type: "info"
-        });
-      }
+      this.$notify({
+        title: "就诊提示",
+        message:
+          "您的号为" +
+          this.userReservation.regNo +
+          "号，现在叫到" +
+          this.userReservation.callNo +
+          "号，请耐心等待。",
+        type: "info"
+      });
     },
     callPassed() {
-      if (this.userReservation.regNo < this.userReservation.callNo) {
-        this.$notify({
-          title: "就诊提示",
-          message: "很抱歉，您的号已经过了，请重新挂号或联系管理员",
-          type: "warning"
-        });
-      }
-    },
-    pushClinicState() {
-      let value = {
-        userReservationId: this.userReservationId,
-        token: localStorage.getItem("token")
-      };
-      this.stompClient.send("/doc/pushClinicState", {}, JSON.stringify(value));
+      this.$notify({
+        title: "就诊提示",
+        message: "很抱歉，您的号已经过了，请重新挂号或联系管理员",
+        type: "warning"
+      });
     },
     connect() {
       // let socket = new SockJS("https://localhost:8080/myWebSocket");
@@ -168,10 +156,19 @@ export default {
             "/topic/userReservation",
             msg => {
               let o = JSON.parse(msg.body);
-              this.userReservation.callNo = o.callNo;
-              this.isCall();
-              this.callWaited();
-              this.callPassed();
+              if (o.code == 0) {
+                if (o.callNo == -1) {
+                  this.userReservation.callNo = "就诊中";
+                  this.isCall();
+                } else {
+                  this.userReservation.callNo = this.callNo;
+                  this.callWaited();
+                }
+              } else if (o.code == 2) {
+                this.userReservation.callNo = "很抱歉，已过号";
+                this.callPassed();
+                this.$router.push("/personalCenter");
+              }
             },
             {}
           );
