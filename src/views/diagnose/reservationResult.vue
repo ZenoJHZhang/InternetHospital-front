@@ -77,7 +77,7 @@
               </div>
             </div>
             <no-comment
-              style="margin-top:50px;margin-bottom:150px;text-align:center"
+              style="margin-top:50px;margin-bottom:50px;text-align:center"
               v-if="userReservation.imgPathList.length === 0"
               title="暂无图片"
             ></no-comment>

@@ -57,7 +57,10 @@ const giveStar = (doctorId,starRate,uuId) => post("/userReservation/giveStar",do
 const createPayQrCode = (amount,userReservationUuId) => post("/pay/createPayQrCode",amount,userReservationUuId);
 /**获取支付状态 */
 const getPayStatus = (userReservationUuId) => post('/pay/getPayStatus',userReservationUuId);
+/**跟踪订单，并根据订单状态更新 */
 const tradeOrder = (outTradeNo) => post('/pay/tradeOrder',outTradeNo);
+/**申请退款 */
+const applyRefund = (userReservationUuId,reason,refundAmount) => post("/userReservation/applyRefund",userReservationUuId,reason,refundAmount)
 export default {
   login,
   register,
@@ -84,5 +87,6 @@ export default {
   giveStar,
   createPayQrCode,
   getPayStatus,
-  tradeOrder
+  tradeOrder,
+  applyRefund
 }

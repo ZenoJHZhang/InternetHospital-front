@@ -30,7 +30,7 @@
             padding:20px;padding-top:50px;text-align:center;padding-bottom:100px"
           >
             <el-button style="margin-right:50px" @click="dialogVisible = true">联系管理员</el-button>
-            <el-button>申请退款</el-button>
+            <el-button @click="applyRefundVisible = true">申请退款</el-button>
           </el-footer>
         </el-container>
       </el-main>
@@ -53,6 +53,31 @@
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog :visible.sync="applyRefundVisible" title="提示" width="30%">
+      <div
+        style="margin-left:10px;margin-bottom:10px;color:red;font-weight:700"
+      >最大退款金额: ￥{{userReservation.clinicPrice}}</div>
+      <el-form ref="form" :inline="true" :model="form" :rules="rules">
+        <el-form-item label="请填写申请退款原因" prop="reason">
+          <el-input
+            v-model="form.reason"
+            placeholder="申请退款原因"
+            type="textarea"
+            :autosize="{ minRows: 2}"
+          />
+        </el-form-item>
+        <br>
+        <el-form-item label="请填写申请退款金额" prop="refundAmount">
+          <el-input v-model="form.refundAmount" placeholder="申请退款金额"/>
+        </el-form-item>
+        <br>
+        <el-form-item>
+          <el-button @click="applyRefundVisible = false">取 消</el-button>
+          <el-button type="primary" @click="applyRefund('form')">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -65,7 +90,20 @@ export default {
       userReservationId: "",
       userReservation: {},
       stompClient: "",
-      dialogVisible: false
+      dialogVisible: false,
+      userReservationUuId: "",
+      reason: "",
+      refundAmount: 0,
+      applyRefundVisible: false,
+      form: {},
+      rules: {
+        reason: [
+          { required: true, message: "请填写申请退款原因", trigger: "blur" }
+        ],
+        refundAmount: [
+          { required: true, message: "请填写申请退款金额", trigger: "blur" }
+        ]
+      }
     };
   },
   components: {
@@ -74,10 +112,52 @@ export default {
   methods: {
     connectAdmin() {},
     getUserReservationDetail() {
-      let userReservationUuId = sessionStorage.getItem("userReservationUuId");
-      axion.getUserReservationDetail(userReservationUuId).then(response => {
-        if (response != null) {
-          this.userReservation = response.data.returnData;
+      this.userReservationUuId = sessionStorage.getItem("userReservationUuId");
+      axion
+        .getUserReservationDetail(this.userReservationUuId)
+        .then(response => {
+          if (response != null) {
+            this.userReservation = response.data.returnData;
+          }
+        });
+    },
+    applyRefund(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // 正数
+          const reg = /^([1-9][0-9]*(\.\d{1,2})?)|(0\.\d{1,2})$/;
+          if (!reg.test(this.form.refundAmount)) {
+            this.$message({
+              message: "退款金额需大于0",
+              type: "error"
+            });
+          } else if (
+            this.form.refundAmount > this.userReservation.clinicPrice
+          ) {
+            this.$message({
+              message: "退款金额不得大于付款金额",
+              type: "error"
+            });
+          } else {
+            axion
+              .applyRefund({
+                userReservationUuId: this.userReservationUuId,
+                reason: this.form.reason,
+                refundAmount: this.form.refundAmount
+              })
+              .then(response => {
+                if (response != null) {
+                  this.applyRefundVisible = false;
+                  this.$router.push("/personalCenter")
+                  this.$message({
+                    message: "申请退款成功，请耐心等待",
+                    type: "success"
+                  });
+                }
+              });
+          }
+        } else {
+          return false;
         }
       });
     }
