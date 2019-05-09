@@ -58,7 +58,12 @@
                 <span>{{t.doctorDto.doctorName}}</span>
               </div>
               <div style="margin-top:15px">
-                <el-rate disabled text-color="#ff9900" :v-model="t.doctorDto.starLevel"></el-rate>
+                <el-rate
+                  v-model="t.doctorDto.starLevel"
+                  :score-template="t.doctorDto.starLevel"
+                  disabled
+                  text-color="#ff9900"
+                />
               </div>
 
               <div class="expertMajor">{{t.doctorDto.goodAt}}</div>
