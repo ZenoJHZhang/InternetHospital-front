@@ -146,23 +146,33 @@ export default {
           duration: 2000
         });
       } else {
-        axion.getUserReservationDetail(userReservationUuId).then(response => {
+        axion.hasClinicNumber(userReservationUuId).then(response => {
           if (response != null) {
             this.userReservation = response.data.returnData;
-            if (this.userReservation.patient.sex == 0) {
-              this.sex = "女";
+            if (!this.userReservation.clinicNumberStatus) {
+              this.$message({
+                message:
+                  "您预约的号源已挂完，请另选科室/医生进行预约，并及时付款",
+                type: "warning",
+                duration: 2000
+              });
+              this.$router.push("netTreatRoom");
             } else {
-              this.sex = "男";
+              if (this.userReservation.patient.sex == 0) {
+                this.sex = "女";
+              } else {
+                this.sex = "男";
+              }
+              if (this.userReservation.type == 1) {
+                this.title = "普通挂号";
+              } else if (this.userReservation.type == 2) {
+                this.title = "普通预约";
+              } else {
+                this.title = "专家预约";
+              }
+              this.outTradeNo = this.userReservation.outTradeNo;
+              this.time = setInterval(this.getPayStatus, 1000);
             }
-            if (this.userReservation.type == 1) {
-              this.title = "普通挂号";
-            } else if (this.userReservation.type == 2) {
-              this.title = "普通预约";
-            } else {
-              this.title = "专家预约";
-            }
-            this.outTradeNo = this.userReservation.outTradeNo;
-            this.time = setInterval(this.getPayStatus, 1000);
           }
         });
       }
@@ -210,6 +220,7 @@ export default {
             let payStatus = response.data.returnData;
             if (payStatus === 2) {
               clearInterval(this.time);
+              this.$store.state.payStore.isClinicPayDialogVisible = false;
               this.$router.push("waitDoctorCall");
               this.$notify({
                 title: "谢谢",
@@ -218,6 +229,7 @@ export default {
               });
             } else if (payStatus === 7) {
               clearInterval(this.time);
+              this.$store.state.payStore.isClinicPayDialogVisible = false;
               this.$notify({
                 title: "很抱歉",
                 message: "支付超时",

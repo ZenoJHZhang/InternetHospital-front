@@ -61,6 +61,8 @@ const getPayStatus = (userReservationUuId) => post('/pay/getPayStatus',userReser
 const tradeOrder = (outTradeNo) => post('/pay/tradeOrder',outTradeNo);
 /**申请退款 */
 const applyRefund = (userReservationUuId,reason,refundAmount) => post("/userReservation/applyRefund",userReservationUuId,reason,refundAmount)
+/**判断是否有号源 */
+const hasClinicNumber = (userReservationUuId) => get('/userReservation/hasClinicNumber?userReservationUuId='+userReservationUuId);
 export default {
   login,
   register,
@@ -88,5 +90,6 @@ export default {
   createPayQrCode,
   getPayStatus,
   tradeOrder,
-  applyRefund
+  applyRefund,
+  hasClinicNumber
 }
